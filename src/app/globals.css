@@ -1,4 +1,6 @@
 @import 'tailwindcss';
+@source "./src";
+@config "../../tailwind.config.js";
 
 @custom-variant dark (&:is(.dark *));
 

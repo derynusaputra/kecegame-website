@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import React from "react";
 import CarouselBanner from "./_component/CarouselBanner";
+import MainContent from "./_component/MainContent";
 
 export default function page() {
   return (
@@ -19,6 +20,7 @@ export default function page() {
         <div className="w-full flex-1 overflow-y-auto bg-yellow-500">
           <div className="flex flex-col gap-2 px-0 py-2">
             <CarouselBanner />
+            <MainContent />
             {Array.from({ length: 10 }).map((_, i) => (
               <div
                 key={i}
@@ -29,15 +31,16 @@ export default function page() {
               </div>
             ))}
           </div>
+          <div className="h-[60px]" />
           {/*  bottom nav */}
-          <div className="flex h-[50px] w-full grid-cols-5 bg-green-500">
+          <div className="fixed bottom-0 z-10 flex h-[50px] w-full max-w-md grid-cols-5 bg-green-500">
             <div className="h-[50px] w-full bg-[#3F1FBA]">ahmad</div>
             <div className="h-[50px] w-full bg-[#ba841f]">dery</div>
             <div className="h-[50px] w-full bg-[#1fba34]">dery</div>
             <div className="h-[50px] w-full bg-[#ba841f]">dery</div>
             <div className="h-[50px] w-full bg-[#8bba1f]">dery</div>
           </div>
-          <nav className="fixed bottom-0 z-10 w-full max-w-md px-5">
+          {/* <nav className="fixed bottom-0 z-10 w-full max-w-md px-5">
             <div className="grid h-fit grid-cols-4 justify-between rounded-[40px] bg-black px-5 py-4">
               <a
                 href="index.html"
@@ -70,7 +73,7 @@ export default function page() {
                 <span className="text-sm font-semibold text-white">Help</span>
               </a>
             </div>
-          </nav>
+          </nav> */}
         </div>
         {/* Bawah (Hijau) */}
       </div>
