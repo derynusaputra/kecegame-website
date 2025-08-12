@@ -11,8 +11,8 @@ import TextAreaInput from "@/components/form/form-elements/TextAreaInput";
 import ToggleSwitch from "@/components/form/form-elements/ToggleSwitch";
 import React from "react";
 export const metadata = {
-    title: "Next.js Form Elements | TailAdmin - Next.js Dashboard Template",
-    description: "This is Next.js Form Elements page for TailAdmin - Next.js Tailwind CSS Admin Dashboard Template",
+    title: "Next.js Form Elements | KeceGame - Next.js Dashboard Template",
+    description: "This is Next.js Form Elements page for KeceGame - Next.js Tailwind CSS Admin Dashboard Template",
 };
 export default function FormElements() {
     return (<div>

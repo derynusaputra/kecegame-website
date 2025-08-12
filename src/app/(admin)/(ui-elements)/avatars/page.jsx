@@ -3,8 +3,8 @@ import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import Avatar from "@/components/ui/avatar/Avatar";
 import React from "react";
 export const metadata = {
-    title: "Next.js Avatars | TailAdmin - Next.js Dashboard Template",
-    description: "This is Next.js Avatars page for TailAdmin - Next.js Tailwind CSS Admin Dashboard Template",
+    title: "Next.js Avatars | KeceGame - Next.js Dashboard Template",
+    description: "This is Next.js Avatars page for KeceGame - Next.js Tailwind CSS Admin Dashboard Template",
 };
 export default function AvatarPage() {
     return (<div>

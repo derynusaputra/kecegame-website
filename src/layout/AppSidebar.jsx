@@ -10,7 +10,9 @@ const navItems = [
     {
         icon: <GridIcon />,
         name: "Dashboard",
-        subItems: [{ name: "Ecommerce", path: "/", pro: false }],
+        // subItems: [{ name: "Ecommerce", path: "/admin", pro: false }],
+        path: "/admin",
+
     },
     {
         icon: <CalenderIcon />,
@@ -66,9 +68,16 @@ const othersItems = [
         icon: <PlugInIcon />,
         name: "Authentication",
         subItems: [
-            { name: "Sign In", path: "/signin", pro: false },
-            { name: "Sign Up", path: "/signup", pro: false },
+            { name: "Connection", path: "/connection", pro: false },
+
+            // { name: "Sign In", path: "/signin", pro: false },
+            // { name: "Sign Up", path: "/signup", pro: false },
         ],
+    },
+    {
+        icon: <CalenderIcon />,
+        name: "Calendar",
+        path: "/calendar",
     },
 ];
 const AppSidebar = () => {
@@ -190,7 +199,7 @@ const AppSidebar = () => {
         ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}
         lg:translate-x-0`} onMouseEnter={() => !isExpanded && setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
       <div className={`py-8 flex  ${!isExpanded && !isHovered ? "lg:justify-center" : "justify-start"}`}>
-        <Link href="/">
+        <Link href="/admin">
           {isExpanded || isHovered || isMobileOpen ? (<>
               <Image className="dark:hidden" src="/images/logo/logo.svg" alt="Logo" width={150} height={40}/>
               <Image className="hidden dark:block" src="/images/logo/logo-dark.svg" alt="Logo" width={150} height={40}/>
@@ -219,7 +228,8 @@ const AppSidebar = () => {
             </div>
           </div>
         </nav>
-        {isExpanded || isHovered || isMobileOpen ? <SidebarWidget /> : null}
+      
+        {/* {isExpanded || isHovered || isMobileOpen ? <SidebarWidget /> : null} */}
       </div>
     </aside>);
 };

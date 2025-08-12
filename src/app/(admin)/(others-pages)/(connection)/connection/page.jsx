@@ -7,11 +7,11 @@ export const metadata = {
     description: "This is Next.js Basic Table  page for KeceGame  Tailwind CSS Admin Dashboard Template",
     // other metadata
 };
-export default function BasicTables() {
+export default function ConnectionPage() {
     return (<div>
-      <PageBreadcrumb pageTitle="Basic Table"/>
+      <PageBreadcrumb pageTitle="Connection"/>
       <div className="space-y-6">
-        <ComponentCard title="Basic Table 1">
+        <ComponentCard title="Connection">
           <BasicTableOne />
         </ComponentCard>
       </div>

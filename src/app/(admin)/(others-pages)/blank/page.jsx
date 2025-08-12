@@ -1,8 +1,8 @@
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import React from "react";
 export const metadata = {
-    title: "Next.js Blank Page | TailAdmin - Next.js Dashboard Template",
-    description: "This is Next.js Blank Page TailAdmin Dashboard Template",
+    title: "Next.js Blank Page | KeceGame - Next.js Dashboard Template",
+    description: "This is Next.js Blank Page KeceGame Dashboard Template",
 };
 export default function BlankPage() {
     return (<div>

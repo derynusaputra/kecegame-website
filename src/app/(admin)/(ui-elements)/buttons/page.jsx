@@ -4,8 +4,8 @@ import Button from "@/components/ui/button/Button";
 import { BoxIcon } from "@/icons";
 import React from "react";
 export const metadata = {
-    title: "Next.js Buttons | TailAdmin - Next.js Dashboard Template",
-    description: "This is Next.js Buttons page for TailAdmin - Next.js Tailwind CSS Admin Dashboard Template",
+    title: "Next.js Buttons | KeceGame - Next.js Dashboard Template",
+    description: "This is Next.js Buttons page for KeceGame - Next.js Tailwind CSS Admin Dashboard Template",
 };
 export default function Buttons() {
     return (<div>

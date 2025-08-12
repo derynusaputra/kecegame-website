@@ -3,8 +3,8 @@ import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import Alert from "@/components/ui/alert/Alert";
 import React from "react";
 export const metadata = {
-    title: "Next.js Alerts | TailAdmin - Next.js Dashboard Template",
-    description: "This is Next.js Alerts page for TailAdmin - Next.js Tailwind CSS Admin Dashboard Template",
+    title: "Next.js Alerts | KeceGame - Next.js Dashboard Template",
+    description: "This is Next.js Alerts page for KeceGame - Next.js Tailwind CSS Admin Dashboard Template",
     // other metadata
 };
 export default function Alerts() {

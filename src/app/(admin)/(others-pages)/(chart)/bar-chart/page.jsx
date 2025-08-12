@@ -3,8 +3,8 @@ import ComponentCard from "@/components/common/ComponentCard";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import React from "react";
 export const metadata = {
-    title: "Next.js Bar Chart | TailAdmin - Next.js Dashboard Template",
-    description: "This is Next.js Bar Chart page for TailAdmin - Next.js Tailwind CSS Admin Dashboard Template",
+    title: "Next.js Bar Chart | KeceGame - Next.js Dashboard Template",
+    description: "This is Next.js Bar Chart page for KeceGame - Next.js Tailwind CSS Admin Dashboard Template",
 };
 export default function page() {
     return (<div>
