@@ -30,13 +30,47 @@ export default function page() {
             ))}
           </div>
           {/*  bottom nav */}
-        </div>
-        <div className="flex h-[50px] w-full grid-cols-5 bg-green-500">
-          <div className="h-[50px] w-full bg-[#3F1FBA]">dery</div>
-          <div className="h-[50px] w-full bg-[#ba841f]">dery</div>
-          <div className="h-[50px] w-full bg-[#1fba34]">dery</div>
-          <div className="h-[50px] w-full bg-[#ba841f]">dery</div>
-          <div className="h-[50px] w-full bg-[#8bba1f]">dery</div>
+          <div className="flex h-[50px] w-full grid-cols-5 bg-green-500">
+            <div className="h-[50px] w-full bg-[#3F1FBA]">ahmad</div>
+            <div className="h-[50px] w-full bg-[#ba841f]">dery</div>
+            <div className="h-[50px] w-full bg-[#1fba34]">dery</div>
+            <div className="h-[50px] w-full bg-[#ba841f]">dery</div>
+            <div className="h-[50px] w-full bg-[#8bba1f]">dery</div>
+          </div>
+          <nav className="fixed bottom-0 z-10 w-full max-w-md px-5">
+            <div className="grid h-fit grid-cols-4 justify-between rounded-[40px] bg-black px-5 py-4">
+              <a
+                href="index.html"
+                className="flex flex-col items-center gap-2 text-center"
+              >
+                <LucideGlobe className="flex h-8 w-8 shrink-0 text-white" />
+                <span className="text-sm font-semibold text-white">
+                  Discover
+                </span>
+              </a>
+              <a
+                href="check-booking.html"
+                className="flex flex-col items-center gap-2 text-center"
+              >
+                <LucideFileHeart className="flex h-8 w-8 shrink-0 text-white" />
+                <span className="text-sm font-semibold text-white">Orders</span>
+              </a>
+              <a
+                href="find-kos.html"
+                className="flex flex-col items-center gap-2 text-center"
+              >
+                <LucideSearch className="flex h-8 w-8 shrink-0 text-white" />
+                <span className="text-sm font-semibold text-white">Find</span>
+              </a>
+              <a
+                href="#"
+                className="flex flex-col items-center gap-2 text-center"
+              >
+                <LucideHeadphones className="flex h-8 w-8 shrink-0 text-white" />
+                <span className="text-sm font-semibold text-white">Help</span>
+              </a>
+            </div>
+          </nav>
         </div>
         {/* Bawah (Hijau) */}
       </div>
