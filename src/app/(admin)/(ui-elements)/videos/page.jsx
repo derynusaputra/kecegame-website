@@ -2,13 +2,16 @@ import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import VideosExample from "@/components/ui/video/VideosExample";
 import React from "react";
 export const metadata = {
-    title: "Next.js Videos | KeceGame - Next.js Dashboard Template",
-    description: "This is Next.js Videos page for KeceGame - Next.js Tailwind CSS Admin Dashboard Template",
+  title: "Next.js Videos | KeceGame - Next.js Dashboard Template",
+  description:
+    "This is Next.js Videos page for KeceGame - Next.js Tailwind CSS Admin Dashboard Template",
 };
 export default function VideoPage() {
-    return (<div>
-      <PageBreadcrumb pageTitle="Videos"/>
+  return (
+    <div>
+      <PageBreadcrumb pageTitle="Videos" />
 
       <VideosExample />
-    </div>);
+    </div>
+  );
 }

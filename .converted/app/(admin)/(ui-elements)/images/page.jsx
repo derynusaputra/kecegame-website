@@ -5,13 +5,15 @@ import ThreeColumnImageGrid from "@/components/ui/images/ThreeColumnImageGrid";
 import TwoColumnImageGrid from "@/components/ui/images/TwoColumnImageGrid";
 import React from "react";
 export const metadata = {
-    title: "Next.js Images | TailAdmin - Next.js Dashboard Template",
-    description: "This is Next.js Images page for TailAdmin - Next.js Tailwind CSS Admin Dashboard Template",
-    // other metadata
+  title: "Next.js Images | TailAdmin - Next.js Dashboard Template",
+  description:
+    "This is Next.js Images page for TailAdmin - Next.js Tailwind CSS Admin Dashboard Template",
+  // other metadata
 };
 export default function Images() {
-    return (<div>
-      <PageBreadcrumb pageTitle="Images"/>
+  return (
+    <div>
+      <PageBreadcrumb pageTitle="Images" />
       <div className="space-y-5 sm:space-y-6">
         <ComponentCard title="Responsive image">
           <ResponsiveImage />
@@ -23,5 +25,6 @@ export default function Images() {
           <ThreeColumnImageGrid />
         </ComponentCard>
       </div>
-    </div>);
+    </div>
+  );
 }

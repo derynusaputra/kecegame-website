@@ -4,12 +4,14 @@ import Button from "@/components/ui/button/Button";
 import { BoxIcon } from "@/icons";
 import React from "react";
 export const metadata = {
-    title: "Next.js Buttons | KeceGame - Next.js Dashboard Template",
-    description: "This is Next.js Buttons page for KeceGame - Next.js Tailwind CSS Admin Dashboard Template",
+  title: "Next.js Buttons | KeceGame - Next.js Dashboard Template",
+  description:
+    "This is Next.js Buttons page for KeceGame - Next.js Tailwind CSS Admin Dashboard Template",
 };
 export default function Buttons() {
-    return (<div>
-      <PageBreadcrumb pageTitle="Buttons"/>
+  return (
+    <div>
+      <PageBreadcrumb pageTitle="Buttons" />
       <div className="space-y-5 sm:space-y-6">
         {/* Primary Button */}
         <ComponentCard title="Primary Button">
@@ -79,5 +81,6 @@ export default function Buttons() {
           </div>
         </ComponentCard>
       </div>
-    </div>);
+    </div>
+  );
 }

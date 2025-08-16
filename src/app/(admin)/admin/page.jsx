@@ -7,8 +7,7 @@ import RecentOrders from "@/components/ecommerce/RecentOrders";
 import DemographicCard from "@/components/ecommerce/DemographicCard";
 
 export const metadata = {
-  title:
-    "Next.js E-commerce Dashboard | KeceGame - Next.js Dashboard Template",
+  title: "Next.js E-commerce Dashboard | KeceGame - Next.js Dashboard Template",
   description: "This is Next.js Home for KeceGame Dashboard Template",
 };
 
@@ -39,4 +38,3 @@ export default function Ecommerce() {
     </div>
   );
 }
-

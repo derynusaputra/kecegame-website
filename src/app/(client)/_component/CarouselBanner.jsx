@@ -49,7 +49,7 @@ export default function CarouselBanner() {
   }, [currentIndex]);
 
   return (
-    <div className="group relative mx-auto  h-[160px] w-full max-w-md overflow-hidden ">
+    <div className="group relative mx-auto h-[160px] w-full max-w-md overflow-hidden">
       <div
         className="flex h-full transition-transform duration-500 ease-out"
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
@@ -59,7 +59,7 @@ export default function CarouselBanner() {
             key={banner.id}
             src={banner.url}
             alt="Banner Image"
-            className="flex-shrink-0 object-cover w-full h-full"
+            className="h-full w-full flex-shrink-0 object-cover"
           />
         ))}
       </div>
@@ -67,10 +67,10 @@ export default function CarouselBanner() {
       {/* Tombol Panah Kiri (prevSlide) */}
       <button
         onClick={prevSlide}
-        className="absolute p-2 text-purple-600 transition-all -translate-y-1/2 bg-white rounded-full shadow-md cursor-pointer left-2 top-1/2 hover:bg-gray-100"
+        className="absolute top-1/2 left-2 -translate-y-1/2 cursor-pointer rounded-full bg-white p-2 text-purple-600 shadow-md transition-all hover:bg-gray-100"
       >
         <svg
-          className="w-5 h-5"
+          className="h-5 w-5"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -87,10 +87,10 @@ export default function CarouselBanner() {
       {/* Tombol Panah Kanan (nextSlide) */}
       <button
         onClick={nextSlide}
-        className="absolute p-2 text-purple-600 transition-all -translate-y-1/2 bg-white rounded-full shadow-md cursor-pointer right-2 top-1/2 hover:bg-gray-100"
+        className="absolute top-1/2 right-2 -translate-y-1/2 cursor-pointer rounded-full bg-white p-2 text-purple-600 shadow-md transition-all hover:bg-gray-100"
       >
         <svg
-          className="w-5 h-5"
+          className="h-5 w-5"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -105,7 +105,7 @@ export default function CarouselBanner() {
       </button>
 
       {/* Dots Indicator */}
-      <div className="absolute flex space-x-2 -translate-x-1/2 bottom-4 left-1/2">
+      <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 space-x-2">
         {bannerImages.map((_, slideIndex) => (
           <button
             key={slideIndex}

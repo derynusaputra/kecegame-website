@@ -12,15 +12,21 @@ import MainContent from "./_component/MainContent";
 const bottomNav = [
   {
     name: "Home",
-    icon: <LucideGlobe className="flex h-[18px] w-[18px] shrink-0 text-white" />,
+    icon: (
+      <LucideGlobe className="flex h-[18px] w-[18px] shrink-0 text-white" />
+    ),
   },
   {
     name: "Promo",
-    icon: <LucideFileHeart className="flex h-[18px] w-[18px] shrink-0 text-white" />,
+    icon: (
+      <LucideFileHeart className="flex h-[18px] w-[18px] shrink-0 text-white" />
+    ),
   },
   {
     name: "Event",
-    icon: <LucideHeadphones className="flex h-[18px] w-[18px] shrink-0 text-white" />,
+    icon: (
+      <LucideHeadphones className="flex h-[18px] w-[18px] shrink-0 text-white" />
+    ),
   },
   {
     name: "Profile",
@@ -54,17 +60,20 @@ export default function page() {
           <div className="h-[60px]" />
           {/*  bottom nav */}
           <div className="fixed bottom-0 z-10 flex h-[60px] w-full max-w-md grid-cols-4 bg-green-500">
-           {bottomNav.map((item, index) => (
-            <div key={index} className="h-[60px] w-full bg-[#1fba34] items-center justify-center flex">
-              <div className="text-center pt-2">
-                <div className="flex items-center h-[18px] justify-center mb-[-5px]">
-                 {item.icon}
+            {bottomNav.map((item, index) => (
+              <div
+                key={index}
+                className="flex h-[60px] w-full items-center justify-center bg-[#1fba34]"
+              >
+                <div className="pt-2 text-center">
+                  <div className="mb-[-5px] flex h-[18px] items-center justify-center">
+                    {item.icon}
+                  </div>
+                  <span className="text-[10px] text-white">{item.name}</span>
                 </div>
-                <span className="text-[10px] text-white">{item.name}</span>
               </div>
-            </div>
-           ))}
-          </div>        
+            ))}
+          </div>
         </div>
         {/* Bawah (Hijau) */}
       </div>
