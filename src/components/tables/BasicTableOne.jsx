@@ -520,14 +520,14 @@ export default function BasicTableOne() {
         <div className="flex flex-wrap gap-2">
           <button
             onClick={deleteSelectedProducts}
-            className="px-3 py-2 text-sm font-medium text-white transition-colors bg-red-500 rounded-md whitespace-nowrap hover:bg-red-600"
+            className="rounded-md bg-red-500 px-3 py-2 text-sm font-medium whitespace-nowrap text-white transition-colors hover:bg-red-600"
           >
             <span className="hidden sm:inline">Hapus Produk yang Dipilih</span>
             <span className="sm:hidden">Hapus ({selectedProducts.length})</span>
           </button>
           <button
             onClick={addNewProduct}
-            className="px-3 py-2 text-sm font-medium text-white transition-colors bg-blue-500 rounded-md whitespace-nowrap hover:bg-blue-600"
+            className="rounded-md bg-blue-500 px-3 py-2 text-sm font-medium whitespace-nowrap text-white transition-colors hover:bg-blue-600"
           >
             + Tambah Produk
           </button>
@@ -541,9 +541,9 @@ export default function BasicTableOne() {
           <div className="flex flex-col gap-2 sm:flex-row">
             <button
               onClick={searchAllProducts}
-              className="flex items-center justify-center px-3 py-2 space-x-1 text-sm font-medium text-blue-700 transition-colors bg-blue-100 rounded-md whitespace-nowrap hover:bg-blue-200"
+              className="flex items-center justify-center space-x-1 rounded-md bg-blue-100 px-3 py-2 text-sm font-medium whitespace-nowrap text-blue-700 transition-colors hover:bg-blue-200"
             >
-              <MagnifyingGlassIcon className="w-4 h-4" />
+              <MagnifyingGlassIcon className="h-4 w-4" />
               <span className="hidden sm:inline">Q Cari Semua Produk</span>
               <span className="sm:hidden">Cari Semua</span>
             </button>
@@ -555,7 +555,7 @@ export default function BasicTableOne() {
                   : "bg-red-100 text-red-700 hover:bg-red-200"
               }`}
             >
-              <ExclamationTriangleIcon className="w-4 h-4" />
+              <ExclamationTriangleIcon className="h-4 w-4" />
               <span className="hidden sm:inline">
                 Tampilkan Produk Gangguan
               </span>
@@ -569,7 +569,7 @@ export default function BasicTableOne() {
                   : "bg-orange-100 text-orange-700 hover:bg-orange-200"
               }`}
             >
-              <ExclamationTriangleIcon className="w-4 h-4" />
+              <ExclamationTriangleIcon className="h-4 w-4" />
               <span className="hidden sm:inline">Tampilkan Semua Produk</span>
               <span className="sm:hidden">Semua Produk</span>
             </button>
@@ -584,7 +584,7 @@ export default function BasicTableOne() {
               placeholder={`Cari produk ${selectedCategory}`}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full py-2 pl-4 pr-10 border border-gray-300 rounded-md focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+              className="w-full rounded-md border border-gray-300 py-2 pr-10 pl-4 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
             />
             <MagnifyingGlassIcon className="absolute top-2.5 right-3 h-4 w-4 text-gray-400" />
           </div>

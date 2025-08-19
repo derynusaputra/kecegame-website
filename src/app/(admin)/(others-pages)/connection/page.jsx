@@ -2,6 +2,7 @@ import ComponentCard from "@/components/common/ComponentCard";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import BasicTableOne from "@/components/tables/BasicTableOne";
 import React from "react";
+import MainConnect from "./_component/MainConnect";
 export const metadata = {
   title: "Next.js Basic Table | KeceGame - Next.js Dashboard Template",
   description:
@@ -14,7 +15,7 @@ export default function ConnectionPage() {
       <PageBreadcrumb pageTitle="Connection" />
       <div className="space-y-6">
         <ComponentCard title="Connection">
-          <BasicTableOne />
+          <MainConnect />
         </ComponentCard>
       </div>
     </div>
