@@ -1,14 +1,14 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
-const API_URL = "https://api.halalinmu.com/v1/thirdparty/keys";
+const API_URL = "https://api.halalinmu.com";
 
 export const useThirParty = {
   // 🔹 GET
   get: () => {
     return useQuery({
-      queryKey: ["users"],
+      queryKey: ["thirdparty"],
       queryFn: async () => {
-        const res = await fetch(API_URL);
+        const res = await fetch(API_URL + "/v1/thirdparty/keys");
         if (!res.ok) throw new Error("Gagal fetch users");
         return res.json();
       },
@@ -20,7 +20,7 @@ export const useThirParty = {
     const queryClient = useQueryClient();
     return useMutation({
       mutationFn: async (newUser) => {
-        const res = await fetch(API_URL, {
+        const res = await fetch(API_URL + "/v1/thirdparty", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(newUser),

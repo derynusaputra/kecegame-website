@@ -20,6 +20,8 @@ import {
 import { useSidebar } from "@/context/SidebarContext";
 import { useThirdPartyKeys } from "@/hooks/useThirdPartyKeys";
 import { useThirParty } from "@/hooks/ReactQuery/useThirParty";
+import { useModal } from "@/hooks/useModal";
+import CreateApiKeyModal from "./CreateApiKeyModal";
 
 export default function MainConnect() {
   const { isExpanded } = useSidebar();
@@ -27,8 +29,11 @@ export default function MainConnect() {
   const [selectedConnections, setSelectedConnections] = useState([]);
   const [expandedRows, setExpandedRows] = useState({});
   const [showOnlyActive, setShowOnlyActive] = useState(false);
+  const { isOpen, openModal, closeModal } = useModal();
 
   // Fetch data using React Query
+  //   const updateUser = useThirParty.update();
+  //   const deleteUser = useThirParty.delete();
 
   const {
     data: dataThirParty = [],
@@ -41,6 +46,11 @@ export default function MainConnect() {
   useEffect(() => {
     getThirtParty();
   }, []);
+
+  // Handle successful creation
+  const handleCreateSuccess = () => {
+    getThirtParty(); // Refresh the data
+  };
 
   // Transform API data to match our component structure
   const transformedData =
@@ -113,10 +123,6 @@ export default function MainConnect() {
     }
   };
 
-  const addNewConnection = () => {
-    alert("Membuka form tambah koneksi baru");
-  };
-
   const getStatusColor = (status) => {
     switch (status) {
       case "active":
@@ -143,9 +149,6 @@ export default function MainConnect() {
     }
   };
 
-  console.log("====================================");
-  console.log(dataThirParty);
-  console.log("====================================");
   // Loading state
   if (initLoadThirtParty) {
     return (
@@ -189,6 +192,13 @@ export default function MainConnect() {
         isExpanded ? "lg:pr-4" : "lg:pr-0"
       }`}
     >
+      {/* Create API Key Modal */}
+      <CreateApiKeyModal
+        isOpen={isOpen}
+        onClose={closeModal}
+        onSuccess={handleCreateSuccess}
+      />
+
       {/* Header */}
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
@@ -243,7 +253,7 @@ export default function MainConnect() {
             <span className="sm:hidden">Hapus</span>
           </button>
           <button
-            onClick={addNewConnection}
+            onClick={openModal}
             className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white transition-colors bg-blue-500 rounded-md hover:bg-blue-600"
           >
             <PlusIcon className="w-4 h-4" />
