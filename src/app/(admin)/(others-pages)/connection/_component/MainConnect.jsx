@@ -22,6 +22,8 @@ import { useThirdPartyKeys } from "@/hooks/useThirdPartyKeys";
 import { useThirParty } from "@/hooks/ReactQuery/useThirParty";
 import { useModal } from "@/hooks/useModal";
 import CreateApiKeyModal from "./CreateApiKeyModal";
+import DeleteConfirmationModal from "./DeleteConfirmationModal";
+import SuccessNotificationModal from "./SuccessNotificationModal";
 
 export default function MainConnect() {
   const { isExpanded } = useSidebar();
@@ -29,7 +31,16 @@ export default function MainConnect() {
   const [selectedConnections, setSelectedConnections] = useState([]);
   const [expandedRows, setExpandedRows] = useState({});
   const [showOnlyActive, setShowOnlyActive] = useState(false);
+
+  // Modal states
   const { isOpen, openModal, closeModal } = useModal();
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
+  const [successMessage, setSuccessMessage] = useState({
+    title: "",
+    message: "",
+  });
 
   // Fetch data using React Query
   //   const updateUser = useThirParty.update();
@@ -50,6 +61,38 @@ export default function MainConnect() {
   // Handle successful creation
   const handleCreateSuccess = () => {
     getThirtParty(); // Refresh the data
+    setSuccessMessage({
+      title: "API Key Berhasil Ditambahkan!",
+      message: "API Key baru telah berhasil ditambahkan ke sistem.",
+    });
+    setShowSuccessModal(true);
+  };
+
+  // Handle successful deletion
+  const handleDeleteSuccess = () => {
+    getThirtParty(); // Refresh the data
+    setSelectedConnections([]); // Clear selection
+    setSuccessMessage({
+      title: "API Key Berhasil Dihapus!",
+      message: "API Key telah berhasil dihapus dari sistem.",
+    });
+    setShowSuccessModal(true);
+  };
+
+  // Handle single item delete
+  const handleSingleDelete = (connection) => {
+    setItemToDelete(connection);
+    setShowDeleteModal(true);
+  };
+
+  // Handle multiple items delete
+  const handleMultipleDelete = () => {
+    if (selectedConnections.length === 0) {
+      alert("Pilih API Key terlebih dahulu");
+      return;
+    }
+    setItemToDelete(selectedConnections);
+    setShowDeleteModal(true);
   };
 
   // Transform API data to match our component structure
@@ -114,15 +157,6 @@ export default function MainConnect() {
     }));
   };
 
-  const deleteSelectedConnections = () => {
-    if (selectedConnections.length > 0) {
-      alert(`Menghapus ${selectedConnections.length} koneksi yang dipilih`);
-      setSelectedConnections([]);
-    } else {
-      alert("Pilih koneksi terlebih dahulu");
-    }
-  };
-
   const getStatusColor = (status) => {
     switch (status) {
       case "active":
@@ -154,7 +188,7 @@ export default function MainConnect() {
     return (
       <div className="flex min-h-[400px] items-center justify-center">
         <div className="text-center">
-          <div className="w-12 h-12 mx-auto border-b-2 border-blue-500 rounded-full animate-spin"></div>
+          <div className="mx-auto h-12 w-12 animate-spin rounded-full border-b-2 border-blue-500"></div>
           <p className="mt-4 text-gray-600 dark:text-gray-400">
             Memuat data koneksi...
           </p>
@@ -168,7 +202,7 @@ export default function MainConnect() {
     return (
       <div className="flex min-h-[400px] items-center justify-center">
         <div className="text-center">
-          <ExclamationTriangleIcon className="w-12 h-12 mx-auto text-red-500" />
+          <ExclamationTriangleIcon className="mx-auto h-12 w-12 text-red-500" />
           <h3 className="mt-4 text-lg font-medium text-gray-900 dark:text-white">
             Terjadi Kesalahan
           </h3>
@@ -177,7 +211,7 @@ export default function MainConnect() {
           </p>
           <button
             onClick={() => getThirtParty()}
-            className="px-4 py-2 mt-4 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600"
+            className="mt-4 rounded-md bg-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-blue-600"
           >
             Coba Lagi
           </button>
@@ -199,6 +233,25 @@ export default function MainConnect() {
         onSuccess={handleCreateSuccess}
       />
 
+      {/* Delete Confirmation Modal */}
+      <DeleteConfirmationModal
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        onSuccess={handleDeleteSuccess}
+        itemToDelete={itemToDelete}
+        isMultiple={Array.isArray(itemToDelete)}
+      />
+
+      {/* Success Notification Modal */}
+      <SuccessNotificationModal
+        isOpen={showSuccessModal}
+        onClose={() => setShowSuccessModal(false)}
+        title={successMessage.title}
+        message={successMessage.message}
+        autoClose={true}
+        autoCloseDelay={3000}
+      />
+
       {/* Header */}
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
@@ -213,11 +266,11 @@ export default function MainConnect() {
         <div className="flex flex-wrap gap-2">
           <button
             onClick={() => getThirtParty()}
-            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white transition-colors bg-green-500 rounded-md hover:bg-green-600"
+            className="flex items-center gap-2 rounded-md bg-green-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-green-600"
           >
             {loadThirtParty ? (
               <svg
-                className="w-4 h-4 text-white animate-spin"
+                className="h-4 w-4 animate-spin text-white"
                 fill="none"
                 viewBox="0 0 24 24"
               >
@@ -236,17 +289,17 @@ export default function MainConnect() {
                 ></path>
               </svg>
             ) : (
-              <EyeIcon className="w-4 h-4" />
+              <EyeIcon className="h-4 w-4" />
             )}
             <span className="hidden sm:inline">Refresh Data</span>
             <span className="sm:hidden">Refresh</span>
           </button>
           <button
-            onClick={deleteSelectedConnections}
+            onClick={handleMultipleDelete}
             disabled={selectedConnections.length === 0}
-            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white transition-colors bg-red-500 rounded-md hover:bg-red-600 disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex items-center gap-2 rounded-md bg-red-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-600 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            <TrashIcon className="w-4 h-4" />
+            <TrashIcon className="h-4 w-4" />
             <span className="hidden sm:inline">
               Hapus ({selectedConnections.length})
             </span>
@@ -254,9 +307,9 @@ export default function MainConnect() {
           </button>
           <button
             onClick={openModal}
-            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white transition-colors bg-blue-500 rounded-md hover:bg-blue-600"
+            className="flex items-center gap-2 rounded-md bg-blue-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-600"
           >
-            <PlusIcon className="w-4 h-4" />
+            <PlusIcon className="h-4 w-4" />
             <span className="hidden sm:inline">Tambah API Key</span>
             <span className="sm:hidden">Tambah</span>
           </button>
@@ -284,7 +337,7 @@ export default function MainConnect() {
             placeholder="Cari API key..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full py-2 pl-4 pr-10 border border-gray-300 rounded-md focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+            className="w-full rounded-md border border-gray-300 py-2 pr-10 pl-4 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
           />
           <MagnifyingGlassIcon className="absolute top-2.5 right-3 h-4 w-4 text-gray-400" />
         </div>
@@ -312,7 +365,7 @@ export default function MainConnect() {
                       filteredData.length > 0
                     }
                     onChange={toggleAllConnectionsSelection}
-                    className="text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
                 </TableCell>
                 <TableCell
@@ -375,19 +428,19 @@ export default function MainConnect() {
                           onChange={() =>
                             toggleConnectionSelection(connection.id)
                           }
-                          className="text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                          className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                         />
                       </TableCell>
                       <TableCell className="px-2 py-3">
                         <div className="flex items-center space-x-2">
                           <button
                             onClick={() => toggleRowExpansion(connection.id)}
-                            className="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
+                            className="rounded p-1 hover:bg-gray-200 dark:hover:bg-gray-700"
                           >
                             {expandedRows[connection.id] ? (
-                              <ChevronDownIcon className="w-4 h-4" />
+                              <ChevronDownIcon className="h-4 w-4" />
                             ) : (
-                              <ChevronRightIcon className="w-4 h-4" />
+                              <ChevronRightIcon className="h-4 w-4" />
                             )}
                           </button>
                           <div>
@@ -434,24 +487,24 @@ export default function MainConnect() {
                             onClick={() =>
                               alert(`Lihat detail ${connection.name}`)
                             }
-                            className="p-1 text-white transition-colors bg-blue-500 rounded hover:bg-blue-600"
+                            className="rounded bg-blue-500 p-1 text-white transition-colors hover:bg-blue-600"
                             title="Lihat Detail"
                           >
-                            <EyeIcon className="w-4 h-4" />
+                            <EyeIcon className="h-4 w-4" />
                           </button>
                           <button
                             onClick={() => alert(`Edit ${connection.name}`)}
-                            className="p-1 text-white transition-colors bg-yellow-500 rounded hover:bg-yellow-600"
+                            className="rounded bg-yellow-500 p-1 text-white transition-colors hover:bg-yellow-600"
                             title="Edit"
                           >
-                            <PencilIcon className="w-4 h-4" />
+                            <PencilIcon className="h-4 w-4" />
                           </button>
                           <button
-                            onClick={() => alert(`Hapus ${connection.name}`)}
-                            className="p-1 text-white transition-colors bg-red-500 rounded hover:bg-red-600"
+                            onClick={() => handleSingleDelete(connection)}
+                            className="rounded bg-red-500 p-1 text-white transition-colors hover:bg-red-600"
                             title="Hapus"
                           >
-                            <TrashIcon className="w-4 h-4" />
+                            <TrashIcon className="h-4 w-4" />
                           </button>
                         </div>
                       </TableCell>
@@ -499,7 +552,7 @@ export default function MainConnect() {
                               <h4 className="text-sm font-medium text-gray-900 dark:text-white">
                                 Full API Key
                               </h4>
-                              <div className="p-2 mt-2 font-mono text-sm text-gray-600 break-all bg-gray-100 rounded dark:bg-gray-700 dark:text-gray-400">
+                              <div className="mt-2 rounded bg-gray-100 p-2 font-mono text-sm break-all text-gray-600 dark:bg-gray-700 dark:text-gray-400">
                                 {connection.apiKey}
                               </div>
                             </div>
@@ -508,10 +561,10 @@ export default function MainConnect() {
                                 Actions
                               </h4>
                               <div className="mt-2 space-y-2">
-                                <button className="w-full px-3 py-1 text-xs text-white bg-blue-500 rounded hover:bg-blue-600">
+                                <button className="w-full rounded bg-blue-500 px-3 py-1 text-xs text-white hover:bg-blue-600">
                                   Test API Key
                                 </button>
-                                <button className="w-full px-3 py-1 text-xs text-white bg-green-500 rounded hover:bg-green-600">
+                                <button className="w-full rounded bg-green-500 px-3 py-1 text-xs text-white hover:bg-green-600">
                                   Regenerate Key
                                 </button>
                               </div>

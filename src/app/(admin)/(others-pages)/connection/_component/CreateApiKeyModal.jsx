@@ -35,10 +35,9 @@ export default function CreateApiKeyModal({ isOpen, onClose, onSuccess }) {
     try {
       console.log(createForm);
       await createUser.mutateAsync(createForm);
-      // setCreateForm({ provider: "OTHER", name: "", key: "" });
-      // onSuccess?.();
+      setCreateForm({ provider: "OTHER", name: "", key: "" });
+      onSuccess?.();
       onClose();
-      // alert("API Key berhasil ditambahkan!");
     } catch (error) {
       console.error("Error creating API key:", error);
       alert("Gagal menambahkan API Key. Silakan coba lagi.");
@@ -96,7 +95,7 @@ export default function CreateApiKeyModal({ isOpen, onClose, onSuccess }) {
           </div>
         </div>
 
-        <div className="flex items-center justify-end w-full gap-3 mt-6">
+        <div className="mt-6 flex w-full items-center justify-end gap-3">
           <Button size="sm" variant="outline" onClick={onClose}>
             Batal
           </Button>
@@ -108,7 +107,7 @@ export default function CreateApiKeyModal({ isOpen, onClose, onSuccess }) {
           >
             {createUser.isPending ? (
               <>
-                <div className="w-4 h-4 border-2 border-white rounded-full animate-spin border-t-transparent"></div>
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
                 <span>Menyimpan...</span>
               </>
             ) : (
