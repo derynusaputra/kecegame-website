@@ -10,7 +10,6 @@ export default function CreateApiKeyModal({ isOpen, onClose, onSuccess }) {
   const [createForm, setCreateForm] = useState({
     provider: "OTHER",
     name: "",
-    key: "",
   });
 
   const createUser = useThirParty.create();
@@ -27,15 +26,15 @@ export default function CreateApiKeyModal({ isOpen, onClose, onSuccess }) {
   const handleCreateSubmit = async (e) => {
     e.preventDefault();
 
-    if (!createForm.name || !createForm.key) {
-      alert("Nama dan API Key harus diisi!");
+    if (!createForm.name) {
+      alert("Nama harus diisi!");
       return;
     }
 
     try {
       console.log(createForm);
       await createUser.mutateAsync(createForm);
-      setCreateForm({ provider: "OTHER", name: "", key: "" });
+      setCreateForm({ provider: "OTHER", name: "" });
       onSuccess?.();
       onClose();
     } catch (error) {
@@ -82,20 +81,9 @@ export default function CreateApiKeyModal({ isOpen, onClose, onSuccess }) {
               required
             />
           </div>
-
-          <div className="col-span-1 sm:col-span-2">
-            <Label>API Key</Label>
-            <Input
-              type="text"
-              placeholder="Masukkan API Key"
-              value={createForm.key}
-              onChange={(e) => handleFormChange("key", e.target.value)}
-              required
-            />
-          </div>
         </div>
 
-        <div className="mt-6 flex w-full items-center justify-end gap-3">
+        <div className="flex items-center justify-end w-full gap-3 mt-6">
           <Button size="sm" variant="outline" onClick={onClose}>
             Batal
           </Button>
@@ -107,7 +95,7 @@ export default function CreateApiKeyModal({ isOpen, onClose, onSuccess }) {
           >
             {createUser.isPending ? (
               <>
-                <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                <div className="w-4 h-4 border-2 border-white rounded-full animate-spin border-t-transparent"></div>
                 <span>Menyimpan...</span>
               </>
             ) : (
