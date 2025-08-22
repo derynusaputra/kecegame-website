@@ -29,9 +29,9 @@ export default function FormElements() {
         <div className="space-y-6">
           <InputGroup />
           <FileInputExample />
-          <CheckboxComponents />
+          {/* <CheckboxComponents /> */}
           <RadioButtons />
-          <ToggleSwitch />
+          {/* <ToggleSwitch /> */}
           <DropzoneComponent />
         </div>
       </div>

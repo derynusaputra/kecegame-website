@@ -1,6 +1,6 @@
 "use client";
 import React, { createContext, useContext, useState, useEffect } from "react";
-const SidebarContext = createContext(undefined);
+const SidebarContext = createContext();
 export const useSidebar = () => {
   const context = useContext(SidebarContext);
   if (!context) {

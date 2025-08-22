@@ -25,6 +25,7 @@ import CreateApiKeyModal from "./CreateApiKeyModal";
 import DeleteConfirmationModal from "./DeleteConfirmationModal";
 import SuccessNotificationModal from "./SuccessNotificationModal";
 import ApiKeyPreviewModal from "./ApiKeyPreviewModal";
+import ConnectionConfigModalHero from "./ConnectionConfigModalHero";
 
 export default function MainConnect() {
   const { isExpanded } = useSidebar();
@@ -38,7 +39,9 @@ export default function MainConnect() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showApiKeyModal, setShowApiKeyModal] = useState(false);
+  const [showConfigModal, setShowConfigModal] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
+  const [selectedConnection, setSelectedConnection] = useState(null);
   const [selectedApiKey, setSelectedApiKey] = useState({
     apiKey: "",
     name: "",
@@ -99,6 +102,28 @@ export default function MainConnect() {
     }
     setItemToDelete(selectedConnections);
     setShowDeleteModal(true);
+  };
+
+  // Handle connection configuration
+  const handleConfigureConnection = (connection) => {
+    setSelectedConnection(connection);
+    setShowConfigModal(true);
+  };
+
+  // Handle save configuration
+  const handleSaveConfiguration = (configData) => {
+    // Here you would typically call an API to update the connection
+    console.log("Saving configuration:", configData);
+
+    // For now, just show success message
+    setSuccessMessage({
+      title: "Koneksi Berhasil Dikonfigurasi!",
+      message: `Koneksi ${configData.name} telah berhasil diaktifkan dan dikonfigurasi.`,
+    });
+    setShowSuccessModal(true);
+
+    // Refresh data
+    getThirtParty();
   };
 
   // Transform API data to match our component structure
@@ -466,15 +491,43 @@ export default function MainConnect() {
                         </span>
                       </TableCell>
                       <TableCell className="px-2 py-3">
-                        <span
-                          className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${getStatusColor(
-                            connection.status
-                          )}`}
-                        >
-                          {connection.status === "active"
-                            ? "Aktif"
-                            : "Tidak Aktif"}
-                        </span>
+                        {connection.status === "active" ? (
+                          <span
+                            className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${getStatusColor(
+                              connection.status
+                            )}`}
+                          >
+                            Aktif
+                          </span>
+                        ) : (
+                          <button
+                            onClick={() =>
+                              handleConfigureConnection(connection)
+                            }
+                            className="inline-flex items-center px-3 py-1 text-xs font-medium text-yellow-800 transition-colors bg-yellow-100 rounded-full hover:bg-yellow-200"
+                          >
+                            <svg
+                              className="w-3 h-3 mr-1"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                              />
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                              />
+                            </svg>
+                            Konfigurasi
+                          </button>
+                        )}
                       </TableCell>
                       <TableCell className="hidden px-2 py-3 lg:table-cell">
                         <button
@@ -616,6 +669,14 @@ export default function MainConnect() {
         onClose={() => setShowApiKeyModal(false)}
         apiKey={selectedApiKey.apiKey}
         providerName={selectedApiKey.name}
+      />
+
+      {/* Connection Configuration Modal */}
+      <ConnectionConfigModalHero
+        isOpen={showConfigModal}
+        onClose={() => setShowConfigModal(false)}
+        connection={selectedConnection}
+        onSave={handleSaveConfiguration}
       />
     </div>
   );
