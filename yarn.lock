@@ -1138,21 +1138,7 @@
     "@react-aria/focus" "3.21.0"
     "@react-types/breadcrumbs" "3.7.15"
 
-"@heroui/button@2.2.24":
-  version "2.2.24"
-  resolved "https://registry.npmjs.org/@heroui/button/-/button-2.2.24.tgz"
-  integrity sha512-PR4CZaDSSAGYPv7uUNRc9FAJkNtMgcNUdnD0qxQoJDQoB/C6LLLgROqc/iHaKX9aEH5JYIISbMxTIcJtY2Zk2A==
-  dependencies:
-    "@heroui/react-utils" "2.1.12"
-    "@heroui/ripple" "2.2.18"
-    "@heroui/shared-utils" "2.1.10"
-    "@heroui/spinner" "2.2.21"
-    "@heroui/use-aria-button" "2.2.18"
-    "@react-aria/focus" "3.21.0"
-    "@react-aria/interactions" "3.25.4"
-    "@react-types/shared" "3.31.0"
-
-"@heroui/button@^2.2.24":
+"@heroui/button@2.2.24", "@heroui/button@^2.2.24":
   version "2.2.24"
   resolved "https://registry.yarnpkg.com/@heroui/button/-/button-2.2.24.tgz#94827bbd817c4e8a44f93d1701ae1868be40ecb6"
   integrity sha512-PR4CZaDSSAGYPv7uUNRc9FAJkNtMgcNUdnD0qxQoJDQoB/C6LLLgROqc/iHaKX9aEH5JYIISbMxTIcJtY2Zk2A==
@@ -2026,6 +2012,13 @@
     "@heroui/react-utils" "2.1.12"
     "@heroui/shared-utils" "2.1.10"
     "@react-aria/focus" "3.21.0"
+
+"@hookform/resolvers@^5.2.1":
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/@hookform/resolvers/-/resolvers-5.2.1.tgz#3332b4662fe301a969ac1b795d663cf728329166"
+  integrity sha512-u0+6X58gkjMcxur1wRWokA7XsiiBJ6aK17aPZxhkoYiK5J+HcTx0Vhu9ovXe6H+dVpO6cjrn2FkJTryXEMlryQ==
+  dependencies:
+    "@standard-schema/utils" "^0.3.0"
 
 "@humanfs/core@^0.19.1":
   version "0.19.1"
@@ -3420,6 +3413,11 @@
   version "1.11.0"
   resolved "https://registry.npmjs.org/@rushstack/eslint-patch/-/eslint-patch-1.11.0.tgz"
   integrity sha512-zxnHvoMQVqewTJr/W4pKjF0bMGiKJv1WX7bSrkl46Hg0QjESbzBROWK0Wg4RphzSOS5Jiy7eFimmM3UgMrMZbQ==
+
+"@standard-schema/utils@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@standard-schema/utils/-/utils-0.3.0.tgz#3d5e608f16c2390c10528e98e59aef6bf73cae7b"
+  integrity sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g==
 
 "@svgdotjs/svg.draggable.js@^3.0.4":
   version "3.0.6"
@@ -6055,6 +6053,11 @@ react-dropzone@^14.3.5:
     file-selector "^2.1.0"
     prop-types "^15.8.1"
 
+react-hook-form@^7.62.0:
+  version "7.62.0"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.62.0.tgz#2d81e13c2c6b6d636548e440818341ca753218d0"
+  integrity sha512-7KWFejc98xqG/F4bAxpL41NB3o1nnvQO1RWZT3TqRZYL8RryQETGfEdVnJN2fy1crCiBLLjkRBVK05j24FxJGA==
+
 react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"
   resolved "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz"
@@ -6822,3 +6825,8 @@ yocto-queue@^0.1.0:
   version "0.1.0"
   resolved "https://registry.npmjs.org/yocto-queue/-/yocto-queue-0.1.0.tgz"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
+
+zod@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-4.1.0.tgz#b1d5883af7653ad48cd8ecb5a2f4012b542f632a"
+  integrity sha512-UWxluYj2IDX9MHRXTMbB/2eeWrAMmmMSESM+MfT9MQw8U1qo9q5ASW08anoJh6AJ7pkt099fLdNFmfI+4aChHg==

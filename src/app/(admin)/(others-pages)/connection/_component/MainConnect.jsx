@@ -38,6 +38,7 @@ import {
   ModalHeader,
   useDisclosure,
 } from "@heroui/react";
+import ModalContentLoginLitmatch from "./ModalContentLoginLitmatch";
 
 export default function MainConnect() {
   const { isExpanded } = useSidebar();
@@ -239,7 +240,7 @@ export default function MainConnect() {
     return (
       <div className="flex min-h-[400px] items-center justify-center">
         <div className="text-center">
-          <div className="w-12 h-12 mx-auto border-b-2 border-blue-500 rounded-full animate-spin"></div>
+          <div className="mx-auto h-12 w-12 animate-spin rounded-full border-b-2 border-blue-500"></div>
           <p className="mt-4 text-gray-600 dark:text-gray-400">
             Memuat data koneksi...
           </p>
@@ -253,7 +254,7 @@ export default function MainConnect() {
     return (
       <div className="flex min-h-[400px] items-center justify-center">
         <div className="text-center">
-          <ExclamationTriangleIcon className="w-12 h-12 mx-auto text-red-500" />
+          <ExclamationTriangleIcon className="mx-auto h-12 w-12 text-red-500" />
           <h3 className="mt-4 text-lg font-medium text-gray-900 dark:text-white">
             Terjadi Kesalahan
           </h3>
@@ -262,7 +263,7 @@ export default function MainConnect() {
           </p>
           <button
             onClick={() => getThirtParty()}
-            className="px-4 py-2 mt-4 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600"
+            className="mt-4 rounded-md bg-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-blue-600"
           >
             Coba Lagi
           </button>
@@ -329,11 +330,11 @@ export default function MainConnect() {
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => getThirtParty()}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white transition-colors bg-green-500 rounded-md hover:bg-green-600"
+              className="flex items-center gap-2 rounded-md bg-green-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-green-600"
             >
               {loadThirtParty ? (
                 <svg
-                  className="w-4 h-4 text-white animate-spin"
+                  className="h-4 w-4 animate-spin text-white"
                   fill="none"
                   viewBox="0 0 24 24"
                 >
@@ -352,7 +353,7 @@ export default function MainConnect() {
                   ></path>
                 </svg>
               ) : (
-                <EyeIcon className="w-4 h-4" />
+                <EyeIcon className="h-4 w-4" />
               )}
               <span className="hidden sm:inline">Refresh Data</span>
               <span className="sm:hidden">Refresh</span>
@@ -360,9 +361,9 @@ export default function MainConnect() {
             <button
               onClick={handleMultipleDelete}
               disabled={selectedConnections.length === 0}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white transition-colors bg-red-500 rounded-md hover:bg-red-600 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex items-center gap-2 rounded-md bg-red-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-600 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              <TrashIcon className="w-4 h-4" />
+              <TrashIcon className="h-4 w-4" />
               <span className="hidden sm:inline">
                 Hapus ({selectedConnections.length})
               </span>
@@ -370,9 +371,9 @@ export default function MainConnect() {
             </button>
             <button
               onClick={openModal}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white transition-colors bg-blue-500 rounded-md hover:bg-blue-600"
+              className="flex items-center gap-2 rounded-md bg-blue-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-600"
             >
-              <PlusIcon className="w-4 h-4" />
+              <PlusIcon className="h-4 w-4" />
               <span className="hidden sm:inline">Tambah API Key</span>
               <span className="sm:hidden">Tambah</span>
             </button>
@@ -403,7 +404,7 @@ export default function MainConnect() {
               placeholder="Cari API key..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full py-2 pl-4 pr-10 border border-gray-300 rounded-md focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+              className="w-full rounded-md border border-gray-300 py-2 pr-10 pl-4 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
             />
             <MagnifyingGlassIcon className="absolute top-2.5 right-3 h-4 w-4 text-gray-400" />
           </div>
@@ -432,7 +433,7 @@ export default function MainConnect() {
                         filteredData.length > 0
                       }
                       onChange={toggleAllConnectionsSelection}
-                      className="text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                     />
                   </TableCell>
                   <TableCell
@@ -498,19 +499,19 @@ export default function MainConnect() {
                             onChange={() =>
                               toggleConnectionSelection(connection.id)
                             }
-                            className="text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                           />
                         </TableCell>
                         <TableCell className="px-2 py-3">
                           <div className="flex items-center space-x-2">
                             <button
                               onClick={() => toggleRowExpansion(connection.id)}
-                              className="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
+                              className="rounded p-1 hover:bg-gray-200 dark:hover:bg-gray-700"
                             >
                               {expandedRows[connection.id] ? (
-                                <ChevronDownIcon className="w-4 h-4" />
+                                <ChevronDownIcon className="h-4 w-4" />
                               ) : (
-                                <ChevronRightIcon className="w-4 h-4" />
+                                <ChevronRightIcon className="h-4 w-4" />
                               )}
                             </button>
                             <div>
@@ -542,10 +543,10 @@ export default function MainConnect() {
                               onClick={() =>
                                 handleConfigureConnection(connection)
                               }
-                              className="inline-flex items-center px-3 py-1 text-xs font-medium text-yellow-800 transition-colors bg-yellow-100 rounded-full hover:bg-yellow-200"
+                              className="inline-flex items-center rounded-full bg-yellow-100 px-3 py-1 text-xs font-medium text-yellow-800 transition-colors hover:bg-yellow-200"
                             >
                               <svg
-                                className="w-3 h-3 mr-1"
+                                className="mr-1 h-3 w-3"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -576,10 +577,10 @@ export default function MainConnect() {
                               });
                               setShowApiKeyModal(true);
                             }}
-                            className="inline-flex items-center px-3 py-1 text-xs font-medium text-white transition-colors bg-gray-600 rounded hover:bg-gray-700"
+                            className="inline-flex items-center rounded bg-gray-600 px-3 py-1 text-xs font-medium text-white transition-colors hover:bg-gray-700"
                           >
                             <svg
-                              className="w-3 h-3 mr-1"
+                              className="mr-1 h-3 w-3"
                               fill="none"
                               stroke="currentColor"
                               viewBox="0 0 24 24"
@@ -607,24 +608,24 @@ export default function MainConnect() {
                               onClick={() =>
                                 alert(`Lihat detail ${connection.name}`)
                               }
-                              className="p-1 text-white transition-colors bg-blue-500 rounded hover:bg-blue-600"
+                              className="rounded bg-blue-500 p-1 text-white transition-colors hover:bg-blue-600"
                               title="Lihat Detail"
                             >
-                              <EyeIcon className="w-4 h-4" />
+                              <EyeIcon className="h-4 w-4" />
                             </button>
                             <button
                               onClick={() => alert(`Edit ${connection.name}`)}
-                              className="p-1 text-white transition-colors bg-yellow-500 rounded hover:bg-yellow-600"
+                              className="rounded bg-yellow-500 p-1 text-white transition-colors hover:bg-yellow-600"
                               title="Edit"
                             >
-                              <PencilIcon className="w-4 h-4" />
+                              <PencilIcon className="h-4 w-4" />
                             </button>
                             <button
                               onClick={() => handleSingleDelete(connection)}
-                              className="p-1 text-white transition-colors bg-red-500 rounded hover:bg-red-600"
+                              className="rounded bg-red-500 p-1 text-white transition-colors hover:bg-red-600"
                               title="Hapus"
                             >
-                              <TrashIcon className="w-4 h-4" />
+                              <TrashIcon className="h-4 w-4" />
                             </button>
                           </div>
                         </TableCell>
@@ -672,7 +673,7 @@ export default function MainConnect() {
                                 <h4 className="text-sm font-medium text-gray-900 dark:text-white">
                                   Full API Key
                                 </h4>
-                                <div className="p-2 mt-2 font-mono text-sm text-gray-600 break-all bg-gray-100 rounded dark:bg-gray-700 dark:text-gray-400">
+                                <div className="mt-2 rounded bg-gray-100 p-2 font-mono text-sm break-all text-gray-600 dark:bg-gray-700 dark:text-gray-400">
                                   {connection.apiKey}
                                 </div>
                               </div>
@@ -681,10 +682,10 @@ export default function MainConnect() {
                                   Actions
                                 </h4>
                                 <div className="mt-2 space-y-2">
-                                  <button className="w-full px-3 py-1 text-xs text-white bg-blue-500 rounded hover:bg-blue-600">
+                                  <button className="w-full rounded bg-blue-500 px-3 py-1 text-xs text-white hover:bg-blue-600">
                                     Test API Key
                                   </button>
-                                  <button className="w-full px-3 py-1 text-xs text-white bg-green-500 rounded hover:bg-green-600">
+                                  <button className="w-full rounded bg-green-500 px-3 py-1 text-xs text-white hover:bg-green-600">
                                     Regenerate Key
                                   </button>
                                 </div>
@@ -723,46 +724,7 @@ export default function MainConnect() {
         placement="top-center"
         onOpenChange={onOpenChangeLogin}
       >
-        <ModalContent>
-          {(onCloseLogin) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1">Log in</ModalHeader>
-              <ModalBody>
-                <Input
-                  label="Email"
-                  placeholder="Enter your email"
-                  variant="bordered"
-                />
-                <Input
-                  label="Password"
-                  placeholder="Enter your password"
-                  type="password"
-                  variant="bordered"
-                />
-                <div className="flex justify-between px-1 py-2">
-                  <Checkbox
-                    classNames={{
-                      label: "text-small",
-                    }}
-                  >
-                    Remember me
-                  </Checkbox>
-                  <Link color="primary" href="#" size="sm">
-                    Forgot password?
-                  </Link>
-                </div>
-              </ModalBody>
-              <ModalFooter>
-                <Button color="danger" variant="flat" onPress={onCloseLogin}>
-                  Close
-                </Button>
-                <Button color="primary" onPress={onCloseLogin}>
-                  Sign in
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
+        <ModalContentLoginLitmatch onCloseLogin={onCloseLogin} />
       </Modal>
     </>
   );
