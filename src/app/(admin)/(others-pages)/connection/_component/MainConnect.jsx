@@ -26,9 +26,8 @@ import DeleteConfirmationModal from "./DeleteConfirmationModal";
 import SuccessNotificationModal from "./SuccessNotificationModal";
 import ApiKeyPreviewModal from "./ApiKeyPreviewModal";
 import ConnectionConfigModalHero from "./ConnectionConfigModalHero";
-import { Button } from "@heroui/button";
 import {
-  addToast,
+  Button,
   Checkbox,
   Input,
   Link,
@@ -37,7 +36,6 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-  ToastProvider,
   useDisclosure,
 } from "@heroui/react";
 
@@ -64,6 +62,14 @@ export default function MainConnect() {
     title: "",
     message: "",
   });
+
+  // Login modal hook - moved to top level to follow Rules of Hooks
+  const {
+    isOpen: isOpenLogin,
+    onOpen: onOpenLogin,
+    onOpenChange: onOpenChangeLogin,
+    onClose: onCloseLogin,
+  } = useDisclosure();
 
   // Fetch data using React Query
   //   const updateUser = useThirParty.update();
@@ -265,12 +271,6 @@ export default function MainConnect() {
     );
   }
 
-  const {
-    isOpen: isOpenLogin,
-    onOpen: onOpenLogin,
-    onOpenChange: onOpenChangeLogin,
-    onClose: onCloseLogin,
-  } = useDisclosure();
   const onPressShadow = () => {
     // addToast({
     //   title: "Toast title",
@@ -718,11 +718,6 @@ export default function MainConnect() {
         />
       </div>
 
-      {/* modal */}
-      <div className="fixed z-[100]">
-        <ToastProvider placement="top-center" toastOffset={60} />
-      </div>
-
       <Modal
         isOpen={isOpenLogin}
         placement="top-center"
@@ -758,10 +753,10 @@ export default function MainConnect() {
                 </div>
               </ModalBody>
               <ModalFooter>
-                <Button color="danger" variant="flat" onPress={onClose}>
+                <Button color="danger" variant="flat" onPress={onCloseLogin}>
                   Close
                 </Button>
-                <Button color="primary" onPress={onClose}>
+                <Button color="primary" onPress={onCloseLogin}>
                   Sign in
                 </Button>
               </ModalFooter>
