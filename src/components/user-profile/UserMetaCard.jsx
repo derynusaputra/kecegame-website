@@ -15,10 +15,10 @@ export default function UserMetaCard() {
   };
   return (
     <>
-      <div className="rounded-2xl border border-gray-200 p-5 lg:p-6 dark:border-gray-800">
+      <div className="p-5 border border-gray-200 rounded-2xl lg:p-6 dark:border-gray-800">
         <div className="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
-          <div className="flex w-full flex-col items-center gap-6 xl:flex-row">
-            <div className="h-20 w-20 overflow-hidden rounded-full border border-gray-200 dark:border-gray-800">
+          <div className="flex flex-col items-center w-full gap-6 xl:flex-row">
+            <div className="w-20 h-20 overflow-hidden border border-gray-200 rounded-full dark:border-gray-800">
               <Image
                 width={80}
                 height={80}
@@ -27,7 +27,7 @@ export default function UserMetaCard() {
               />
             </div>
             <div className="order-3 xl:order-2">
-              <h4 className="mb-2 text-center text-lg font-semibold text-gray-800 xl:text-left dark:text-white/90">
+              <h4 className="mb-2 text-lg font-semibold text-center text-gray-800 xl:text-left dark:text-white/90">
                 Musharof Chowdhury
               </h4>
               <div className="flex flex-col items-center gap-1 text-center xl:flex-row xl:gap-3 xl:text-left">
@@ -40,7 +40,7 @@ export default function UserMetaCard() {
                 </p>
               </div>
             </div>
-            <div className="order-2 flex grow items-center gap-2 xl:order-3 xl:justify-end">
+            <div className="flex items-center order-2 gap-2 grow xl:order-3 xl:justify-end">
               <a
                 target="_blank"
                 rel="noreferrer"
@@ -230,7 +230,7 @@ export default function UserMetaCard() {
                 </div>
               </div>
             </div>
-            <div className="mt-6 flex items-center gap-3 px-2 lg:justify-end">
+            <div className="flex items-center gap-3 px-2 mt-6 lg:justify-end">
               <Button size="sm" variant="outline" onClick={closeModal}>
                 Close
               </Button>
