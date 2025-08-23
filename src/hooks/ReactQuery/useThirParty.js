@@ -56,7 +56,7 @@ export const useThirParty = {
     const queryClient = useQueryClient();
     return useMutation({
       mutationFn: async (id) => {
-        await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+        await fetch(`${API_URL}/v1/thirdparty/${id}`, { method: "DELETE" });
         return id;
       },
       onSuccess: () => {

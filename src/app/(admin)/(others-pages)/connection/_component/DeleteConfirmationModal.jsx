@@ -14,13 +14,16 @@ export default function DeleteConfirmationModal({
   const deleteUser = useThirParty.delete();
 
   const handleDelete = async () => {
+    console.log("====================================");
+    console.log(itemToDelete?.id);
+    console.log("====================================");
     try {
       if (isMultiple) {
         // Delete multiple items
         await Promise.all(itemToDelete.map((id) => deleteUser.mutateAsync(id)));
       } else {
         // Delete single item
-        await deleteUser.mutateAsync(itemToDelete);
+        await deleteUser.mutateAsync(itemToDelete?.id);
       }
       onSuccess?.();
       onClose();

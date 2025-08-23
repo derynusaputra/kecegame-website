@@ -8,6 +8,7 @@ import {
   ModalFooter,
   Button,
   Input,
+  InputOtp,
 } from "@heroui/react";
 
 export default function ModalContentLoginLitmatch({ onCloseLogin }) {
@@ -75,6 +76,19 @@ export default function ModalContentLoginLitmatch({ onCloseLogin }) {
     }
   };
 
+  const handleBackToPhone = () => {
+    // Clear all states when going back to step 1
+    setStep(1);
+    setCodeSent(false);
+    setCountdown(0);
+    setIsSendingCode(false);
+
+    // Reset form values
+    setValue("code", "");
+
+    console.log("Back to phone number step - states cleared");
+  };
+
   const onSubmit = async (data) => {
     console.log("Form submitted:", data);
     try {
@@ -124,8 +138,8 @@ export default function ModalContentLoginLitmatch({ onCloseLogin }) {
                         inputWrapper: "h-12 relative",
                       }}
                       startContent={
-                        <div className="flex items-center pointer-events-none">
-                          <span className="text-sm text-default-400">+62</span>
+                        <div className="pointer-events-none flex items-center">
+                          <span className="text-default-400 text-sm">+62</span>
                         </div>
                       }
                       onChange={(e) => {
@@ -173,39 +187,53 @@ export default function ModalContentLoginLitmatch({ onCloseLogin }) {
             ) : (
               // Step 2: Code Input
               <div className="space-y-4">
-                <Controller
-                  name="code"
-                  control={control}
-                  render={({ field }) => (
-                    <Input
-                      {...field}
-                      label="Verification Code"
-                      placeholder="Enter 6-digit code"
-                      variant="bordered"
-                      type="text"
-                      maxLength={6}
-                      isInvalid={!!errors.code}
-                      errorMessage={errors.code?.message}
-                      classNames={{
-                        input: "text-sm text-center text-lg font-mono",
-                        inputWrapper: "h-12",
-                      }}
-                    />
-                  )}
-                  rules={{
-                    required: "Verification code is required",
-                    pattern: {
-                      value: /^\d{6}$/,
-                      message: "Enter a 6-digit code",
-                    },
-                  }}
-                />
+                <div className="flex items-center justify-center">
+                  <Controller
+                    name="code"
+                    control={control}
+                    render={({ field }) => (
+                      // <Input
+                      //   {...field}
+                      //   label="Verification Code"
+                      //   placeholder="Enter 6-digit code"
+                      //   variant="bordered"
+                      //   type="text"
+                      //   maxLength={6}
+                      //   isInvalid={!!errors.code}
+                      //   errorMessage={errors.code?.message}
+                      //   classNames={{
+                      //     input: "text-sm text-center text-lg font-mono",
+                      //     inputWrapper: "h-12",
+                      //   }}
+                      // />
+                      <InputOtp
+                        {...field}
+                        isRequired
+                        aria-label="OTP input field"
+                        length={6}
+                        name="otp"
+                        placeholder="Enter code"
+                        classNames={{
+                          input: "text-sm text-center text-lg font-mono",
+                          inputWrapper: "h-12",
+                        }}
+                      />
+                    )}
+                    rules={{
+                      required: "Verification code is required",
+                      pattern: {
+                        value: /^\d{6}$/,
+                        message: "Enter a 6-digit code",
+                      },
+                    }}
+                  />
+                </div>
 
                 <div className="flex items-center justify-between">
                   <Button
                     color="default"
                     variant="light"
-                    onPress={() => setStep(1)}
+                    onPress={handleBackToPhone}
                     className="text-sm"
                   >
                     ← Back to Phone
