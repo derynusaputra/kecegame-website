@@ -26,6 +26,20 @@ import DeleteConfirmationModal from "./DeleteConfirmationModal";
 import SuccessNotificationModal from "./SuccessNotificationModal";
 import ApiKeyPreviewModal from "./ApiKeyPreviewModal";
 import ConnectionConfigModalHero from "./ConnectionConfigModalHero";
+import { Button } from "@heroui/button";
+import {
+  addToast,
+  Checkbox,
+  Input,
+  Link,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ToastProvider,
+  useDisclosure,
+} from "@heroui/react";
 
 export default function MainConnect() {
   const { isExpanded } = useSidebar();
@@ -251,260 +265,318 @@ export default function MainConnect() {
     );
   }
 
+  const {
+    isOpen: isOpenLogin,
+    onOpen: onOpenLogin,
+    onOpenChange: onOpenChangeLogin,
+    onClose: onCloseLogin,
+  } = useDisclosure();
+  const onPressShadow = () => {
+    // addToast({
+    //   title: "Toast title",
+    //   description: "Toast displayed successfully",
+    //   color: "success",
+    //   timeout: 1500,
+    // });
+
+    onOpenLogin();
+  };
+
   return (
-    <div
-      className={`w-full space-y-4 transition-all duration-300 lg:space-y-6 ${
-        isExpanded ? "lg:pr-4" : "lg:pr-0"
-      }`}
-    >
-      {/* Create API Key Modal */}
-      <CreateApiKeyModal
-        isOpen={isOpen}
-        onClose={closeModal}
-        onSuccess={handleCreateSuccess}
-      />
+    <>
+      <div
+        className={`w-full space-y-4 transition-all duration-300 lg:space-y-6 ${
+          isExpanded ? "lg:pr-4" : "lg:pr-0"
+        }`}
+      >
+        {/* Create API Key Modal */}
+        <CreateApiKeyModal
+          isOpen={isOpen}
+          onClose={closeModal}
+          onSuccess={handleCreateSuccess}
+        />
 
-      {/* Delete Confirmation Modal */}
-      <DeleteConfirmationModal
-        isOpen={showDeleteModal}
-        onClose={() => setShowDeleteModal(false)}
-        onSuccess={handleDeleteSuccess}
-        itemToDelete={itemToDelete}
-        isMultiple={Array.isArray(itemToDelete)}
-      />
+        {/* Delete Confirmation Modal */}
+        <DeleteConfirmationModal
+          isOpen={showDeleteModal}
+          onClose={() => setShowDeleteModal(false)}
+          onSuccess={handleDeleteSuccess}
+          itemToDelete={itemToDelete}
+          isMultiple={Array.isArray(itemToDelete)}
+        />
 
-      {/* Success Notification Modal */}
-      <SuccessNotificationModal
-        isOpen={showSuccessModal}
-        onClose={() => setShowSuccessModal(false)}
-        title={successMessage.title}
-        message={successMessage.message}
-        autoClose={true}
-        autoCloseDelay={3000}
-      />
+        {/* Success Notification Modal */}
+        <SuccessNotificationModal
+          isOpen={showSuccessModal}
+          onClose={() => setShowSuccessModal(false)}
+          title={successMessage.title}
+          message={successMessage.message}
+          autoClose={true}
+          autoCloseDelay={3000}
+        />
 
-      {/* Header */}
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-            Third Party API Keys
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Kelola semua API keys dari third party providers
-          </p>
+        {/* Header */}
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+              Third Party API Keys
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400">
+              Kelola semua API keys dari third party providers
+            </p>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => getThirtParty()}
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white transition-colors bg-green-500 rounded-md hover:bg-green-600"
+            >
+              {loadThirtParty ? (
+                <svg
+                  className="w-4 h-4 text-white animate-spin"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                  ></path>
+                </svg>
+              ) : (
+                <EyeIcon className="w-4 h-4" />
+              )}
+              <span className="hidden sm:inline">Refresh Data</span>
+              <span className="sm:hidden">Refresh</span>
+            </button>
+            <button
+              onClick={handleMultipleDelete}
+              disabled={selectedConnections.length === 0}
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white transition-colors bg-red-500 rounded-md hover:bg-red-600 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <TrashIcon className="w-4 h-4" />
+              <span className="hidden sm:inline">
+                Hapus ({selectedConnections.length})
+              </span>
+              <span className="sm:hidden">Hapus</span>
+            </button>
+            <button
+              onClick={openModal}
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white transition-colors bg-blue-500 rounded-md hover:bg-blue-600"
+            >
+              <PlusIcon className="w-4 h-4" />
+              <span className="hidden sm:inline">Tambah API Key</span>
+              <span className="sm:hidden">Tambah</span>
+            </button>
+          </div>
         </div>
 
-        <div className="flex flex-wrap gap-2">
-          <button
-            onClick={() => getThirtParty()}
-            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white transition-colors bg-green-500 rounded-md hover:bg-green-600"
-          >
-            {loadThirtParty ? (
-              <svg
-                className="w-4 h-4 text-white animate-spin"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                ></path>
-              </svg>
-            ) : (
-              <EyeIcon className="w-4 h-4" />
-            )}
-            <span className="hidden sm:inline">Refresh Data</span>
-            <span className="sm:hidden">Refresh</span>
-          </button>
-          <button
-            onClick={handleMultipleDelete}
-            disabled={selectedConnections.length === 0}
-            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white transition-colors bg-red-500 rounded-md hover:bg-red-600 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            <TrashIcon className="w-4 h-4" />
-            <span className="hidden sm:inline">
-              Hapus ({selectedConnections.length})
-            </span>
-            <span className="sm:hidden">Hapus</span>
-          </button>
-          <button
-            onClick={openModal}
-            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white transition-colors bg-blue-500 rounded-md hover:bg-blue-600"
-          >
-            <PlusIcon className="w-4 h-4" />
-            <span className="hidden sm:inline">Tambah API Key</span>
-            <span className="sm:hidden">Tambah</span>
-          </button>
-        </div>
-      </div>
+        {/* Filters and Search */}
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => setShowOnlyActive(!showOnlyActive)}
+              className={`rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+                showOnlyActive
+                  ? "bg-green-500 text-white"
+                  : "border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+              }`}
+            >
+              Hanya Aktif
+            </button>
+            <Button color="primary" variant="shadow" onPress={onPressShadow}>
+              Shadow
+            </Button>
+          </div>
 
-      {/* Filters and Search */}
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <div className="flex flex-wrap gap-2">
-          <button
-            onClick={() => setShowOnlyActive(!showOnlyActive)}
-            className={`rounded-md px-3 py-2 text-sm font-medium transition-colors ${
-              showOnlyActive
-                ? "bg-green-500 text-white"
-                : "border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
-            }`}
-          >
-            Hanya Aktif
-          </button>
+          <div className="relative w-full lg:w-80">
+            <input
+              type="text"
+              placeholder="Cari API key..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full py-2 pl-4 pr-10 border border-gray-300 rounded-md focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+            />
+            <MagnifyingGlassIcon className="absolute top-2.5 right-3 h-4 w-4 text-gray-400" />
+          </div>
         </div>
 
-        <div className="relative w-full lg:w-80">
-          <input
-            type="text"
-            placeholder="Cari API key..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full py-2 pl-4 pr-10 border border-gray-300 rounded-md focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
-          />
-          <MagnifyingGlassIcon className="absolute top-2.5 right-3 h-4 w-4 text-gray-400" />
+        {/* Results Count */}
+        <div className="text-sm text-gray-600 dark:text-gray-400">
+          Menampilkan {filteredData.length} dari {transformedData.length} API
+          keys
         </div>
-      </div>
 
-      {/* Results Count */}
-      <div className="text-sm text-gray-600 dark:text-gray-400">
-        Menampilkan {filteredData.length} dari {transformedData.length} API keys
-      </div>
-
-      {/* Table */}
-      <div className="w-full rounded-xl border border-gray-200 bg-white transition-all duration-300 dark:border-white/[0.05] dark:bg-white/[0.03]">
-        <div className="w-full overflow-x-auto">
-          <Table>
-            <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
-              <TableRow>
-                <TableCell
-                  isHeader
-                  className="min-w-[40px] px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
-                >
-                  <input
-                    type="checkbox"
-                    checked={
-                      selectedConnections.length === filteredData.length &&
-                      filteredData.length > 0
-                    }
-                    onChange={toggleAllConnectionsSelection}
-                    className="text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                  />
-                </TableCell>
-                <TableCell
-                  isHeader
-                  className="min-w-[200px] px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
-                >
-                  Nama Provider
-                </TableCell>
-                <TableCell
-                  isHeader
-                  className="min-w-[100px] px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
-                >
-                  Provider
-                </TableCell>
-                <TableCell
-                  isHeader
-                  className="min-w-[100px] px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
-                >
-                  Status
-                </TableCell>
-                <TableCell
-                  isHeader
-                  className="hidden min-w-[250px] px-2 py-3 text-start text-xs font-medium text-gray-500 lg:table-cell dark:text-gray-400"
-                >
-                  API Key Preview
-                </TableCell>
-                <TableCell
-                  isHeader
-                  className="hidden min-w-[150px] px-2 py-3 text-start text-xs font-medium text-gray-500 md:table-cell dark:text-gray-400"
-                >
-                  Updated At
-                </TableCell>
-                <TableCell
-                  isHeader
-                  className="min-w-[80px] px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
-                >
-                  Actions
-                </TableCell>
-              </TableRow>
-            </TableHeader>
-
-            {/* body */}
-            <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-              {filteredData.length === 0 ? (
+        {/* Table */}
+        <div className="w-full rounded-xl border border-gray-200 bg-white transition-all duration-300 dark:border-white/[0.05] dark:bg-white/[0.03]">
+          <div className="w-full overflow-x-auto">
+            <Table>
+              <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
                 <TableRow>
                   <TableCell
-                    colSpan={7}
-                    className="px-4 py-8 text-center text-gray-500 dark:text-gray-400"
+                    isHeader
+                    className="min-w-[40px] px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
                   >
-                    Tidak ada API key yang ditemukan
+                    <input
+                      type="checkbox"
+                      checked={
+                        selectedConnections.length === filteredData.length &&
+                        filteredData.length > 0
+                      }
+                      onChange={toggleAllConnectionsSelection}
+                      className="text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                  </TableCell>
+                  <TableCell
+                    isHeader
+                    className="min-w-[200px] px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
+                  >
+                    Nama Provider
+                  </TableCell>
+                  <TableCell
+                    isHeader
+                    className="min-w-[100px] px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
+                  >
+                    Provider
+                  </TableCell>
+                  <TableCell
+                    isHeader
+                    className="min-w-[100px] px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
+                  >
+                    Status
+                  </TableCell>
+                  <TableCell
+                    isHeader
+                    className="hidden min-w-[250px] px-2 py-3 text-start text-xs font-medium text-gray-500 lg:table-cell dark:text-gray-400"
+                  >
+                    API Key Preview
+                  </TableCell>
+                  <TableCell
+                    isHeader
+                    className="hidden min-w-[150px] px-2 py-3 text-start text-xs font-medium text-gray-500 md:table-cell dark:text-gray-400"
+                  >
+                    Updated At
+                  </TableCell>
+                  <TableCell
+                    isHeader
+                    className="min-w-[80px] px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
+                  >
+                    Actions
                   </TableCell>
                 </TableRow>
-              ) : (
-                filteredData.map((connection) => (
-                  <React.Fragment key={connection.id}>
-                    <TableRow className="hover:bg-gray-50 dark:hover:bg-gray-800/30">
-                      <TableCell className="px-2 py-3">
-                        <input
-                          type="checkbox"
-                          checked={selectedConnections.includes(connection.id)}
-                          onChange={() =>
-                            toggleConnectionSelection(connection.id)
-                          }
-                          className="text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                        />
-                      </TableCell>
-                      <TableCell className="px-2 py-3">
-                        <div className="flex items-center space-x-2">
-                          <button
-                            onClick={() => toggleRowExpansion(connection.id)}
-                            className="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
-                          >
-                            {expandedRows[connection.id] ? (
-                              <ChevronDownIcon className="w-4 h-4" />
-                            ) : (
-                              <ChevronRightIcon className="w-4 h-4" />
+              </TableHeader>
+
+              {/* body */}
+              <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+                {filteredData.length === 0 ? (
+                  <TableRow>
+                    <TableCell
+                      colSpan={7}
+                      className="px-4 py-8 text-center text-gray-500 dark:text-gray-400"
+                    >
+                      Tidak ada API key yang ditemukan
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  filteredData.map((connection) => (
+                    <React.Fragment key={connection.id}>
+                      <TableRow className="hover:bg-gray-50 dark:hover:bg-gray-800/30">
+                        <TableCell className="px-2 py-3">
+                          <input
+                            type="checkbox"
+                            checked={selectedConnections.includes(
+                              connection.id
                             )}
-                          </button>
-                          <div>
-                            <div className="font-medium text-gray-900 dark:text-white">
-                              {connection.name}
-                            </div>
-                            <div className="text-xs text-gray-500 lg:hidden dark:text-gray-400">
-                              {connection.endpoint}
+                            onChange={() =>
+                              toggleConnectionSelection(connection.id)
+                            }
+                            className="text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                          />
+                        </TableCell>
+                        <TableCell className="px-2 py-3">
+                          <div className="flex items-center space-x-2">
+                            <button
+                              onClick={() => toggleRowExpansion(connection.id)}
+                              className="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
+                            >
+                              {expandedRows[connection.id] ? (
+                                <ChevronDownIcon className="w-4 h-4" />
+                              ) : (
+                                <ChevronRightIcon className="w-4 h-4" />
+                              )}
+                            </button>
+                            <div>
+                              <div className="font-medium text-gray-900 dark:text-white">
+                                {connection.name}
+                              </div>
+                              <div className="text-xs text-gray-500 lg:hidden dark:text-gray-400">
+                                {connection.endpoint}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </TableCell>
-                      <TableCell className="px-2 py-3">
-                        <span className="text-sm text-gray-700 dark:text-gray-300">
-                          {connection.provider}
-                        </span>
-                      </TableCell>
-                      <TableCell className="px-2 py-3">
-                        {connection.status === "active" ? (
-                          <span
-                            className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${getStatusColor(
-                              connection.status
-                            )}`}
-                          >
-                            Aktif
+                        </TableCell>
+                        <TableCell className="px-2 py-3">
+                          <span className="text-sm text-gray-700 dark:text-gray-300">
+                            {connection.provider}
                           </span>
-                        ) : (
+                        </TableCell>
+                        <TableCell className="px-2 py-3">
+                          {connection.status === "active" ? (
+                            <span
+                              className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${getStatusColor(
+                                connection.status
+                              )}`}
+                            >
+                              Aktif
+                            </span>
+                          ) : (
+                            <button
+                              onClick={() =>
+                                handleConfigureConnection(connection)
+                              }
+                              className="inline-flex items-center px-3 py-1 text-xs font-medium text-yellow-800 transition-colors bg-yellow-100 rounded-full hover:bg-yellow-200"
+                            >
+                              <svg
+                                className="w-3 h-3 mr-1"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                                />
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                                />
+                              </svg>
+                              Konfigurasi
+                            </button>
+                          )}
+                        </TableCell>
+                        <TableCell className="hidden px-2 py-3 lg:table-cell">
                           <button
-                            onClick={() =>
-                              handleConfigureConnection(connection)
-                            }
-                            className="inline-flex items-center px-3 py-1 text-xs font-medium text-yellow-800 transition-colors bg-yellow-100 rounded-full hover:bg-yellow-200"
+                            onClick={() => {
+                              setSelectedApiKey({
+                                apiKey: connection.apiKey,
+                                name: connection.name,
+                              });
+                              setShowApiKeyModal(true);
+                            }}
+                            className="inline-flex items-center px-3 py-1 text-xs font-medium text-white transition-colors bg-gray-600 rounded hover:bg-gray-700"
                           >
                             <svg
                               className="w-3 h-3 mr-1"
@@ -516,168 +588,187 @@ export default function MainConnect() {
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
                                 strokeWidth={2}
-                                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                              />
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                                d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"
                               />
                             </svg>
-                            Konfigurasi
+                            Token
                           </button>
-                        )}
-                      </TableCell>
-                      <TableCell className="hidden px-2 py-3 lg:table-cell">
-                        <button
-                          onClick={() => {
-                            setSelectedApiKey({
-                              apiKey: connection.apiKey,
-                              name: connection.name,
-                            });
-                            setShowApiKeyModal(true);
-                          }}
-                          className="inline-flex items-center px-3 py-1 text-xs font-medium text-white transition-colors bg-gray-600 rounded hover:bg-gray-700"
-                        >
-                          <svg
-                            className="w-3 h-3 mr-1"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"
-                            />
-                          </svg>
-                          Token
-                        </button>
-                      </TableCell>
-                      <TableCell className="hidden px-2 py-3 md:table-cell">
-                        <div className="text-sm text-gray-700 dark:text-gray-300">
-                          {new Date(connection.lastSync).toLocaleString(
-                            "id-ID"
-                          )}
-                        </div>
-                      </TableCell>
-                      <TableCell className="px-2 py-3">
-                        <div className="flex space-x-1">
-                          <button
-                            onClick={() =>
-                              alert(`Lihat detail ${connection.name}`)
-                            }
-                            className="p-1 text-white transition-colors bg-blue-500 rounded hover:bg-blue-600"
-                            title="Lihat Detail"
-                          >
-                            <EyeIcon className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={() => alert(`Edit ${connection.name}`)}
-                            className="p-1 text-white transition-colors bg-yellow-500 rounded hover:bg-yellow-600"
-                            title="Edit"
-                          >
-                            <PencilIcon className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={() => handleSingleDelete(connection)}
-                            className="p-1 text-white transition-colors bg-red-500 rounded hover:bg-red-600"
-                            title="Hapus"
-                          >
-                            <TrashIcon className="w-4 h-4" />
-                          </button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-
-                    {/* Expanded Row Details */}
-                    {expandedRows[connection.id] && (
-                      <TableRow className="bg-gray-50 dark:bg-gray-800/20">
-                        <TableCell colSpan={7} className="px-4 py-4">
-                          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-                            <div>
-                              <h4 className="text-sm font-medium text-gray-900 dark:text-white">
-                                API Key Details
-                              </h4>
-                              <div className="mt-2 space-y-1 text-sm text-gray-600 dark:text-gray-400">
-                                <div>ID: {connection.id}</div>
-                                <div>Provider: {connection.provider}</div>
-                                <div>
-                                  Status:{" "}
-                                  {connection.status === "active"
-                                    ? "Active"
-                                    : "Inactive"}
-                                </div>
-                              </div>
-                            </div>
-                            <div>
-                              <h4 className="text-sm font-medium text-gray-900 dark:text-white">
-                                Sync Status
-                              </h4>
-                              <div className="mt-2">
-                                <span
-                                  className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${getSyncStatusColor(
-                                    connection.syncStatus
-                                  )}`}
-                                >
-                                  {connection.syncStatus === "success"
-                                    ? "Berhasil"
-                                    : connection.syncStatus === "failed"
-                                      ? "Gagal"
-                                      : "Pending"}
-                                </span>
-                              </div>
-                            </div>
-                            <div>
-                              <h4 className="text-sm font-medium text-gray-900 dark:text-white">
-                                Full API Key
-                              </h4>
-                              <div className="p-2 mt-2 font-mono text-sm text-gray-600 break-all bg-gray-100 rounded dark:bg-gray-700 dark:text-gray-400">
-                                {connection.apiKey}
-                              </div>
-                            </div>
-                            <div>
-                              <h4 className="text-sm font-medium text-gray-900 dark:text-white">
-                                Actions
-                              </h4>
-                              <div className="mt-2 space-y-2">
-                                <button className="w-full px-3 py-1 text-xs text-white bg-blue-500 rounded hover:bg-blue-600">
-                                  Test API Key
-                                </button>
-                                <button className="w-full px-3 py-1 text-xs text-white bg-green-500 rounded hover:bg-green-600">
-                                  Regenerate Key
-                                </button>
-                              </div>
-                            </div>
+                        </TableCell>
+                        <TableCell className="hidden px-2 py-3 md:table-cell">
+                          <div className="text-sm text-gray-700 dark:text-gray-300">
+                            {new Date(connection.lastSync).toLocaleString(
+                              "id-ID"
+                            )}
+                          </div>
+                        </TableCell>
+                        <TableCell className="px-2 py-3">
+                          <div className="flex space-x-1">
+                            <button
+                              onClick={() =>
+                                alert(`Lihat detail ${connection.name}`)
+                              }
+                              className="p-1 text-white transition-colors bg-blue-500 rounded hover:bg-blue-600"
+                              title="Lihat Detail"
+                            >
+                              <EyeIcon className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={() => alert(`Edit ${connection.name}`)}
+                              className="p-1 text-white transition-colors bg-yellow-500 rounded hover:bg-yellow-600"
+                              title="Edit"
+                            >
+                              <PencilIcon className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={() => handleSingleDelete(connection)}
+                              className="p-1 text-white transition-colors bg-red-500 rounded hover:bg-red-600"
+                              title="Hapus"
+                            >
+                              <TrashIcon className="w-4 h-4" />
+                            </button>
                           </div>
                         </TableCell>
                       </TableRow>
-                    )}
-                  </React.Fragment>
-                ))
-              )}
-            </TableBody>
-          </Table>
+
+                      {/* Expanded Row Details */}
+                      {expandedRows[connection.id] && (
+                        <TableRow className="bg-gray-50 dark:bg-gray-800/20">
+                          <TableCell colSpan={7} className="px-4 py-4">
+                            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+                              <div>
+                                <h4 className="text-sm font-medium text-gray-900 dark:text-white">
+                                  API Key Details
+                                </h4>
+                                <div className="mt-2 space-y-1 text-sm text-gray-600 dark:text-gray-400">
+                                  <div>ID: {connection.id}</div>
+                                  <div>Provider: {connection.provider}</div>
+                                  <div>
+                                    Status:{" "}
+                                    {connection.status === "active"
+                                      ? "Active"
+                                      : "Inactive"}
+                                  </div>
+                                </div>
+                              </div>
+                              <div>
+                                <h4 className="text-sm font-medium text-gray-900 dark:text-white">
+                                  Sync Status
+                                </h4>
+                                <div className="mt-2">
+                                  <span
+                                    className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${getSyncStatusColor(
+                                      connection.syncStatus
+                                    )}`}
+                                  >
+                                    {connection.syncStatus === "success"
+                                      ? "Berhasil"
+                                      : connection.syncStatus === "failed"
+                                        ? "Gagal"
+                                        : "Pending"}
+                                  </span>
+                                </div>
+                              </div>
+                              <div>
+                                <h4 className="text-sm font-medium text-gray-900 dark:text-white">
+                                  Full API Key
+                                </h4>
+                                <div className="p-2 mt-2 font-mono text-sm text-gray-600 break-all bg-gray-100 rounded dark:bg-gray-700 dark:text-gray-400">
+                                  {connection.apiKey}
+                                </div>
+                              </div>
+                              <div>
+                                <h4 className="text-sm font-medium text-gray-900 dark:text-white">
+                                  Actions
+                                </h4>
+                                <div className="mt-2 space-y-2">
+                                  <button className="w-full px-3 py-1 text-xs text-white bg-blue-500 rounded hover:bg-blue-600">
+                                    Test API Key
+                                  </button>
+                                  <button className="w-full px-3 py-1 text-xs text-white bg-green-500 rounded hover:bg-green-600">
+                                    Regenerate Key
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      )}
+                    </React.Fragment>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
         </div>
+
+        {/* API Key Preview Modal */}
+        <ApiKeyPreviewModal
+          isOpen={showApiKeyModal}
+          onClose={() => setShowApiKeyModal(false)}
+          apiKey={selectedApiKey.apiKey}
+          providerName={selectedApiKey.name}
+        />
+
+        {/* Connection Configuration Modal */}
+        <ConnectionConfigModalHero
+          isOpen={showConfigModal}
+          onClose={() => setShowConfigModal(false)}
+          connection={selectedConnection}
+          onSave={handleSaveConfiguration}
+        />
       </div>
 
-      {/* API Key Preview Modal */}
-      <ApiKeyPreviewModal
-        isOpen={showApiKeyModal}
-        onClose={() => setShowApiKeyModal(false)}
-        apiKey={selectedApiKey.apiKey}
-        providerName={selectedApiKey.name}
-      />
+      {/* modal */}
+      <div className="fixed z-[100]">
+        <ToastProvider placement="top-center" toastOffset={60} />
+      </div>
 
-      {/* Connection Configuration Modal */}
-      <ConnectionConfigModalHero
-        isOpen={showConfigModal}
-        onClose={() => setShowConfigModal(false)}
-        connection={selectedConnection}
-        onSave={handleSaveConfiguration}
-      />
-    </div>
+      <Modal
+        isOpen={isOpenLogin}
+        placement="top-center"
+        onOpenChange={onOpenChangeLogin}
+      >
+        <ModalContent>
+          {(onCloseLogin) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">Log in</ModalHeader>
+              <ModalBody>
+                <Input
+                  label="Email"
+                  placeholder="Enter your email"
+                  variant="bordered"
+                />
+                <Input
+                  label="Password"
+                  placeholder="Enter your password"
+                  type="password"
+                  variant="bordered"
+                />
+                <div className="flex justify-between px-1 py-2">
+                  <Checkbox
+                    classNames={{
+                      label: "text-small",
+                    }}
+                  >
+                    Remember me
+                  </Checkbox>
+                  <Link color="primary" href="#" size="sm">
+                    Forgot password?
+                  </Link>
+                </div>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="flat" onPress={onClose}>
+                  Close
+                </Button>
+                <Button color="primary" onPress={onClose}>
+                  Sign in
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+    </>
   );
 }

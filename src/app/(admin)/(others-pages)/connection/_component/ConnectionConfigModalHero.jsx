@@ -98,16 +98,16 @@ export default function ConnectionConfigModalHero({
   };
 
   const handleClose = () => {
-    if (step === 3) {
-      onClose();
-    } else {
-      const confirmed = window.confirm(
-        "Are you sure you want to close? All progress will be lost."
-      );
-      if (confirmed) {
-        onClose();
-      }
-    }
+    onClose();
+    // if (step === 3) {
+    // } else {
+    //   const confirmed = window.confirm(
+    //     "Are you sure you want to close? All progress will be lost."
+    //   );
+    //   if (confirmed) {
+    //     onClose();
+    //   }
+    // }
   };
 
   const renderStep1 = () => (

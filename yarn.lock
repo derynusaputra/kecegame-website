@@ -1152,6 +1152,20 @@
     "@react-aria/interactions" "3.25.4"
     "@react-types/shared" "3.31.0"
 
+"@heroui/button@^2.2.24":
+  version "2.2.24"
+  resolved "https://registry.yarnpkg.com/@heroui/button/-/button-2.2.24.tgz#94827bbd817c4e8a44f93d1701ae1868be40ecb6"
+  integrity sha512-PR4CZaDSSAGYPv7uUNRc9FAJkNtMgcNUdnD0qxQoJDQoB/C6LLLgROqc/iHaKX9aEH5JYIISbMxTIcJtY2Zk2A==
+  dependencies:
+    "@heroui/react-utils" "2.1.12"
+    "@heroui/ripple" "2.2.18"
+    "@heroui/shared-utils" "2.1.10"
+    "@heroui/spinner" "2.2.21"
+    "@heroui/use-aria-button" "2.2.18"
+    "@react-aria/focus" "3.21.0"
+    "@react-aria/interactions" "3.25.4"
+    "@react-types/shared" "3.31.0"
+
 "@heroui/calendar@2.2.24":
   version "2.2.24"
   resolved "https://registry.npmjs.org/@heroui/calendar/-/calendar-2.2.24.tgz"
