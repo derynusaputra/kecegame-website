@@ -127,6 +127,15 @@ export default function MainConnect() {
 
   // Handle connection configuration
   const handleConfigureConnection = (connection) => {
+    console.log("====================================");
+    console.log(connection?.name === "LITEMATCH");
+    console.log("====================================");
+
+    if (connection?.name === "LITEMATCH") {
+      onOpenLogin();
+      return;
+    }
+
     setSelectedConnection(connection);
     setShowConfigModal(true);
   };
@@ -150,6 +159,8 @@ export default function MainConnect() {
   // Transform API data to match our component structure
   const transformedData =
     dataThirParty?.data?.map((item) => {
+      console.log(item);
+
       const apiKey = item.apiKey || "kosong";
       const apiKeyPreview =
         apiKey === "kosong"
@@ -160,7 +171,7 @@ export default function MainConnect() {
         id: item.id.toString(),
         name: item.name,
         type: item.provider,
-        status: item.isActive ? "active" : "inactive",
+        status: item.apiKey ? "active" : "inactive",
         endpoint: apiKeyPreview,
         lastSync: item.updatedAt,
         syncStatus: item.isActive ? "success" : "failed",
@@ -456,7 +467,13 @@ export default function MainConnect() {
                   </TableCell>
                   <TableCell
                     isHeader
-                    className="hidden min-w-[250px] px-2 py-3 text-start text-xs font-medium text-gray-500 lg:table-cell dark:text-gray-400"
+                    className="min-w-[150px] px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
+                  >
+                    Status
+                  </TableCell>
+                  <TableCell
+                    isHeader
+                    className="hidden min-w-[150px] px-2 py-3 text-start text-xs font-medium text-gray-500 lg:table-cell dark:text-gray-400"
                   >
                     API Key Preview
                   </TableCell>
@@ -504,16 +521,6 @@ export default function MainConnect() {
                         </TableCell>
                         <TableCell className="px-2 py-3">
                           <div className="flex items-center space-x-2">
-                            <button
-                              onClick={() => toggleRowExpansion(connection.id)}
-                              className="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
-                            >
-                              {expandedRows[connection.id] ? (
-                                <ChevronDownIcon className="w-4 h-4" />
-                              ) : (
-                                <ChevronRightIcon className="w-4 h-4" />
-                              )}
-                            </button>
                             <div>
                               <div className="font-medium text-gray-900 dark:text-white">
                                 {connection.name}
@@ -530,43 +537,45 @@ export default function MainConnect() {
                           </span>
                         </TableCell>
                         <TableCell className="px-2 py-3">
-                          {connection.status === "active" ? (
-                            <span
-                              className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${getStatusColor(
-                                connection.status
-                              )}`}
+                          <button
+                            onClick={() =>
+                              handleConfigureConnection(connection)
+                            }
+                            className="inline-flex items-center px-3 py-1 text-xs font-medium text-yellow-800 transition-colors bg-yellow-100 rounded-full hover:bg-yellow-200"
+                          >
+                            <svg
+                              className="w-3 h-3 mr-1"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
                             >
-                              Aktif
-                            </span>
-                          ) : (
-                            <button
-                              onClick={() =>
-                                handleConfigureConnection(connection)
-                              }
-                              className="inline-flex items-center px-3 py-1 text-xs font-medium text-yellow-800 transition-colors bg-yellow-100 rounded-full hover:bg-yellow-200"
-                            >
-                              <svg
-                                className="w-3 h-3 mr-1"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                                />
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                                />
-                              </svg>
-                              Konfigurasi
-                            </button>
-                          )}
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                              />
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                              />
+                            </svg>
+                            Konfigurasi
+                          </button>
+                        </TableCell>
+
+                        <TableCell className="px-2 py-3">
+                          <span
+                            className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${getStatusColor(
+                              connection.status
+                            )}`}
+                          >
+                            {connection.status === "active"
+                              ? "Aktif"
+                              : "Tidak Aktif"}
+                          </span>
                         </TableCell>
                         <TableCell className="hidden px-2 py-3 lg:table-cell">
                           <button

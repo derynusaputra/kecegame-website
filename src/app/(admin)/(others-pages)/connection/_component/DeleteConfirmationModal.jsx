@@ -14,9 +14,6 @@ export default function DeleteConfirmationModal({
   const deleteUser = useThirParty.delete();
 
   const handleDelete = async () => {
-    console.log("====================================");
-    console.log(itemToDelete?.id);
-    console.log("====================================");
     try {
       if (isMultiple) {
         // Delete multiple items
