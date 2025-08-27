@@ -2,6 +2,7 @@
 import { Button, Input } from "@heroui/react";
 import React, { Children } from "react";
 import { Controller, useForm } from "react-hook-form";
+import PackageCom from "./PackageCom";
 
 export default function MainContentDetailGame({ children }) {
   const {
@@ -91,34 +92,7 @@ export default function MainContentDetailGame({ children }) {
 
       <div className="mt-3 flex flex-col bg-white p-4">
         <Head no={3} title="Pilih Paket" />
-        <Controller
-          name="package"
-          control={control}
-          render={({ field }) => (
-            <Input
-              {...field}
-              label="Pilih Paket"
-              placeholder="Pilih Paket"
-              variant="bordered"
-              autoComplete="tel"
-              isInvalid={!!errors.phoneNumber}
-              errorMessage={errors.phoneNumber?.message}
-              onChange={(e) => {
-                let value = e.target.value;
-
-                field.onChange(value);
-              }}
-              type="email"
-            />
-          )}
-          rules={{
-            required: "Email is required",
-            pattern: {
-              value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-              message: "Enter a valid email address",
-            },
-          }}
-        />
+        <PackageCom />
       </div>
 
       <Button
