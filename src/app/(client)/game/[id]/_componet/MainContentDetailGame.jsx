@@ -1,10 +1,12 @@
 "use client";
 import { Button, Input } from "@heroui/react";
-import React, { Children } from "react";
+import React, { Children, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import PackageCom from "./PackageCom";
+import ButtonPurhcase from "./ButtonPurhcase";
 
 export default function MainContentDetailGame({ children }) {
+  const [selectedPackage, setSelectedPackage] = useState(null);
   const {
     control,
     handleSubmit,
@@ -17,93 +19,104 @@ export default function MainContentDetailGame({ children }) {
       phoneNumber: "",
       package: "",
     },
+    mode: "all",
   });
 
   const values = watch();
-  console.log(isValid);
+
+  console.log(selectedPackage);
 
   const onSubmit = async (data) => {
     console.log("Form submitted:", data);
   };
   return (
-    <div className="flex flex-col">
-      {/* head */}
-      <div className="mt-3 flex flex-col bg-white p-4">
-        <Head no={1} title="Pembayaran" />
-        <Controller
-          name="userID"
-          control={control}
-          render={({ field }) => (
-            <Input
-              {...field}
-              label="User ID"
-              placeholder="Masukan User ID"
-              variant="bordered"
-              autoComplete="tel"
-              isInvalid={!!errors.userID}
-              errorMessage={errors.userID?.message}
-              onChange={(e) => {
-                let value = e.target.value;
-                field.onChange(value);
+    <div className="w-full flex-1 overflow-y-auto bg-yellow-500">
+      <div className="flex flex-col gap-2 px-0 py-2">
+        {/* content */}
+        <div className="flex flex-col">
+          {/* head */}
+          <div className="mt-3 flex flex-col bg-white p-4">
+            <Head no={1} title="Pembayaran" />
+            <Controller
+              name="userID"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  label="User ID"
+                  placeholder="Masukan User ID"
+                  classNames={{
+                    input: "placeholder:text-gray-300",
+                  }}
+                  variant="bordered"
+                  autoComplete="tel"
+                  isInvalid={!!errors.userID}
+                  errorMessage={errors.userID?.message}
+                  onChange={(e) => {
+                    let value = e.target.value;
+                    field.onChange(value);
+                  }}
+                  type="text"
+                />
+              )}
+              rules={{
+                required: "User ID is required",
+                pattern: {
+                  //   value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                  message: "Masukan User ID",
+                },
               }}
-              type="text"
             />
-          )}
-          rules={{
-            required: "User ID is required",
-            pattern: {
-              //   value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-              message: "Masukan User ID",
-            },
-          }}
-        />
-      </div>
-      <div className="mt-3 flex flex-col bg-white p-4">
-        <Head no={2} title="Pembayaran" />
-        <Controller
-          name="phoneNumber"
-          control={control}
-          render={({ field }) => (
-            <Input
-              {...field}
-              label="Email"
-              placeholder="example@gmail.com"
-              variant="bordered"
-              autoComplete="tel"
-              isInvalid={!!errors.phoneNumber}
-              errorMessage={errors.phoneNumber?.message}
-              onChange={(e) => {
-                let value = e.target.value;
+          </div>
+          <div className="mt-3 flex flex-col bg-white p-4">
+            <Head no={2} title="Pembayaran" />
+            <Controller
+              name="phoneNumber"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  label="Email"
+                  placeholder="example@gmail.com"
+                  classNames={{
+                    input: "placeholder:text-gray-300",
+                  }}
+                  variant="bordered"
+                  autoComplete="tel"
+                  isInvalid={!!errors.phoneNumber}
+                  errorMessage={errors.phoneNumber?.message}
+                  onChange={(e) => {
+                    let value = e.target.value;
 
-                field.onChange(value);
+                    field.onChange(value);
+                  }}
+                  type="email"
+                />
+              )}
+              rules={{
+                required: "Email is required",
+                pattern: {
+                  value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                  message: "Enter a valid email address",
+                },
               }}
-              type="email"
             />
-          )}
-          rules={{
-            required: "Email is required",
-            pattern: {
-              value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-              message: "Enter a valid email address",
-            },
-          }}
-        />
-      </div>
+          </div>
 
-      <div className="mt-3 flex flex-col bg-white p-4">
-        <Head no={3} title="Pilih Paket" />
-        <PackageCom />
+          <div className="mt-3 flex flex-col bg-white p-4">
+            <Head no={3} title="Pilih Paket" />
+            <PackageCom setSelectedPackage={setSelectedPackage} />
+          </div>
+        </div>
       </div>
-
-      <Button
-        color="primary"
+      <div className="h-[60px]" />
+      {/*  bottom nav */}
+      <ButtonPurhcase
+        totalPrice={selectedPackage?.sale_price}
         onPress={handleSubmit(onSubmit)}
-        isLoading={isSubmitting}
-        isDisabled={!isValid}
-        className="flex-1 sm:flex-none"
-      >
-        {isSubmitting ? "Verifying..." : "Verify & Login"}
-      </Button>
+        isSubmitting={isSubmitting}
+        isValid={isValid}
+      />
     </div>
   );
 }

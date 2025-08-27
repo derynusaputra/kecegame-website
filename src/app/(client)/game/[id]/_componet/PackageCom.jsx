@@ -1,20 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import { Card, CardBody, Badge, Image } from "@heroui/react";
 
 const initialPackages = [
-  {
-    id: "d55",
-    diamonds: 55,
-    bonus: 10,
-    official_price: 1800,
-    sale_price: 1500,
-    discount_percent: 17,
-    you_save: 300,
-    badges: ["Entry Saver"],
-    isSelected: false,
-  },
   {
     id: "d435",
     diamonds: 435,
@@ -83,7 +72,7 @@ const initialPackages = [
   },
 ];
 
-export default function PackageCom() {
+function PackageCom({ setSelectedPackage }) {
   const [packages, setPackages] = useState(initialPackages);
 
   const selectPackage = (id) => {
@@ -94,18 +83,17 @@ export default function PackageCom() {
     setPackages(updated);
   };
 
-  const selected = packages.find((p) => p.isSelected);
   return (
     <div className="space-y-4">
       {/* Tab Navigation */}
-      <div className="flex rounded-lg border border-gray-200 bg-white p-1">
-        <button className="flex-1 rounded-md bg-purple-600 px-4 py-2 text-sm font-medium text-white">
+      {/* <div className="flex p-1 bg-white border border-gray-200 rounded-lg">
+        <button className="flex-1 px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-md">
           Berlian
         </button>
-        <button className="flex-1 rounded-md px-4 py-2 text-sm font-medium text-gray-600">
+        <button className="flex-1 px-4 py-2 text-sm font-medium text-gray-600 rounded-md">
           Bintang
         </button>
-      </div>
+      </div> */}
 
       {/* Selected Package Summary */}
       <div className="grid grid-cols-2 gap-4">
@@ -113,7 +101,10 @@ export default function PackageCom() {
           <CardPackage
             key={idx}
             {...p}
-            onClick={() => selectPackage(p.id)}
+            onClick={() => {
+              selectPackage(p.id);
+              setSelectedPackage(p);
+            }}
             isSelected={p.isSelected}
           />
         ))}
@@ -121,6 +112,8 @@ export default function PackageCom() {
     </div>
   );
 }
+
+export default memo(PackageCom);
 
 const CardPackage = ({
   id,
