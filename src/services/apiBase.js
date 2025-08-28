@@ -21,5 +21,5 @@ export const apiBase = (token) => {
   const API_URLs = "https://d58b88291335.ngrok-free.app";
   const API_URL_LOCAL = "http://localhost:3000";
 
-  return axiosInstatance(API_URL_LOCAL, token);
+  return axiosInstatance(API_URL, token);
 };

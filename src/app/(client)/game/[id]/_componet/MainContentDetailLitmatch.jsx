@@ -35,10 +35,13 @@ export default function MainContentDetailLitmatch({ children }) {
     setUserData(data?.data);
   };
 
-  console.log("test", userData?.data?.nickname);
+  console.log("test", selectedPackage?.diamonds + selectedPackage?.bonus);
 
   const onSubmit = async (data) => {
-    console.log("Form submitted:", data);
+    console.log("Form submitted:", {
+      ...data,
+      package: data.selectedPackage,
+    });
   };
   return (
     <div className="w-full flex-1 overflow-y-auto bg-yellow-500">
