@@ -9,6 +9,7 @@ import {
   Button,
   Input,
 } from "@heroui/react";
+import { apiBase } from "@/services/apiBase";
 
 export default function ConnectionConfigModal({
   isOpen,
@@ -43,13 +44,10 @@ export default function ConnectionConfigModal({
     try {
       // Simulate API call to send OTP
 
-      const response = await axios.post(
-        `https://api.halalinmu.com/v1/game/send-otp-litmatch`,
-        {
-          zone: "62",
-          phone: "82111589680",
-        }
-      );
+      const response = await apiBase().post(`/v1/game/send-otp-litmatch`, {
+        zone: "62",
+        phone: "82111589680",
+      });
       await new Promise((resolve) => setTimeout(resolve, 1000));
       setOtpSent(true);
       setCountdown(60);
@@ -117,13 +115,13 @@ export default function ConnectionConfigModal({
 
       <div className="space-y-4">
         <div>
-          <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
             Email Address
           </label>
           <div className="relative">
-            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
               <svg
-                className="w-5 h-5 text-gray-400"
+                className="h-5 w-5 text-gray-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -148,13 +146,13 @@ export default function ConnectionConfigModal({
         </div>
 
         <div>
-          <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
             Password
           </label>
           <div className="relative">
-            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
               <svg
-                className="w-5 h-5 text-gray-400"
+                className="h-5 w-5 text-gray-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -179,14 +177,14 @@ export default function ConnectionConfigModal({
         </div>
 
         <div>
-          <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
             App Verification Code
           </label>
           <div className="flex gap-2">
             <div className="relative flex-1">
-              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                 <svg
-                  className="w-5 h-5 text-gray-400"
+                  className="h-5 w-5 text-gray-400"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -246,7 +244,7 @@ export default function ConnectionConfigModal({
 
       <div className="space-y-4">
         <div>
-          <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
             Verification Code
           </label>
           <Input
@@ -255,7 +253,7 @@ export default function ConnectionConfigModal({
             value={formData.otp}
             onChange={(e) => handleInputChange("otp", e.target.value)}
             maxLength={6}
-            className="text-lg tracking-widest text-center"
+            className="text-center text-lg tracking-widest"
           />
         </div>
 
@@ -278,9 +276,9 @@ export default function ConnectionConfigModal({
   const renderStep3 = () => (
     <div className="space-y-4">
       <div className="mb-6 text-center">
-        <div className="flex items-center justify-center w-16 h-16 mx-auto mb-4 bg-green-100 rounded-full">
+        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
           <svg
-            className="w-8 h-8 text-green-600"
+            className="h-8 w-8 text-green-600"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -301,7 +299,7 @@ export default function ConnectionConfigModal({
         </p>
       </div>
 
-      <div className="p-4 rounded-lg bg-green-50 dark:bg-green-900/20">
+      <div className="rounded-lg bg-green-50 p-4 dark:bg-green-900/20">
         <h4 className="mb-2 text-sm font-medium text-green-900 dark:text-green-100">
           Connection Details
         </h4>

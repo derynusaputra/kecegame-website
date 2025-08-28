@@ -1,6 +1,5 @@
+import { apiBase } from "@/services/apiBase";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-
-const API_URL = "https://api.halalinmu.com";
 
 export const useThirParty = {
   // 🔹 GET
@@ -8,9 +7,10 @@ export const useThirParty = {
     return useQuery({
       queryKey: ["thirdparty"],
       queryFn: async () => {
-        const res = await fetch(API_URL + "/v1/thirdparty/keys");
-        if (!res.ok) throw new Error("Gagal fetch users");
-        return res.json();
+        const { data } = await apiBase().get("/v1/thirdparty/keys");
+        console.log("data", data);
+
+        return data;
       },
     });
   },
@@ -20,12 +20,8 @@ export const useThirParty = {
     const queryClient = useQueryClient();
     return useMutation({
       mutationFn: async (newUser) => {
-        const res = await fetch(API_URL + "/v1/thirdparty", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(newUser),
-        });
-        return res.json();
+        const { data } = await apiBase().post("/v1/thirdparty", newUser);
+        return data;
       },
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ["thirdparty"] });
@@ -38,12 +34,11 @@ export const useThirParty = {
     const queryClient = useQueryClient();
     return useMutation({
       mutationFn: async ({ id, ...updatedUser }) => {
-        const res = await fetch(`${API_URL}/${id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(updatedUser),
-        });
-        return res.json();
+        const { data } = await apiBase().put(
+          `/v1/thirdparty/${id}`,
+          updatedUser
+        );
+        return data;
       },
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ["thirdparty"] });
@@ -56,8 +51,8 @@ export const useThirParty = {
     const queryClient = useQueryClient();
     return useMutation({
       mutationFn: async (id) => {
-        await fetch(`${API_URL}/v1/thirdparty/${id}`, { method: "DELETE" });
-        return id;
+        const { data } = await apiBase().delete(`/v1/thirdparty/${id}`);
+        return data;
       },
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ["thirdparty"] });

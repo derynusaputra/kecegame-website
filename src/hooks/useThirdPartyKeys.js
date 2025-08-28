@@ -1,17 +1,10 @@
+import { apiBase } from "@/services/apiBase";
 import { useQuery } from "@tanstack/react-query";
 
 // Fetch function for third party keys
 const fetchThirdPartyKeys = async () => {
   try {
-    const response = await fetch(
-      "https://api.halalinmu.com/v1/thirdparty/keys",
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await apiBase().get("/v1/thirdparty/keys");
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
