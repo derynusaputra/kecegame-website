@@ -1,5 +1,12 @@
 export const games = [
   {
+    id: 6,
+    name: "Litmatch",
+    iconUrl: "/icons/litmatch.png",
+    category: "top_up",
+    slug: "litmatch",
+  },
+  {
     id: 1,
     name: "Mobile Legends",
     iconUrl: "/icons/mlbb.png",

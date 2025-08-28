@@ -47,15 +47,6 @@ export default function page() {
           <div className="flex flex-col gap-2 px-0 py-2">
             <CarouselBanner />
             <MainContent />
-            {Array.from({ length: 10 }).map((_, i) => (
-              <div
-                key={i}
-                className="flex w-full items-center justify-center rounded-md border border-gray-300 bg-white"
-                style={{ height: 100 }}
-              >
-                Kotak {i + 1}
-              </div>
-            ))}
           </div>
           <div className="h-[60px]" />
           {/*  bottom nav */}
