@@ -1,14 +1,21 @@
 "use client";
-import { Button, Input } from "@heroui/react";
+import { addToast, Button, Input } from "@heroui/react";
 import React, { Children, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import PackageCom from "./PackageCom";
 import ButtonPurhcase from "./ButtonPurhcase";
 import { apiBase } from "@/services/apiBase";
+import { useCheckID } from "@/hooks/ReactQuery/useCheckID";
+import { useCheckout } from "@/hooks/ReactQuery/useCheckout";
 
 export default function MainContentDetailLitmatch({ children }) {
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [userData, setUserData] = useState(null);
+
+  const postCheckID = useCheckID.create();
+
+  const postCheckout = useCheckout.create();
+
   const {
     control,
     handleSubmit,
@@ -27,21 +34,45 @@ export default function MainContentDetailLitmatch({ children }) {
   const values = watch();
 
   const onCheckUserID = async () => {
-    console.log("check user id");
     const userID = values.userID;
-    const { data } = await apiBase().post("/v1/game/check-profile-litmatch", {
-      target_uid: userID,
-    });
-    setUserData(data?.data);
+    await postCheckID.mutateAsync(userID);
+
+    setUserData(userID);
   };
 
-  console.log("test", selectedPackage?.diamonds + selectedPackage?.bonus);
+  console.log("test", postCheckID.data);
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (dataku) => {
     console.log("Form submitted:", {
-      ...data,
-      package: data.selectedPackage,
+      ...dataku,
+      package: selectedPackage?.bonus + selectedPackage?.diamonds,
+      price: selectedPackage?.sale_price,
     });
+
+    const dataSubmit = {
+      ...dataku,
+      package: selectedPackage?.bonus + selectedPackage?.diamonds,
+      price: selectedPackage?.sale_price,
+    };
+
+    await postCheckout.mutateAsync(dataSubmit);
+
+    if (postCheckout.isSuccess) {
+      console.log("postCheckout.isSuccess", postCheckout.data);
+      addToast({
+        title: "Success title",
+        description: "Success displayed successfully",
+        color: color.toLowerCase(),
+      });
+    }
+
+    if (postCheckout.isError) {
+      addToast({
+        title: "Error title",
+        description: "Error displayed successfully",
+        color: color.toLowerCase(),
+      });
+    }
   };
   return (
     <div className="w-full flex-1 overflow-y-auto bg-yellow-500">
@@ -82,18 +113,24 @@ export default function MainContentDetailLitmatch({ children }) {
               }}
             />
 
-            {values.userID ? (
-              userData?.data?.nickname ? (
+            {userData === values.userID ? (
+              postCheckID?.data?.data?.data?.nickname ? (
                 <div className="text-sm text-green-500">
-                  User ID : {userData?.data?.nickname}
+                  User ID : {postCheckID?.data?.data?.data?.nickname}
                 </div>
               ) : (
-                <p className="text-sm text-gray-500">User ID tidak ditemukan</p>
+                <div className="text-sm text-red-500">
+                  User ID tidak ditemukan
+                </div>
               )
-            ) : null}
+            ) : !values.userID ? null : (
+              <div className="h-4" />
+            )}
             <Button
-              className="w-full bg-blue-500 text-white"
+              className={`w-full bg-blue-600 text-white`}
               onPress={onCheckUserID}
+              isLoading={postCheckID.isPending}
+              isDisabled={!values.userID}
             >
               Check User ID
             </Button>
@@ -106,8 +143,8 @@ export default function MainContentDetailLitmatch({ children }) {
               render={({ field }) => (
                 <Input
                   {...field}
-                  label="Email"
-                  placeholder="example@gmail.com"
+                  label="Whatsapp"
+                  placeholder="1234567890"
                   classNames={{
                     input: "placeholder:text-gray-300",
                   }}
@@ -115,19 +152,47 @@ export default function MainContentDetailLitmatch({ children }) {
                   autoComplete="tel"
                   isInvalid={!!errors.phoneNumber}
                   errorMessage={errors.phoneNumber?.message}
+                  type="tel"
+                  // classNames={{
+                  //   input: "text-sm pl-12",
+                  //   inputWrapper: "h-12 relative",
+                  // }}
+                  startContent={
+                    <div className="pointer-events-none flex items-center">
+                      <span className="text-default-400 text-sm">+62</span>
+                    </div>
+                  }
                   onChange={(e) => {
                     let value = e.target.value;
 
+                    // Remove any non-digit characters
+                    value = value.replace(/\D/g, "");
+
+                    // Handle different input formats
+                    if (value.startsWith("0")) {
+                      // If starts with 0, remove it and keep the rest
+                      value = value.substring(1);
+                    } else if (value.startsWith("62")) {
+                      // If starts with 62, remove it and keep the rest
+                      value = value.substring(2);
+                    }
+
+                    // Limit to 9 digits (Indonesian mobile number without country code)
+                    // value = value.substring(0, 16);
+
                     field.onChange(value);
                   }}
-                  type="email"
                 />
               )}
               rules={{
-                required: "Email is required",
+                required: "Whatsapp is required",
                 pattern: {
-                  value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                  message: "Enter a valid email address",
+                  // value: /^\d{8,9}$/,
+                  message: "Enter a valid whatsapp number (8-9 digits)",
+                },
+                maxLength: {
+                  value: 16,
+                  message: "Whatsapp number must be 16 digits",
                 },
               }}
             />
@@ -145,7 +210,7 @@ export default function MainContentDetailLitmatch({ children }) {
         totalPrice={selectedPackage?.sale_price}
         onPress={handleSubmit(onSubmit)}
         isSubmitting={isSubmitting}
-        isValid={isValid && userData?.data?.nickname}
+        isValid={isValid && postCheckID?.data?.data?.data?.nickname}
       />
     </div>
   );

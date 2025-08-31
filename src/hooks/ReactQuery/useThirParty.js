@@ -5,13 +5,13 @@ export const useThirParty = {
   // 🔹 GET
   get: () => {
     return useQuery({
-      queryKey: ["thirdparty"],
       queryFn: async () => {
         const { data } = await apiBase().get("/v1/thirdparty/keys");
         console.log("data", data);
 
         return data;
       },
+      queryKey: ["thirdparty"],
     });
   },
 

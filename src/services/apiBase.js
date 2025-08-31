@@ -17,9 +17,9 @@ const axiosInstatance = (baseURL, token) => {
 export const apiBase = (token) => {
   console.log("token", token);
 
-  const API_URL = "https://api.halalinmu.com";
-  const API_URLs = "https://d58b88291335.ngrok-free.app";
-  const API_URL_LOCAL = "http://localhost:3000";
+  const API_URLs = "https://api.halalinmu.com";
+  const API_URLss = "https://d58b88291335.ngrok-free.app";
+  const API_URL = "http://localhost:3000";
 
   return axiosInstatance(API_URL, token);
 };
