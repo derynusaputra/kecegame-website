@@ -58,76 +58,76 @@ export default function MainContentDetailLitmatch({ children }) {
     setUserData(userId);
   };
 
-  console.log("test", postCheckID.data);
-
   const onSubmit = (dataku) => {
-    const dataSubmit = {
-      ...dataku,
-      package: selectedPackage?.bonus + selectedPackage?.diamonds,
-      price: selectedPackage?.sale_price,
-    };
-    onOpen({ dataSubmit });
-    // addToast({
-    //   title: "Toast title",
-    //   description: "Toast displayed successfully",
-    //   color: "success",
-    //   timeout: 1500,
-    // });
+    onOpen();
   };
   const [dataSubmit, setDataSubmit] = useState(null);
 
-  const router = useRouter();
+  const onSubmits = async (dataku) => {
+    try {
+      onClose();
 
-  useEffect(() => {
-    if (dataSubmit) {
-      const onPopState = (e) => {
-        e.preventDefault();
-        router.replace("/"); // paksa balik ke root
+      const payload = {
+        ...dataku,
+        // pastikan selectedPackage ada:
+        package:
+          (selectedPackage?.bonus ?? 0) + (selectedPackage?.diamonds ?? 0),
+        price: selectedPackage?.sale_price ?? 0,
       };
 
-      // trik kecil agar Back memicu popstate ke state “baru”
-      history.pushState(null, "", location.href);
-      window.addEventListener("popstate", onPopState);
+      // gunakan return dari mutateAsync, bukan isSuccess/isError
+      const res = await postCheckout.mutateAsync(payload);
 
-      return () => window.removeEventListener("popstate", onPopState);
-    }
-  }, [dataSubmit]);
-
-  const onSubmits = async (dataku) => {
-    onClose();
-
-    const dataSubmit = {
-      ...dataku,
-      package: selectedPackage?.bonus + selectedPackage?.diamonds,
-      price: selectedPackage?.sale_price,
-    };
-
-    await postCheckout.mutateAsync(dataSubmit);
-
-    if (postCheckout.isSuccess) {
-      console.log("postCheckout.isSuccess", postCheckout.data.data.invoice_url);
-      addToast({
-        title: "Success",
-        description: "Payment successful",
-        color: "success",
-      });
-
-      postCheckout.data.data.invoice_url;
-      setDataSubmit(postCheckout.data.data.invoice_url);
-    }
-
-    if (postCheckout.isError) {
-      addToast({
-        title: "Failed",
-        description: "Payment failed",
-        color: "danger",
-      });
+      // simpan URL invoice dari response
+      const invoiceUrl = res?.data?.data?.invoice_url;
+      setDataSubmit(invoiceUrl ?? null);
+    } catch (err) {
+      console.log(err);
     }
   };
   return (
     <>
-      {dataSubmit ? (
-        <WebView />
+      <div className="fixed z-[100]">
+        <ToastProvider placement={"top-center"} toastOffset={60} />
+      </div>
+
+      <Modal ref={targetRef} isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader {...moveProps} className="flex flex-col gap-1">
+                Whatsapp Admin
+              </ModalHeader>
+              <ModalBody>
+                <p>
+                  Kami akan mengirimkan link pembayaran ke whatsapp anda. jika
+                  ada kendala silahkan hubungi admin kami{" "}
+                  <span
+                    onClick={() =>
+                      window.open(
+                        "https://api.whatsapp.com/send/?phone=%2B6285724663330&text=Halo"
+                      )
+                    }
+                    className="font-bold cursor-pointer"
+                  >
+                    085724663330
+                  </span>
+                </p>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  Tutup
+                </Button>
+                <Button color="primary" onPress={handleSubmit(onSubmits)}>
+                  Lanjutkan
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+      {postCheckout?.data?.data?.invoice_url ? (
+        <WebView url={postCheckout?.data?.data?.invoice_url} />
       ) : (
         <>
           <div className="flex-1 w-full overflow-y-auto bg-yellow-500">
@@ -270,56 +270,17 @@ export default function MainContentDetailLitmatch({ children }) {
               isValid={isValid && postCheckID?.data?.data?.data?.nickname}
             />
           </div>
-          <div className="fixed z-[100]">
-            <ToastProvider placement={"top-center"} toastOffset={60} />
-          </div>
-
-          <Modal ref={targetRef} isOpen={isOpen} onOpenChange={onOpenChange}>
-            <ModalContent>
-              {(onClose) => (
-                <>
-                  <ModalHeader {...moveProps} className="flex flex-col gap-1">
-                    Whatsapp Admin
-                  </ModalHeader>
-                  <ModalBody>
-                    <p>
-                      Kami akan mengirimkan link pembayaran ke whatsapp anda.
-                      jika ada kendala silahkan hubungi admin kami{" "}
-                      <span
-                        onClick={() =>
-                          window.open(
-                            "https://api.whatsapp.com/send/?phone=%2B6285724663330&text=Halo"
-                          )
-                        }
-                        className="font-bold cursor-pointer"
-                      >
-                        085724663330
-                      </span>
-                    </p>
-                  </ModalBody>
-                  <ModalFooter>
-                    <Button color="danger" variant="light" onPress={onClose}>
-                      Tutup
-                    </Button>
-                    <Button color="primary" onPress={handleSubmit(onSubmits)}>
-                      Lanjutkan
-                    </Button>
-                  </ModalFooter>
-                </>
-              )}
-            </ModalContent>
-          </Modal>
         </>
       )}
     </>
   );
 }
 
-const WebView = () => {
+const WebView = ({ url }) => {
   return (
     <div className="flex-1 w-full overflow-y-auto bg-yellow-500">
       <iframe
-        src="https://checkout-staging.xendit.co/web/68b3f943b1c8612abbf1aded"
+        src={url}
         title="Xendit Checkout"
         style={{
           width: "100%",
@@ -327,7 +288,6 @@ const WebView = () => {
           border: "none",
           background: "#fff",
         }}
-        allow="payment"
       />
     </div>
   );
