@@ -63,79 +63,64 @@ export default function MainContentDetailLitmatch({ children }) {
   };
   const [dataSubmit, setDataSubmit] = useState(null);
 
-  const onSubmits = async (dataku) => {
-    try {
-      onClose();
+  const router = useRouter();
 
-      const payload = {
-        ...dataku,
-        // pastikan selectedPackage ada:
-        package:
-          (selectedPackage?.bonus ?? 0) + (selectedPackage?.diamonds ?? 0),
-        price: selectedPackage?.sale_price ?? 0,
+  useEffect(() => {
+    if (dataSubmit) {
+      const onPopState = (e) => {
+        e.preventDefault();
+        router.replace("/"); // paksa balik ke root
       };
 
-      // gunakan return dari mutateAsync, bukan isSuccess/isError
-      const res = await postCheckout.mutateAsync(payload);
+      // trik kecil agar Back memicu popstate ke state “baru”
+      history.pushState(null, "", location.href);
+      window.addEventListener("popstate", onPopState);
 
-      // simpan URL invoice dari response
-      const invoiceUrl = res?.data?.data?.invoice_url;
-      setDataSubmit(invoiceUrl ?? null);
-    } catch (err) {
-      console.log(err);
+      return () => window.removeEventListener("popstate", onPopState);
+    }
+  }, [dataSubmit]);
+
+  const onSubmits = async (dataku) => {
+    onClose();
+
+    const dataSubmit = {
+      ...dataku,
+      package: selectedPackage?.bonus + selectedPackage?.diamonds,
+      price: selectedPackage?.sale_price,
+    };
+
+    await postCheckout.mutateAsync(dataSubmit);
+
+    if (postCheckout.isSuccess) {
+      addToast({
+        title: "Success",
+        description: "Payment successful",
+        color: "success",
+      });
+
+      setDataSubmit(postCheckout?.data?.data?.invoice_url);
+    }
+
+    if (postCheckout.isError) {
+      addToast({
+        title: "Failed",
+        description: "Payment failed",
+        color: "danger",
+      });
     }
   };
   return (
     <>
-      <div className="fixed z-[100]">
-        <ToastProvider placement={"top-center"} toastOffset={60} />
-      </div>
-
-      <Modal ref={targetRef} isOpen={isOpen} onOpenChange={onOpenChange}>
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader {...moveProps} className="flex flex-col gap-1">
-                Whatsapp Admin
-              </ModalHeader>
-              <ModalBody>
-                <p>
-                  Kami akan mengirimkan link pembayaran ke whatsapp anda. jika
-                  ada kendala silahkan hubungi admin kami{" "}
-                  <span
-                    onClick={() =>
-                      window.open(
-                        "https://api.whatsapp.com/send/?phone=%2B6285724663330&text=Halo"
-                      )
-                    }
-                    className="font-bold cursor-pointer"
-                  >
-                    085724663330
-                  </span>
-                </p>
-              </ModalBody>
-              <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
-                  Tutup
-                </Button>
-                <Button color="primary" onPress={handleSubmit(onSubmits)}>
-                  Lanjutkan
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
-      {postCheckout?.data?.data?.invoice_url ? (
-        <WebView url={postCheckout?.data?.data?.invoice_url} />
+      {dataSubmit ? (
+        <WebView />
       ) : (
         <>
-          <div className="flex-1 w-full overflow-y-auto bg-yellow-500">
+          <div className="w-full flex-1 overflow-y-auto bg-yellow-500">
             <div className="flex flex-col gap-2 px-0 py-2">
               {/* content */}
               <div className="flex flex-col">
                 {/* head */}
-                <div className="flex flex-col p-4 mt-3 bg-white">
+                <div className="mt-3 flex flex-col bg-white p-4">
                   <Head no={1} title="Pembayaran" />
                   <Controller
                     name="userId"
@@ -190,7 +175,7 @@ export default function MainContentDetailLitmatch({ children }) {
                     Check User ID
                   </Button>
                 </div>
-                <div className="flex flex-col p-4 mt-3 bg-white">
+                <div className="mt-3 flex flex-col bg-white p-4">
                   <Head no={2} title="Pembayaran" />
                   <Controller
                     name="phoneNumber"
@@ -213,8 +198,8 @@ export default function MainContentDetailLitmatch({ children }) {
                         //   inputWrapper: "h-12 relative",
                         // }}
                         startContent={
-                          <div className="flex items-center pointer-events-none">
-                            <span className="text-sm text-default-400">
+                          <div className="pointer-events-none flex items-center">
+                            <span className="text-default-400 text-sm">
                               +62
                             </span>
                           </div>
@@ -255,7 +240,7 @@ export default function MainContentDetailLitmatch({ children }) {
                   />
                 </div>
 
-                <div className="flex flex-col p-4 mt-3 bg-white">
+                <div className="mt-3 flex flex-col bg-white p-4">
                   <Head no={3} title="Pilih Paket" />
                   <PackageCom setSelectedPackage={setSelectedPackage} />
                 </div>
@@ -270,17 +255,56 @@ export default function MainContentDetailLitmatch({ children }) {
               isValid={isValid && postCheckID?.data?.data?.data?.nickname}
             />
           </div>
+          <div className="fixed z-[100]">
+            <ToastProvider placement={"top-center"} toastOffset={60} />
+          </div>
+
+          <Modal ref={targetRef} isOpen={isOpen} onOpenChange={onOpenChange}>
+            <ModalContent>
+              {(onClose) => (
+                <>
+                  <ModalHeader {...moveProps} className="flex flex-col gap-1">
+                    Whatsapp Admin
+                  </ModalHeader>
+                  <ModalBody>
+                    <p>
+                      Kami akan mengirimkan link pembayaran ke whatsapp anda.
+                      jika ada kendala silahkan hubungi admin kami{" "}
+                      <span
+                        onClick={() =>
+                          window.open(
+                            "https://api.whatsapp.com/send/?phone=%2B6285724663330&text=Halo"
+                          )
+                        }
+                        className="cursor-pointer font-bold"
+                      >
+                        085724663330
+                      </span>
+                    </p>
+                  </ModalBody>
+                  <ModalFooter>
+                    <Button color="danger" variant="light" onPress={onClose}>
+                      Tutup
+                    </Button>
+                    <Button color="primary" onPress={handleSubmit(onSubmits)}>
+                      Lanjutkan
+                    </Button>
+                  </ModalFooter>
+                </>
+              )}
+            </ModalContent>
+          </Modal>
         </>
       )}
     </>
   );
 }
 
-const WebView = ({ url }) => {
+const WebView = () => {
   return (
-    <div className="flex-1 w-full overflow-y-auto bg-yellow-500">
+    <div className="w-full flex-1 overflow-y-auto bg-yellow-500">
       <iframe
-        src={url}
+        src="https://checkout-staging.xendit.co/web/68b3f943b1c8612abbf1aded"
         title="Xendit Checkout"
         style={{
           width: "100%",
@@ -288,6 +312,7 @@ const WebView = ({ url }) => {
           border: "none",
           background: "#fff",
         }}
+        allow="payment"
       />
     </div>
   );
@@ -295,7 +320,7 @@ const WebView = ({ url }) => {
 
 const Head = ({ no, title }) => {
   return (
-    <div className="flex items-center justify-between w-full mb-2">
+    <div className="mb-2 flex w-full items-center justify-between">
       {/* Left: Number and Title */}
       <div className="flex items-center gap-2">
         <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#7B61FF]">

@@ -8,6 +8,7 @@ import {
 import React from "react";
 import CarouselBanner from "./_component/CarouselBanner";
 import MainContent from "./_component/MainContent";
+import VideoPlayer from "./_component/PlayVideo";
 
 const bottomNav = [
   {
@@ -47,6 +48,7 @@ export default function page() {
           <div className="flex flex-col gap-2 px-0 py-2">
             <CarouselBanner />
             <MainContent />
+            <VideoPlayer />
           </div>
           <div className="h-[60px]" />
           {/*  bottom nav */}
