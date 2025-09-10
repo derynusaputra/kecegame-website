@@ -1,4 +1,5 @@
 "use client";
+import MuxPlayer from "@mux/mux-player-react";
 import { useEffect, useRef } from "react";
 // import { Player } from "@mux/mux-player-react";
 
@@ -34,17 +35,26 @@ export default function VideoItem({ keyku, src }) {
 
   return (
     <div>
-      <video
+      {/* <video
         // key={keyku}
         ref={videoRef}
         src={src}
-        className="h-screen w-full object-cover"
+        className="object-cover w-full h-screen"
         // muted
         loop
         playsInline
         controls={true}
-      />
+      /> */}
 
+      <MuxPlayer
+        streamType="on-demand"
+        src="https://cdn.mysite.com/hls/playlist.m3u8"
+        metadata={{
+          video_id: "video-id-123456",
+          video_title: "Bick Buck Bunny",
+          viewer_user_id: "user-id-bc-789",
+        }}
+      />
       {/* <Player
         streamType="on-demand"
         src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" // bisa pakai HLS dari server kamu
