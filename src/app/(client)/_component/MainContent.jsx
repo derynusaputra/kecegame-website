@@ -1,50 +1,56 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import GameCard from "./GameCard";
 import { games, liveApps, vouchers } from "../_data/game";
-
-const tabs = [
-  { id: "top_up", name: "Top Up Game" },
-  { id: "live_app", name: "Aplikasi Live" },
-  { id: "voucher", name: "Voucher" },
-  { id: "pln", name: "Pulsa dan PLN" },
-  { id: "pulsa", name: "Pulsa dan PLN" },
-];
+import { useGetCategory } from "@/hooks/ReactQuery/useGetCategory";
+import { useBrand } from "@/hooks/ReactQuery/useBrand";
+import CustomLoading from "@/components/loading/CustomLoading";
 
 export default function MainContent() {
-  const [activeTab, setActiveTab] = useState("top_up");
+  const {
+    data: dataBrand,
+    isLoading: initLoadBrand,
+    error: errBrand,
+    refetch: getBrand,
+    isFetching: loadBrand,
+  } = useBrand.get();
+
+  const uniqueBrands = dataBrand?.data.filter(
+    (obj, index, self) =>
+      index === self.findIndex((o) => o.category === obj.category)
+  );
+
+  const [activeTab, setActiveTab] = useState(null);
+
+  useEffect(() => {
+    getBrand();
+  }, []);
+
+  // Set activeTab ke category pertama saat data sudah loaded
+  useEffect(() => {
+    if (uniqueBrands && uniqueBrands.length > 0 && !activeTab) {
+      setActiveTab(uniqueBrands[0].category);
+    }
+  }, [uniqueBrands, activeTab]);
+
+  if (initLoadBrand) {
+    return <CustomLoading />;
+  }
 
   const renderContent = () => {
-    let data;
-    switch (activeTab) {
-      case "top_up":
-        data = games;
-        break;
-      case "live_app":
-        data = liveApps;
-        break;
-      case "voucher":
-        data = vouchers;
-        break;
-      case "pln":
-        data = [];
-        break;
-      case "pulsa":
-        data = []; // Misalnya, data kosong untuk tab ini
-        break;
-      default:
-        data = [];
-    }
+    // Filter data berdasarkan activeTab (category)
+    const filteredData =
+      dataBrand?.data.filter((item) => item.category === activeTab) || [];
 
     return (
       <div className="grid grid-cols-4 gap-0 p-1">
-        {data.map((item) => (
+        {filteredData.map((item) => (
           <GameCard
             key={item.id}
             name={item.name}
-            iconUrl={item.iconUrl}
-            slug={item.slug}
+            iconUrl={item.urlLogo}
+            slug={item.name.toLowerCase().replace(/\s+/g, "-")}
           />
         ))}
       </div>
@@ -56,17 +62,17 @@ export default function MainContent() {
       {/* Tab Navigation */}
 
       <div className="scrollbar-hide flex gap-2 overflow-x-auto pt-3">
-        {tabs.map((tab, idx) => (
+        {uniqueBrands.map((tab, idx) => (
           <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`flex-shrink-0 rounded-lg px-3 py-1 text-[12px] font-semibold transition-colors duration-300 ${
-              activeTab === tab.id
-                ? "bg-blue-600 text-white"
-                : "bg-gray-300 text-gray-500"
+            key={idx}
+            onClick={() => setActiveTab(tab.category)}
+            className={`flex-shrink-0 rounded-lg px-3 py-1 text-[12px] font-semibold text-white duration-300 ${idx === 0 ? "ml-3" : ""} ${
+              activeTab === tab.category
+                ? "bg-[#00c951] text-white"
+                : "bg-gray-300 text-black"
             }${idx === 0 ? "ml-3" : ""}`}
           >
-            {tab.name}
+            {tab.category}
           </button>
         ))}
       </div>

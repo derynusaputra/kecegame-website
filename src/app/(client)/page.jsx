@@ -9,6 +9,7 @@ import React from "react";
 import CarouselBanner from "./_component/CarouselBanner";
 import MainContent from "./_component/MainContent";
 import VideoPlayer from "./_component/PlayVideo";
+import Image from "next/image";
 
 const bottomNav = [
   {
@@ -38,17 +39,27 @@ const bottomNav = [
 export default function page() {
   return (
     <div className="flex h-screen w-screen flex-col items-center bg-[#F5F5F4]">
-      <div className="flex h-full w-full max-w-md flex-col bg-blue-500">
+      <div className="flex h-full w-full max-w-md flex-col">
         {/* Atas (Hijau) */}
         <div className="h-[60px] w-full bg-green-500">
-          <div className="h-[60px] w-full bg-[#3F1FBA]">dery</div>
+          <div className="align-center mt-3 h-[30px] w-full justify-center text-center font-bold text-white">
+            <Image
+              className="h-full w-full"
+              loading="eager"
+              fetchPriority="high"
+              width={20}
+              height={20}
+              src="./images/logo/logo-dark.svg"
+              alt="Logo"
+            />
+          </div>
         </div>
         {/* Tengah (Kuning, scrollable jika overflow) */}
-        <div className="w-full flex-1 overflow-y-auto bg-yellow-500">
+        <div className="w-full flex-1 overflow-y-auto bg-gray-50">
           <div className="flex flex-col gap-2 px-0 py-2">
             <CarouselBanner />
             <MainContent />
-            <VideoPlayer />
+            {/* <VideoPlayer /> */}
           </div>
           <div className="h-[60px]" />
           {/*  bottom nav */}
