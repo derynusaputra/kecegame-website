@@ -5,17 +5,10 @@ import { API_URL, apiBase } from "@/services/apiBase";
 import Image from "next/image";
 import { Image as ImageHeroui } from "@heroui/image";
 import Link from "next/link";
-import CryptoJS from "crypto-js";
-import { encryptKu } from "@/lib/utils";
 
-export default function GameCard({ name, iconUrl, link, slug, item }) {
-  const dataString = JSON.stringify(item);
-
-  // Langkah B: Enkripsi string tersebut
-  const ciphertext = encryptKu(item);
-
+export default function GameCardDigi({ name, iconUrl, link, slug, item }) {
   return (
-    <Link href={`/game/${ciphertext}`} className="block cursor-pointer p-2.5">
+    <Link href={`/game/${slug}`} className="block cursor-pointer p-2.5">
       <div className="relative m-auto h-[50px] w-[50px]">
         <div className="relative m-auto h-[50px] w-[50px] overflow-hidden rounded-lg">
           <ImageHeroui
@@ -29,7 +22,7 @@ export default function GameCard({ name, iconUrl, link, slug, item }) {
             className="aspect-square bg-gray-200 object-cover"
             src={
               iconUrl
-                ? `${API_URL}${iconUrl}`
+                ? API_URL + iconUrl
                 : "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Video-Game-Controller-Icon-IDV-green.svg/2048px-Video-Game-Controller-Icon-IDV-green.svg.png"
             }
             // src="./images/logo/auth-logo.svg"

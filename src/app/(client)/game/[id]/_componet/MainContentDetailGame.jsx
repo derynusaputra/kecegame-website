@@ -1,5 +1,5 @@
 "use client";
-import { Button, Input } from "@heroui/react";
+import { Button, Image, Input } from "@heroui/react";
 import React, { Children, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import PackageCom from "./PackageCom";
@@ -7,8 +7,9 @@ import ButtonPurhcase from "./ButtonPurhcase";
 import { useProduct } from "@/hooks/ReactQuery/useProduct";
 import CustomLoading from "@/components/loading/CustomLoading";
 import ContainerPackage from "./ContainerPackage";
+import { API_URL } from "@/services/apiBase";
 
-export default function MainContentDetailGame({ children, title }) {
+export default function MainContentDetailGame({ children, title, item }) {
   const [selectedPackage, setSelectedPackage] = useState(null);
 
   const postProduct = useProduct.create();
@@ -37,8 +38,6 @@ export default function MainContentDetailGame({ children, title }) {
 
   const values = watch();
 
-  console.log(postProduct?.data?.data);
-
   const onSubmit = async (data) => {
     console.log("Form submitted:", data);
   };
@@ -50,6 +49,9 @@ export default function MainContentDetailGame({ children, title }) {
       <div className="flex flex-col gap-2 px-0 py-2">
         {/* content */}
         <div className="flex flex-col">
+          <div className="flex flex-col bg-white p-4">
+            <HeadDetail no={1} title={title} item={item} />
+          </div>
           {/* head */}
           <div className="mt-3 flex flex-col bg-white p-4">
             <Head no={1} title="Pembayaran" />
@@ -139,6 +141,41 @@ export default function MainContentDetailGame({ children, title }) {
     </div>
   );
 }
+
+const HeadDetail = ({ no, title, item }) => {
+  return (
+    <div className="mb-2 flex w-full items-center justify-between">
+      {/* Left: Number and Title */}
+      <div className="flex items-center gap-2">
+        <div className="relative m-auto h-[50px] w-[50px] overflow-hidden rounded-lg">
+          <Image
+            alt={`Kecel Game ${title}`}
+            fetchPriority="high"
+            loading="eager"
+            width={50}
+            height={50}
+            decoding="async"
+            // Hapus kelas rounded dari sini, karena sudah dihandle oleh parent div
+            className="aspect-square bg-white object-cover"
+            src={
+              item?.urlLogo
+                ? API_URL + item?.urlLogo
+                : "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Video-Game-Controller-Icon-IDV-green.svg/2048px-Video-Game-Controller-Icon-IDV-green.svg.png"
+            }
+            // src="./images/logo/auth-logo.svg"
+          />
+        </div>
+
+        <div className="flex flex-col">
+          <span className="text-[15px] font-semibold">Top Up</span>
+          <span className="text-[15px] font-semibold">{title}</span>
+        </div>
+      </div>
+      {/* Right: Description */}
+      <span className="text-[13px] font-medium text-[#BDBDBD]"></span>
+    </div>
+  );
+};
 
 const Head = ({ no, title }) => {
   return (

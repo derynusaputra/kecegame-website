@@ -6,6 +6,9 @@ import { games, liveApps, vouchers } from "../_data/game";
 import { useGetCategory } from "@/hooks/ReactQuery/useGetCategory";
 import { useBrand } from "@/hooks/ReactQuery/useBrand";
 import CustomLoading from "@/components/loading/CustomLoading";
+// import bcrypt from "bcryptjs";
+// import { secretKey } from "@/lib/utils";
+// import CryptoJS from "crypto-js";
 
 export default function MainContent() {
   const {
@@ -45,14 +48,17 @@ export default function MainContent() {
 
     return (
       <div className="grid grid-cols-4 gap-0 p-1">
-        {filteredData.map((item) => (
-          <GameCard
-            key={item.id}
-            name={item.name}
-            iconUrl={item.urlLogo}
-            slug={item.name.replace(/\s+/g, "-")}
-          />
-        ))}
+        {filteredData.map((item) => {
+          return (
+            <GameCard
+              key={item.id}
+              name={item.name}
+              iconUrl={item.urlLogo}
+              slug={"ciphertext"}
+              item={item}
+            />
+          );
+        })}
       </div>
     );
   };
