@@ -50,7 +50,7 @@ export default function MainContent() {
             key={item.id}
             name={item.name}
             iconUrl={item.urlLogo}
-            slug={item.name.toLowerCase().replace(/\s+/g, "-")}
+            slug={item.name.replace(/\s+/g, "-")}
           />
         ))}
       </div>

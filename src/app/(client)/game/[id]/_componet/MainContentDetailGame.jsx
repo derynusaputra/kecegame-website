@@ -1,12 +1,25 @@
 "use client";
 import { Button, Input } from "@heroui/react";
-import React, { Children, useState } from "react";
+import React, { Children, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import PackageCom from "./PackageCom";
 import ButtonPurhcase from "./ButtonPurhcase";
+import { useProduct } from "@/hooks/ReactQuery/useProduct";
+import CustomLoading from "@/components/loading/CustomLoading";
+import ContainerPackage from "./ContainerPackage";
 
-export default function MainContentDetailGame({ children }) {
+export default function MainContentDetailGame({ children, title }) {
   const [selectedPackage, setSelectedPackage] = useState(null);
+
+  const postProduct = useProduct.create();
+
+  const getProduct = async () => {
+    await postProduct.mutateAsync(title);
+  };
+  useEffect(() => {
+    getProduct();
+  }, []);
+
   const {
     control,
     handleSubmit,
@@ -24,11 +37,14 @@ export default function MainContentDetailGame({ children }) {
 
   const values = watch();
 
-  console.log(selectedPackage);
+  console.log(postProduct?.data?.data);
 
   const onSubmit = async (data) => {
     console.log("Form submitted:", data);
   };
+  if (postProduct?.isPending) {
+    return <CustomLoading />;
+  }
   return (
     <div className="w-full flex-1 overflow-y-auto bg-yellow-500">
       <div className="flex flex-col gap-2 px-0 py-2">
@@ -105,7 +121,10 @@ export default function MainContentDetailGame({ children }) {
 
           <div className="mt-3 flex flex-col bg-white p-4">
             <Head no={3} title="Pilih Paket" />
-            <PackageCom setSelectedPackage={setSelectedPackage} />
+            <ContainerPackage
+              setSelectedPackage={setSelectedPackage}
+              initialPackages={postProduct?.data?.data}
+            />
           </div>
         </div>
       </div>
