@@ -46,7 +46,7 @@ export default function MainContentDetailGame({ children, title }) {
     return <CustomLoading />;
   }
   return (
-    <div className="w-full flex-1 overflow-y-auto bg-yellow-500">
+    <div className="w-full flex-1 overflow-y-auto bg-gray-200">
       <div className="flex flex-col gap-2 px-0 py-2">
         {/* content */}
         <div className="flex flex-col">

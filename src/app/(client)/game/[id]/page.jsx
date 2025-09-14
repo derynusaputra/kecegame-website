@@ -14,8 +14,8 @@ export default function DetailGame() {
     <div className="flex h-screen w-screen flex-col items-center bg-[#F5F5F4]">
       <div className="flex h-full w-full max-w-md flex-col bg-blue-500">
         {/* Atas (Hijau) */}
-        <div className="h-[60px] w-full bg-green-500">
-          <div className="h-[60px] w-full bg-[#3F1FBA]">dery</div>
+        <div className="h-[60px] w-full bg-gray-200">
+          <div className="h-[60px] w-full bg-[#3F1FBA]">Detail Game</div>
         </div>
         {litmatch ? (
           <MainContentDetailLitmatch />
