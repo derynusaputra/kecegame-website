@@ -34,10 +34,16 @@ export default function GameCard({ name, iconUrl, link, slug, item }) {
             }
             // src="./images/logo/auth-logo.svg"
           />
+
+          {/* <img
+            src="https://api.halalinmu.com/uploads/brands/1757878324769.webp"
+            alt="gambar"
+            className="w-full h-auto rounded-lg"
+          /> */}
         </div>
-        <div className="absolute right-[-3px] bottom-[-3px] z-10">
+        {/* <div className="absolute right-[-3px] bottom-[-3px] z-10">
           <Image
-            className="h-full w-full"
+            className="w-full h-full"
             loading="eager"
             fetchPriority="high"
             width={20}
@@ -45,7 +51,7 @@ export default function GameCard({ name, iconUrl, link, slug, item }) {
             src="./images/logo/icon-keranjang.svg"
             alt="Logo"
           />
-        </div>
+        </div> */}
       </div>
       <h3 className="mt-1 -mb-1 line-clamp-2 text-center text-[9px] font-semibold text-gray-600">
         {name}

@@ -7,6 +7,9 @@ const nextConfig = {
     });
     return config;
   },
+  images: {
+    domains: ["api.halalinmu.com"],
+  },
 };
 
 export default nextConfig;

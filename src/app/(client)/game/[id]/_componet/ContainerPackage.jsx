@@ -3,7 +3,11 @@
 import React, { memo, useState } from "react";
 import { Card, CardBody, Badge, Image } from "@heroui/react";
 
-function ContainerPackage({ setSelectedPackage, initialPackages = [] }) {
+function ContainerPackage({
+  setSelectedPackage,
+  initialPackages = [],
+  setValue,
+}) {
   const [packages, setPackages] = useState(initialPackages);
 
   const selectPackage = (id) => {
@@ -16,17 +20,6 @@ function ContainerPackage({ setSelectedPackage, initialPackages = [] }) {
 
   return (
     <div className="space-y-4">
-      {/* Tab Navigation */}
-      {/* <div className="flex p-1 bg-white border border-gray-200 rounded-lg">
-        <button className="flex-1 px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-md">
-          Berlian
-        </button>
-        <button className="flex-1 px-4 py-2 text-sm font-medium text-gray-600 rounded-md">
-          Bintang
-        </button>
-      </div> */}
-
-      {/* Selected Package Summary */}
       <div className="grid grid-cols-2 gap-4">
         {packages.map((p, idx) => (
           <CardPackage
@@ -35,6 +28,9 @@ function ContainerPackage({ setSelectedPackage, initialPackages = [] }) {
             onClick={() => {
               selectPackage(p.id);
               setSelectedPackage(p);
+              // console.log();
+              // setValue("package", p?.buyer_sku_code);
+              setValue.onChange(p?.buyer_sku_code);
             }}
             discount_percent={p.discountPercent}
             official_price={p.strikePrice}
