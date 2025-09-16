@@ -75,33 +75,31 @@ export default function MainContentDetailGame({ children, title, item }) {
               {/* head */}
               <div className="flex flex-col p-4 mt-3 bg-white">
                 <Head no={1} title="Pembayaran" />
+
                 <Controller
                   name="userId"
                   control={control}
                   render={({ field }) => (
                     <Input
                       {...field}
-                      label="User ID"
-                      placeholder="Masukan User ID"
+                      label="Your ID"
+                      placeholder="Your ID"
                       classNames={{
                         input: "placeholder:text-gray-300",
                       }}
                       variant="bordered"
-                      autoComplete="tel"
-                      isInvalid={!!errors.userId}
-                      errorMessage={errors.userId?.message}
+                      type="tel" // biar muncul keypad angka di HP
                       onChange={(e) => {
-                        let value = e.target.value;
+                        let value = e.target.value.replace(/\D/g, ""); // hanya angka
                         field.onChange(value);
                       }}
-                      type="text"
                     />
                   )}
                   rules={{
-                    required: "User ID is required",
+                    required: "Whatsapp is required",
                     pattern: {
-                      //   value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                      message: "Masukan User ID",
+                      // value: /^\d{8,9}$/,
+                      message: "Enter a valid ID",
                     },
                   }}
                 />
