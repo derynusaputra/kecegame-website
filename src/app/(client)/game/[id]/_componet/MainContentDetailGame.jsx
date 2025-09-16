@@ -7,7 +7,7 @@ import ButtonPurhcase from "./ButtonPurhcase";
 import { useProduct } from "@/hooks/ReactQuery/useProduct";
 import CustomLoading from "@/components/loading/CustomLoading";
 import ContainerPackage from "./ContainerPackage";
-import { API_URL } from "@/services/apiBase";
+import { API_URL, apiBase } from "@/services/apiBase";
 import { HeadDetail } from "./HeaderDetail";
 import axios from "axios";
 
@@ -31,7 +31,7 @@ export default function MainContentDetailGame({ children, title, item }) {
     watch,
   } = useForm({
     defaultValues: {
-      userID: "",
+      userId: "",
       phoneNumber: "",
       package: "",
     },
@@ -43,12 +43,11 @@ export default function MainContentDetailGame({ children, title, item }) {
   // const values = watch();
   const postSubmit = async (dataku) => {
     try {
-      const { data } = await axios.post(`${API_URL}/v1/game-payment`, {
-        ...dataku,
-      });
+      const { data } = await apiBase().post("/v1/game-payment", dataku);
+      console.log("data", data);
       setDataSubmit(data?.data?.invoice_url);
     } catch (error) {
-      console.log(error);
+      console.log("data", error);
     }
   };
 
@@ -66,18 +65,18 @@ export default function MainContentDetailGame({ children, title, item }) {
       {dataSubmit ? (
         <WebView url={dataSubmit} />
       ) : (
-        <div className="w-full flex-1 overflow-y-auto bg-gray-200">
+        <div className="flex-1 w-full overflow-y-auto bg-gray-200">
           <div className="flex flex-col gap-2 px-0 py-2">
             {/* content */}
             <div className="flex flex-col">
-              <div className="flex flex-col bg-white p-4">
+              <div className="flex flex-col p-4 bg-white">
                 <HeadDetail no={1} title={title} item={item} />
               </div>
               {/* head */}
-              <div className="mt-3 flex flex-col bg-white p-4">
+              <div className="flex flex-col p-4 mt-3 bg-white">
                 <Head no={1} title="Pembayaran" />
                 <Controller
-                  name="userID"
+                  name="userId"
                   control={control}
                   render={({ field }) => (
                     <Input
@@ -89,8 +88,8 @@ export default function MainContentDetailGame({ children, title, item }) {
                       }}
                       variant="bordered"
                       autoComplete="tel"
-                      isInvalid={!!errors.userID}
-                      errorMessage={errors.userID?.message}
+                      isInvalid={!!errors.userId}
+                      errorMessage={errors.userId?.message}
                       onChange={(e) => {
                         let value = e.target.value;
                         field.onChange(value);
@@ -107,7 +106,7 @@ export default function MainContentDetailGame({ children, title, item }) {
                   }}
                 />
               </div>
-              <div className="mt-3 flex flex-col bg-white p-4">
+              <div className="flex flex-col p-4 mt-3 bg-white">
                 <Head no={2} title="Pembayaran" />
                 <Controller
                   name="phoneNumber"
@@ -126,8 +125,8 @@ export default function MainContentDetailGame({ children, title, item }) {
                       errorMessage={errors.phoneNumber?.message}
                       type="tel"
                       startContent={
-                        <div className="pointer-events-none flex items-center">
-                          <span className="text-default-400 text-sm">+62</span>
+                        <div className="flex items-center pointer-events-none">
+                          <span className="text-sm text-default-400">+62</span>
                         </div>
                       }
                       onChange={(e) => {
@@ -163,7 +162,7 @@ export default function MainContentDetailGame({ children, title, item }) {
                 />
               </div>
 
-              <div className="mt-3 flex flex-col bg-white p-4">
+              <div className="flex flex-col p-4 mt-3 bg-white">
                 <Head no={3} title="Pilih Paket" />
 
                 <Controller
@@ -199,7 +198,7 @@ export default function MainContentDetailGame({ children, title, item }) {
 
 const WebView = ({ url }) => {
   return (
-    <div className="w-full flex-1 overflow-y-auto bg-yellow-500">
+    <div className="flex-1 w-full overflow-y-auto bg-yellow-500">
       <iframe
         src={url}
         title="Xendit Checkout"
@@ -216,7 +215,7 @@ const WebView = ({ url }) => {
 };
 const Head = ({ no, title }) => {
   return (
-    <div className="mb-2 flex w-full items-center justify-between">
+    <div className="flex items-center justify-between w-full mb-2">
       {/* Left: Number and Title */}
       <div className="flex items-center gap-2">
         <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#7B61FF]">
