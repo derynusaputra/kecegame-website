@@ -68,7 +68,7 @@ export default function MainContent() {
       {/* Tab Navigation */}
 
       <div className="scrollbar-hide flex gap-2 overflow-x-auto pt-3">
-        {uniqueBrands.map((tab, idx) => (
+        {uniqueBrands?.map((tab, idx) => (
           <button
             key={idx}
             onClick={() => setActiveTab(tab.category)}
