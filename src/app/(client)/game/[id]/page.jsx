@@ -19,7 +19,7 @@ export default function DetailGame() {
       <div className="flex h-full w-full max-w-md flex-col">
         {/* Atas (Hijau) */}
         <div className="h-[60px] w-full bg-gray-200">
-          <div className="h-[60px] w-full bg-[#3F1FBA]">Detail Game</div>
+          <div className="h-[60px] w-full bg-[#00c951]">Detail Game</div>
         </div>
         {litmatch ? (
           <MainContentDetailLitmatch />
