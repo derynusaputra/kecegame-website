@@ -67,18 +67,20 @@ export default function MainContent() {
     <div className="w-full max-w-md items-center justify-center bg-white">
       {/* Tab Navigation */}
 
-      <div className="scrollbar-hide flex gap-2 overflow-x-auto pt-3">
+      <div className="scrollbar-hide flex overflow-x-auto pt-3">
         {uniqueBrands?.map((tab, idx) => (
           <button
             key={idx}
             onClick={() => setActiveTab(tab.category)}
-            className={`flex-shrink-0 rounded-lg px-3 py-1 text-[12px] font-semibold text-white duration-300 ${idx === 0 ? "ml-3" : ""} ${
+            className={`${
               activeTab === tab.category
-                ? "bg-[#00c951] text-white"
-                : "bg-gray-300 text-black"
-            }${idx === 0 ? "ml-3" : ""}`}
+                ? "border-b-2 border-b-[#00c951] text-[#00c951]"
+                : "border-b-2 border-b-[#f5f5f5] text-black"
+            } h-[40px] w-[100px] flex-shrink-0 text-[12px] font-semibold duration-300`}
           >
-            {tab.category}
+            <div className="h-[30px] w-[100px] border-r-2 border-r-[#f5f5f5] pt-1">
+              {tab.category}
+            </div>
           </button>
         ))}
       </div>

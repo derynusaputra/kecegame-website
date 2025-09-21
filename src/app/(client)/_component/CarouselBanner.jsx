@@ -1,4 +1,6 @@
 "use client";
+import { useBanner } from "@/hooks/ReactQuery/useBanner";
+import { API_URL } from "@/services/apiBase";
 import React, { useEffect, useRef, useState } from "react";
 
 const bannerImages = [
@@ -21,6 +23,21 @@ export default function CarouselBanner() {
   const timeoutRef = useRef(null);
 
   const goToSlide = (slideIndex) => setCurrentIndex(slideIndex);
+
+  // get banner from api
+  const {
+    data: dataBanner,
+    isLoading: initLoadBanner,
+    error: errBanner,
+    refetch: getBanner,
+    isFetching: loadBanner,
+  } = useBanner.get();
+
+  console.log("dataBanner", dataBanner?.data);
+
+  useEffect(() => {
+    getBanner();
+  }, []);
 
   const resetTimeout = () => {
     if (timeoutRef.current) {
@@ -54,10 +71,10 @@ export default function CarouselBanner() {
         className="flex h-full transition-transform duration-500 ease-out"
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
       >
-        {bannerImages.map((banner) => (
+        {dataBanner?.data?.map((banner) => (
           <img
             key={banner.id}
-            src={banner.url}
+            src={`${API_URL}${banner.imageUrl}`}
             alt="Banner Image"
             className="h-full w-full flex-shrink-0 object-cover"
           />
@@ -67,7 +84,7 @@ export default function CarouselBanner() {
       {/* Tombol Panah Kiri (prevSlide) */}
       <button
         onClick={prevSlide}
-        className="absolute top-1/2 left-2 -translate-y-1/2 cursor-pointer rounded-full bg-white p-2 text-purple-600 shadow-md transition-all hover:bg-gray-100"
+        className="absolute top-1/2 left-2 -translate-y-1/2 cursor-pointer rounded-full bg-white p-2 text-[#00c951] shadow-md transition-all hover:bg-gray-100"
       >
         <svg
           className="h-5 w-5"
@@ -87,7 +104,7 @@ export default function CarouselBanner() {
       {/* Tombol Panah Kanan (nextSlide) */}
       <button
         onClick={nextSlide}
-        className="absolute top-1/2 right-2 -translate-y-1/2 cursor-pointer rounded-full bg-white p-2 text-purple-600 shadow-md transition-all hover:bg-gray-100"
+        className="absolute top-1/2 right-2 -translate-y-1/2 cursor-pointer rounded-full bg-white p-2 text-[#00c951] shadow-md transition-all hover:bg-gray-100"
       >
         <svg
           className="h-5 w-5"
