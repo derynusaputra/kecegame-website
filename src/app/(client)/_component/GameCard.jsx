@@ -5,17 +5,14 @@ import { API_URL, apiBase } from "@/services/apiBase";
 import Image from "next/image";
 import { Image as ImageHeroui } from "@heroui/image";
 import Link from "next/link";
-import CryptoJS from "crypto-js";
-import { encryptKu } from "@/lib/utils";
+// Note: Crypto functions removed to avoid dependency issues
 
 export default function GameCard({ name, iconUrl, link, slug, item }) {
-  const dataString = JSON.stringify(item);
-
-  // Langkah B: Enkripsi string tersebut
-  const ciphertext = encryptKu(item);
+  // Use slug or name as fallback for link
+  const gameId = slug || name?.toLowerCase().replace(/\s+/g, "-") || "game";
 
   return (
-    <Link href={`/game/${ciphertext}`} className="block cursor-pointer p-2.5">
+    <Link href={`/game/${gameId}`} className="block cursor-pointer p-2.5">
       <div className="relative m-auto h-[50px] w-[50px]">
         <div className="relative m-auto h-[50px] w-[50px] overflow-hidden rounded-lg">
           <ImageHeroui

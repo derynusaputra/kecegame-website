@@ -3,16 +3,14 @@ import React from "react";
 import MainContentDetailGame from "./_componet/MainContentDetailGame";
 import MainContentDetailLitmatch from "./_componet/MainContentDetailLitmatch";
 import { useParams } from "next/navigation";
-import CryptoJS from "crypto-js";
-import { decryptKu, secretKey } from "@/lib/utils";
-import { log } from "@tensorflow/tfjs";
+// Note: Crypto functions removed to avoid dependency issues
 
 export default function DetailGame() {
   const { id } = useParams();
-  const bytes = decryptKu(id);
-  const litmatch = bytes.name === "litmatch";
-
-  const title = bytes.name;
+  // Use id directly as game identifier
+  const gameId = id;
+  const litmatch = gameId === "litmatch";
+  const title = gameId;
 
   return (
     <div className="flex h-screen w-screen flex-col items-center bg-[#F5F5F4]">
@@ -24,7 +22,7 @@ export default function DetailGame() {
         {litmatch ? (
           <MainContentDetailLitmatch />
         ) : (
-          <MainContentDetailGame title={title} item={bytes} />
+          <MainContentDetailGame title={title} item={{ name: gameId }} />
         )}
       </div>
     </div>
