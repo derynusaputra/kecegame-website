@@ -25,32 +25,42 @@ const navItems = [
     // subItems: [{ name: "Ecommerce", path: "/admin", pro: false }],
     path: "/admin",
   },
+  // {
+  //   icon: <CalenderIcon />,
+  //   name: "Calendar",
+  //   path: "/calendar",
+  // },
+  // {
+  //   icon: <UserCircleIcon />,
+  //   name: "User Profile",
+  //   path: "/profile",
+  // },
+  // {
+  //   name: "Forms",
+  //   icon: <ListIcon />,
+  //   subItems: [{ name: "Form Elements", path: "/form-elements", pro: false }],
+  // },
+  // {
+  //   name: "Pages",
+  //   icon: <PageIcon />,
+  //   subItems: [
+  //     { name: "Blank Page", path: "/blank", pro: false },
+  //     { name: "404 Error", path: "/error-404", pro: false },
+  //   ],
+  // },
   {
-    icon: <CalenderIcon />,
-    name: "Calendar",
-    path: "/calendar",
-  },
-  {
-    icon: <UserCircleIcon />,
-    name: "User Profile",
-    path: "/profile",
-  },
-  {
-    name: "Forms",
-    icon: <ListIcon />,
-    subItems: [{ name: "Form Elements", path: "/form-elements", pro: false }],
-  },
-  {
-    name: "Tables",
+    name: "Transactions",
     icon: <TableIcon />,
     subItems: [{ name: "Basic Tables", path: "/basic-tables", pro: false }],
   },
   {
-    name: "Pages",
-    icon: <PageIcon />,
+    icon: <PlugInIcon />,
+    name: "Authentication",
     subItems: [
-      { name: "Blank Page", path: "/blank", pro: false },
-      { name: "404 Error", path: "/error-404", pro: false },
+      { name: "Connection", path: "/connection", pro: false },
+
+      // { name: "Sign In", path: "/signin", pro: false },
+      // { name: "Sign Up", path: "/signup", pro: false },
     ],
   },
 ];
@@ -75,21 +85,21 @@ const othersItems = [
       { name: "Videos", path: "/videos", pro: false },
     ],
   },
-  {
-    icon: <PlugInIcon />,
-    name: "Authentication",
-    subItems: [
-      { name: "Connection", path: "/connection", pro: false },
+  // {
+  //   icon: <PlugInIcon />,
+  //   name: "Authentication",
+  //   subItems: [
+  //     { name: "Connection", path: "/connection", pro: false },
 
-      // { name: "Sign In", path: "/signin", pro: false },
-      // { name: "Sign Up", path: "/signup", pro: false },
-    ],
-  },
-  {
-    icon: <CalenderIcon />,
-    name: "Calendar",
-    path: "/calendar",
-  },
+  //     // { name: "Sign In", path: "/signin", pro: false },
+  //     // { name: "Sign Up", path: "/signup", pro: false },
+  //   ],
+  // },
+  // {
+  //   icon: <CalenderIcon />,
+  //   name: "Calendar",
+  //   path: "/calendar",
+  // },
 ];
 const AppSidebar = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
@@ -357,7 +367,7 @@ const AppSidebar = () => {
               {renderMenuItems(navItems, "main")}
             </div>
 
-            <div className="">
+            {/* <div className="">
               <h2
                 className={`mb-4 flex text-xs leading-[20px] text-gray-400 uppercase ${
                   !isExpanded && !isHovered
@@ -372,7 +382,7 @@ const AppSidebar = () => {
                 )}
               </h2>
               {renderMenuItems(othersItems, "others")}
-            </div>
+            </div> */}
           </div>
         </nav>
 

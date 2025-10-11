@@ -51,7 +51,7 @@ export default function CreateApiKeyModal({ isOpen, onClose, onSuccess }) {
     >
       <form onSubmit={handleCreateSubmit}>
         <h4 className="mb-6 text-lg font-medium text-gray-800 dark:text-white/90">
-          Tambah API Key Baru
+          Tambah API Key Barus
         </h4>
 
         <div className="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2">
@@ -64,10 +64,8 @@ export default function CreateApiKeyModal({ isOpen, onClose, onSuccess }) {
               required
             >
               <option value="OTHER">OTHER</option>
-              <option value="MIDTRANS">MIDTRANS</option>
-              <option value="XENDIT">XENDIT</option>
-              <option value="DOKU">DOKU</option>
-              <option value="IPAYMU">IPAYMU</option>
+              <option value="PAYMENT">PAYMENT GATEWAY</option>
+              <option value="PLATFORM">PLATFORM</option>
             </select>
           </div>
 
@@ -75,7 +73,7 @@ export default function CreateApiKeyModal({ isOpen, onClose, onSuccess }) {
             <Label>Nama Provider</Label>
             <Input
               type="text"
-              placeholder="Contoh: IPAYMU, XENALIVE"
+              placeholder="Contoh: XENA, XENDIT, DIGIFLAZZ"
               value={createForm.name}
               onChange={(e) => handleFormChange("name", e.target.value)}
               required
