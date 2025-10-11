@@ -3,13 +3,14 @@ import { HeroUIProvider, ToastProvider } from "@heroui/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SidebarProvider } from "@/context/SidebarContext";
 import { ThemeProvider } from "@/context/ThemeContext";
+import { AuthProvider } from "@/context/AuthContext";
 
 // Create a client
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 5 * 60 * 1000, // 5 minutes
-      retry: 1,
+      retry: 0,
+      refetchOnWindowFocus: false,
     },
   },
 });
@@ -17,11 +18,13 @@ const queryClient = new QueryClient({
 export default function Providers({ children }) {
   return (
     <QueryClientProvider client={queryClient}>
-      <HeroUIProvider>
-        <ThemeProvider>
-          <SidebarProvider>{children}</SidebarProvider>
-        </ThemeProvider>
-      </HeroUIProvider>
+      <AuthProvider>
+        <HeroUIProvider>
+          <ThemeProvider>
+            <SidebarProvider>{children}</SidebarProvider>
+          </ThemeProvider>
+        </HeroUIProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

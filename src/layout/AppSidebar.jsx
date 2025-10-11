@@ -9,6 +9,7 @@ import {
   CalenderIcon,
   ChevronDownIcon,
   GridIcon,
+  GroupIcon,
   HorizontaLDots,
   ListIcon,
   PageIcon,
@@ -18,6 +19,7 @@ import {
   UserCircleIcon,
 } from "../icons/index";
 import SidebarWidget from "./SidebarWidget";
+import { PackageSearch } from "lucide-react";
 const navItems = [
   {
     icon: <GridIcon />,
@@ -51,7 +53,12 @@ const navItems = [
   {
     name: "Transactions",
     icon: <TableIcon />,
-    subItems: [{ name: "Basic Tables", path: "/basic-tables", pro: false }],
+    subItems: [{ name: "Transaction", path: "/admin/transaction", pro: false }],
+  },
+  {
+    icon: <PackageSearch />,
+    name: "Product",
+    path: "/admin/product",
   },
   {
     icon: <PlugInIcon />,
@@ -197,7 +204,7 @@ const AppSidebar = () => {
                     : "0px",
               }}
             >
-              <ul className="mt-2 space-y-1 ml-9">
+              <ul className="mt-2 ml-9 space-y-1">
                 {nav.subItems.map((subItem) => (
                   <li key={subItem.name}>
                     <Link
@@ -209,7 +216,7 @@ const AppSidebar = () => {
                       }`}
                     >
                       {subItem.name}
-                      <span className="flex items-center gap-1 ml-auto">
+                      <span className="ml-auto flex items-center gap-1">
                         {subItem.new && (
                           <span
                             className={`ml-auto ${
@@ -347,7 +354,7 @@ const AppSidebar = () => {
           )}
         </Link>
       </div>
-      <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
+      <div className="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
         <nav className="mb-6">
           <div className="flex flex-col gap-4">
             <div>

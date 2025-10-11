@@ -1,6 +1,7 @@
 "use client";
 import { useBanner } from "@/hooks/ReactQuery/useBanner";
 import { API_URL } from "@/services/apiBase";
+import { configEnv } from "@/services/config";
 import React, { useEffect, useRef, useState } from "react";
 
 const bannerImages = [
@@ -74,7 +75,7 @@ export default function CarouselBanner() {
         {dataBanner?.data?.map((banner) => (
           <img
             key={banner.id}
-            src={`${API_URL}${banner.imageUrl}`}
+            src={`${configEnv.baseUrl}${banner.imageUrl}`}
             alt="Banner Image"
             className="h-full w-full flex-shrink-0 object-cover"
           />

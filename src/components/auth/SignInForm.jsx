@@ -3,12 +3,25 @@ import Checkbox from "@/components/form/input/Checkbox";
 import Input from "@/components/form/input/InputField";
 import Label from "@/components/form/Label";
 import Button from "@/components/ui/button/Button";
+import { useAuth } from "@/context/AuthContext";
 import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "@/icons";
+import { postLogin } from "@/services/api/login";
+import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+
+  const [form, setForm] = useState({
+    username: "",
+    password: "",
+  });
+
+  const { mutate, isPending } = postLogin();
+  const { login } = useAuth();
+
   return (
     <div className="flex w-full flex-1 flex-col lg:w-1/2">
       <div className="mx-auto mb-5 w-full max-w-md sm:pt-10">
@@ -83,56 +96,91 @@ export default function SignInForm() {
                 </span>
               </div>
             </div>
-            <form>
-              <div className="space-y-6">
-                <div>
-                  <Label>
-                    Email <span className="text-error-500">*</span>{" "}
-                  </Label>
-                  <Input placeholder="info@gmail.com" type="email" />
-                </div>
-                <div>
-                  <Label>
-                    Password <span className="text-error-500">*</span>{" "}
-                  </Label>
-                  <div className="relative">
-                    <Input
-                      type={showPassword ? "text" : "password"}
-                      placeholder="Enter your password"
-                    />
-                    <span
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute top-1/2 right-4 z-30 -translate-y-1/2 cursor-pointer"
-                    >
-                      {showPassword ? (
-                        <EyeIcon className="fill-gray-500 dark:fill-gray-400" />
-                      ) : (
-                        <EyeCloseIcon className="fill-gray-500 dark:fill-gray-400" />
-                      )}
-                    </span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <Checkbox checked={isChecked} onChange={setIsChecked} />
-                    <span className="text-theme-sm block font-normal text-gray-700 dark:text-gray-400">
-                      Keep me logged in
-                    </span>
-                  </div>
-                  <Link
-                    href="/reset-password"
-                    className="text-brand-500 hover:text-brand-600 dark:text-brand-400 text-sm"
+
+            <div className="space-y-6">
+              <div>
+                <Label>
+                  Username <span className="text-error-500">*</span>{" "}
+                </Label>
+                <Input
+                  placeholder="info@gmail.com"
+                  value={form.username}
+                  onChange={(e) =>
+                    setForm((prev) => ({
+                      ...prev,
+                      username: e.target.value,
+                    }))
+                  }
+                />
+              </div>
+              <div>
+                <Label>
+                  Password <span className="text-error-500">*</span>{" "}
+                </Label>
+                <div className="relative">
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Enter your password"
+                    value={form.password}
+                    onChange={(e) =>
+                      setForm((prev) => ({
+                        ...prev,
+                        password: e.target.value,
+                      }))
+                    }
+                  />
+                  <span
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute top-1/2 right-4 z-30 -translate-y-1/2 cursor-pointer"
                   >
-                    Forgot password?
-                  </Link>
-                </div>
-                <div>
-                  <Button className="w-full" size="sm">
-                    Sign in
-                  </Button>
+                    {showPassword ? (
+                      <EyeIcon className="fill-gray-500 dark:fill-gray-400" />
+                    ) : (
+                      <EyeCloseIcon className="fill-gray-500 dark:fill-gray-400" />
+                    )}
+                  </span>
                 </div>
               </div>
-            </form>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <Checkbox checked={isChecked} onChange={setIsChecked} />
+                  <span className="text-theme-sm block font-normal text-gray-700 dark:text-gray-400">
+                    Keep me logged in
+                  </span>
+                </div>
+                <Link
+                  href="/reset-password"
+                  className="text-brand-500 hover:text-brand-600 dark:text-brand-400 text-sm"
+                >
+                  Forgot password?
+                </Link>
+              </div>
+              <div>
+                <Button
+                  className="w-full"
+                  size="sm"
+                  onClick={() =>
+                    mutate(form, {
+                      onSuccess: (res) => {
+                        if (res.code === 200) {
+                          toast.success(res.message);
+                          document.cookie = `token=${res?.data?.tokens?.access?.token}; path=/; SameSite=Lax;`;
+                          login(
+                            res?.data?.tokens?.access?.token,
+                            res?.data?.user
+                          );
+                        }
+                      },
+                      onError: (err) => {
+                        toast.error(err?.data?.message);
+                      },
+                    })
+                  }
+                >
+                  Sign in
+                </Button>
+              </div>
+            </div>
 
             <div className="mt-5">
               <p className="text-center text-sm font-normal text-gray-700 sm:text-start dark:text-gray-400">
