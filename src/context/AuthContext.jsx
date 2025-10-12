@@ -1,38 +1,59 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { useRouter } from "next/navigation";
+import { apiBase } from "@/services/apiBase";
+import { getCookie } from "@/helpers/getCookie";
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
+  const token = getCookie("token");
   const [user, setUser] = useState(null);
   const router = useRouter();
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    const userData = localStorage.getItem("user");
-    if (token && userData) {
-      setUser(JSON.parse(userData));
+  const fetchProfile = useCallback(async () => {
+    if (!token) {
+      setUser(null);
+      return;
     }
-  }, []);
 
-  const login = (token, userData) => {
-    localStorage.setItem("token", token);
-    localStorage.setItem("user", JSON.stringify(userData));
-    setUser(userData);
+    try {
+      const res = await apiBase(token).get("/v1/users/me");
+
+      if (res.status === 200) {
+        setUser(res.data?.data);
+      } else {
+        setUser(null);
+      }
+    } catch (error) {
+      console.error("Gagal ambil profile:", error);
+      setUser(null);
+    }
+  }, [token]);
+
+  useEffect(() => {
+    fetchProfile();
+  }, [fetchProfile]);
+
+  const login = (token) => {
+    document.cookie = `token=${token}; path=/; SameSite=Lax;`;
     router.push("/admin");
   };
-
   const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    document.cookie = "token=; Max-Age=0; path=/;";
     setUser(null);
     router.push("/login");
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, fetchProfile }}>
       {children}
     </AuthContext.Provider>
   );

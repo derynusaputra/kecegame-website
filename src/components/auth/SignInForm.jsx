@@ -164,7 +164,6 @@ export default function SignInForm() {
                       onSuccess: (res) => {
                         if (res.code === 200) {
                           toast.success(res.message);
-                          document.cookie = `token=${res?.data?.tokens?.access?.token}; path=/; SameSite=Lax;`;
                           login(
                             res?.data?.tokens?.access?.token,
                             res?.data?.user
@@ -177,7 +176,7 @@ export default function SignInForm() {
                     })
                   }
                 >
-                  Sign in
+                  Sign in {isPending && <Loader2 className="animate-spin" />}
                 </Button>
               </div>
             </div>

@@ -1,5 +1,4 @@
 "use client";
-import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -7,38 +6,29 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  MagnifyingGlassIcon,
-  PlusIcon,
-  TrashIcon,
-  PencilIcon,
-  EyeIcon,
-  ChevronDownIcon,
-  ChevronRightIcon,
-  ExclamationTriangleIcon,
-} from "@heroicons/react/24/outline";
 import { useSidebar } from "@/context/SidebarContext";
-import { useThirdPartyKeys } from "@/hooks/useThirdPartyKeys";
 import { useThirParty } from "@/hooks/ReactQuery/useThirParty";
 import { useModal } from "@/hooks/useModal";
-import CreateApiKeyModal from "./CreateApiKeyModal";
-import DeleteConfirmationModal from "./DeleteConfirmationModal";
-import SuccessNotificationModal from "./SuccessNotificationModal";
+import { getListTransaction } from "@/services/api/transaction";
+import {
+  ExclamationTriangleIcon,
+  EyeIcon,
+  MagnifyingGlassIcon,
+  PencilIcon,
+  TrashIcon,
+} from "@heroicons/react/24/outline";
+import { Button, Modal, Pagination, useDisclosure } from "@heroui/react";
+import React, { useEffect, useState } from "react";
 import ApiKeyPreviewModal from "./ApiKeyPreviewModal";
 import ConnectionConfigModalHero from "./ConnectionConfigModalHero";
-import {
-  Button,
-  Checkbox,
-  Input,
-  Link,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  useDisclosure,
-} from "@heroui/react";
+import CreateApiKeyModal from "./CreateApiKeyModal";
+import DeleteConfirmationModal from "./DeleteConfirmationModal";
 import ModalContentLoginLitmatch from "./ModalContentLoginLitmatch";
+import SuccessNotificationModal from "./SuccessNotificationModal";
+import { moments } from "@tensorflow/tfjs";
+import moment from "moment";
+import { formatRupiah } from "@/helpers/formatRupiah";
+import { useDebounce } from "@/hooks/useDebounce";
 
 export default function MainConnect() {
   const { isExpanded } = useSidebar();
@@ -46,6 +36,17 @@ export default function MainConnect() {
   const [selectedConnections, setSelectedConnections] = useState([]);
   const [expandedRows, setExpandedRows] = useState({});
   const [showOnlyActive, setShowOnlyActive] = useState(false);
+
+  const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search, 600);
+
+  const [page, setPage] = useState(1);
+  const { data } = getListTransaction({
+    page: page,
+    limit: 10,
+    search: debouncedSearch,
+  });
+  const transactions = data && data?.data?.data;
 
   // Modal states
   const { isOpen, openModal, closeModal } = useModal();
@@ -138,9 +139,7 @@ export default function MainConnect() {
 
   // Handle save configuration
   const handleSaveConfiguration = (configData) => {
-    // Here you would typically call an API to update the connection
-    console.log("Saving configuration:", configData);
-
+    // Here you would typically call an API to update the connectio
     // For now, just show success message
     setSuccessMessage({
       title: "Koneksi Berhasil Dikonfigurasi!",
@@ -155,8 +154,6 @@ export default function MainConnect() {
   // Transform API data to match our component structure
   const transformedData =
     dataThirParty?.data?.map((item) => {
-      console.log(item);
-
       const apiKey = item.apiKey || "kosong";
       const apiKeyPreview =
         apiKey === "kosong"
@@ -247,7 +244,7 @@ export default function MainConnect() {
     return (
       <div className="flex min-h-[400px] items-center justify-center">
         <div className="text-center">
-          <div className="w-12 h-12 mx-auto border-b-2 border-blue-500 rounded-full animate-spin"></div>
+          <div className="mx-auto h-12 w-12 animate-spin rounded-full border-b-2 border-blue-500"></div>
           <p className="mt-4 text-gray-600 dark:text-gray-400">
             Memuat data koneksi...
           </p>
@@ -261,7 +258,7 @@ export default function MainConnect() {
     return (
       <div className="flex min-h-[400px] items-center justify-center">
         <div className="text-center">
-          <ExclamationTriangleIcon className="w-12 h-12 mx-auto text-red-500" />
+          <ExclamationTriangleIcon className="mx-auto h-12 w-12 text-red-500" />
           <h3 className="mt-4 text-lg font-medium text-gray-900 dark:text-white">
             Terjadi Kesalahan
           </h3>
@@ -270,7 +267,7 @@ export default function MainConnect() {
           </p>
           <button
             onClick={() => getThirtParty()}
-            className="px-4 py-2 mt-4 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600"
+            className="mt-4 rounded-md bg-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-blue-600"
           >
             Coba Lagi
           </button>
@@ -323,70 +320,6 @@ export default function MainConnect() {
           autoCloseDelay={3000}
         />
 
-        {/* Header */}
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-              Third Party API Keys
-            </h1>
-            <p className="text-gray-600 dark:text-gray-400">
-              Kelola semua API keys dari third party providers
-            </p>
-          </div>
-
-          <div className="flex flex-wrap gap-2">
-            <button
-              onClick={() => getThirtParty()}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white transition-colors bg-green-500 rounded-md hover:bg-green-600"
-            >
-              {loadThirtParty ? (
-                <svg
-                  className="w-4 h-4 text-white animate-spin"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                  ></path>
-                </svg>
-              ) : (
-                <EyeIcon className="w-4 h-4" />
-              )}
-              <span className="hidden sm:inline">Refresh Data</span>
-              <span className="sm:hidden">Refresh</span>
-            </button>
-            <button
-              onClick={handleMultipleDelete}
-              disabled={selectedConnections.length === 0}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white transition-colors bg-red-500 rounded-md hover:bg-red-600 disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              <TrashIcon className="w-4 h-4" />
-              <span className="hidden sm:inline">
-                Hapus ({selectedConnections.length})
-              </span>
-              <span className="sm:hidden">Hapus</span>
-            </button>
-            <button
-              onClick={openModal}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white transition-colors bg-blue-500 rounded-md hover:bg-blue-600"
-            >
-              <PlusIcon className="w-4 h-4" />
-              <span className="hidden sm:inline">Tambah API Key</span>
-              <span className="sm:hidden">Tambah</span>
-            </button>
-          </div>
-        </div>
-
         {/* Filters and Search */}
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex flex-wrap gap-2">
@@ -408,24 +341,23 @@ export default function MainConnect() {
           <div className="relative w-full lg:w-80">
             <input
               type="text"
-              placeholder="Cari API key..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full py-2 pl-4 pr-10 border border-gray-300 rounded-md focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+              placeholder="Cari Transaction"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full rounded-md border border-gray-300 py-2 pr-10 pl-4 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
             />
             <MagnifyingGlassIcon className="absolute top-2.5 right-3 h-4 w-4 text-gray-400" />
           </div>
         </div>
 
         {/* Results Count */}
-        <div className="text-sm text-gray-600 dark:text-gray-400">
-          Menampilkan {filteredData.length} dari {transformedData.length} API
-          keys
-        </div>
 
         {/* Table */}
         <div className="w-full rounded-xl border border-gray-200 bg-white transition-all duration-300 dark:border-white/[0.05] dark:bg-white/[0.03]">
-          <div className="w-full overflow-x-auto">
+          <div
+            className="w-full overflow-x-auto"
+            style={{ width: "calc(100vw - 400px)" }}
+          >
             <Table>
               <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
                 <TableRow>
@@ -440,32 +372,50 @@ export default function MainConnect() {
                         filteredData.length > 0
                       }
                       onChange={toggleAllConnectionsSelection}
-                      className="text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                     />
                   </TableCell>
                   <TableCell
                     isHeader
-                    className="min-w-[150px] px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
+                    className="min-w-[100px] px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
                   >
-                    Nama Provider
+                    No Hp Customer
                   </TableCell>
                   <TableCell
                     isHeader
                     className="min-w-[100px] px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
                   >
-                    Status
+                    Product Name
                   </TableCell>
                   <TableCell
                     isHeader
                     className="min-w-[100px] px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
                   >
-                    Status
+                    Brand
                   </TableCell>
                   <TableCell
                     isHeader
                     className="hidden min-w-[100px] px-2 py-3 text-start text-xs font-medium text-gray-500 md:table-cell dark:text-gray-400"
                   >
-                    Updated At
+                    Category
+                  </TableCell>
+                  <TableCell
+                    isHeader
+                    className="hidden min-w-[100px] px-2 py-3 text-start text-xs font-medium text-gray-500 md:table-cell dark:text-gray-400"
+                  >
+                    Price
+                  </TableCell>
+                  <TableCell
+                    isHeader
+                    className="hidden min-w-[100px] px-2 py-3 text-start text-xs font-medium text-gray-500 md:table-cell dark:text-gray-400"
+                  >
+                    Payment Status
+                  </TableCell>
+                  <TableCell
+                    isHeader
+                    className="hidden min-w-[100px] px-2 py-3 text-start text-xs font-medium text-gray-500 md:table-cell dark:text-gray-400"
+                  >
+                    Created At
                   </TableCell>
                   <TableCell
                     isHeader
@@ -478,17 +428,17 @@ export default function MainConnect() {
 
               {/* body */}
               <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-                {filteredData.length === 0 ? (
-                  <TableRow>
-                    <TableCell
-                      colSpan={7}
-                      className="px-4 py-8 text-center text-gray-500 dark:text-gray-400"
+                {transactions?.data?.length === 0 ? (
+                  <tr>
+                    <td
+                      colSpan={9}
+                      className="h-24 text-center text-gray-500 dark:text-gray-400"
                     >
-                      Tidak ada API key yang ditemukan
-                    </TableCell>
-                  </TableRow>
+                      Tidak ada data transaction yang ditemukan
+                    </td>
+                  </tr>
                 ) : (
-                  filteredData.map((connection) => (
+                  transactions?.data?.map((connection) => (
                     <React.Fragment key={connection.id}>
                       <TableRow className="hover:bg-gray-50 dark:hover:bg-gray-800/30">
                         <TableCell className="px-2 py-3">
@@ -500,60 +450,29 @@ export default function MainConnect() {
                             onChange={() =>
                               toggleConnectionSelection(connection.id)
                             }
-                            className="text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                           />
                         </TableCell>
                         <TableCell className="px-2 py-3">
-                          <span className="text-sm text-gray-700 dark:text-gray-300">
-                            {connection.provider}
-                          </span>
+                          {connection?.customerPhone}
                         </TableCell>
                         <TableCell className="px-2 py-3">
-                          <button
-                            onClick={() =>
-                              handleConfigureConnection(connection)
-                            }
-                            className="inline-flex items-center px-3 py-1 text-xs font-medium text-yellow-800 transition-colors bg-yellow-100 rounded-full hover:bg-yellow-200"
-                          >
-                            <svg
-                              className="w-3 h-3 mr-1"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                              />
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                              />
-                            </svg>
-                            Konfigurasi
-                          </button>
-                        </TableCell>
-                        <TableCell className="px-2 py-3">
-                          <span
-                            className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${getStatusColor(
-                              connection.status
-                            )}`}
-                          >
-                            {connection.status === "active"
-                              ? "Aktif"
-                              : "Tidak Aktif"}
-                          </span>
+                          {connection?.productName}
                         </TableCell>
                         <TableCell className="hidden px-2 py-3 md:table-cell">
-                          <div className="text-sm text-gray-700 dark:text-gray-300">
-                            {new Date(connection.lastSync).toLocaleString(
-                              "id-ID"
-                            )}
-                          </div>
+                          {connection?.brand}
+                        </TableCell>
+                        <TableCell className="hidden px-2 py-3 md:table-cell">
+                          {connection?.category}
+                        </TableCell>
+                        <TableCell className="hidden px-2 py-3 md:table-cell">
+                          {formatRupiah(connection?.price || 0)}
+                        </TableCell>
+                        <TableCell className="hidden px-2 py-3 md:table-cell">
+                          {connection?.status}
+                        </TableCell>
+                        <TableCell className="hidden px-2 py-3 md:table-cell">
+                          {moment(connection?.createdAt).format("DD MMM YYYY")}
                         </TableCell>
                         <TableCell className="px-2 py-3">
                           <div className="flex space-x-1">
@@ -561,24 +480,24 @@ export default function MainConnect() {
                               onClick={() =>
                                 alert(`Lihat detail ${connection.name}`)
                               }
-                              className="p-1 text-white transition-colors bg-blue-500 rounded hover:bg-blue-600"
+                              className="rounded bg-blue-500 p-1 text-white transition-colors hover:bg-blue-600"
                               title="Lihat Detail"
                             >
-                              <EyeIcon className="w-4 h-4" />
+                              <EyeIcon className="h-4 w-4" />
                             </button>
                             <button
                               onClick={() => alert(`Edit ${connection.name}`)}
-                              className="p-1 text-white transition-colors bg-yellow-500 rounded hover:bg-yellow-600"
+                              className="rounded bg-yellow-500 p-1 text-white transition-colors hover:bg-yellow-600"
                               title="Edit"
                             >
-                              <PencilIcon className="w-4 h-4" />
+                              <PencilIcon className="h-4 w-4" />
                             </button>
                             <button
                               onClick={() => handleSingleDelete(connection)}
-                              className="p-1 text-white transition-colors bg-red-500 rounded hover:bg-red-600"
+                              className="rounded bg-red-500 p-1 text-white transition-colors hover:bg-red-600"
                               title="Hapus"
                             >
-                              <TrashIcon className="w-4 h-4" />
+                              <TrashIcon className="h-4 w-4" />
                             </button>
                           </div>
                         </TableCell>
@@ -588,6 +507,20 @@ export default function MainConnect() {
                 )}
               </TableBody>
             </Table>
+          </div>
+
+          <div className="my-5 flex items-center justify-between px-5">
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              Menampilkan {transactions?.data?.length} dari{" "}
+              {transactions?.meta?.totalData} Transaction
+            </div>
+            <Pagination
+              isCompact
+              showControls
+              initialPage={1}
+              total={transactions?.meta?.totalPages || 0}
+              onChange={(e) => setPage(e)}
+            />
           </div>
         </div>
 

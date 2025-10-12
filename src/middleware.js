@@ -4,15 +4,13 @@ export function middleware(request) {
   const token = request.cookies.get("token")?.value;
   const { pathname } = request.nextUrl;
 
-  console.log(token);
-
   // jika ke /admin tapi belum login
-  if (pathname.startsWith("/signin") && !token) {
+  if (pathname.startsWith("/admin") && !token) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
   // jika ke /login tapi sudah login
-  if (pathname.startsWith("/signin") && token) {
+  if (pathname.startsWith("/login") && token) {
     return NextResponse.redirect(new URL("/admin", request.url));
   }
 
@@ -20,5 +18,5 @@ export function middleware(request) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/signin"],
+  matcher: ["/admin/:path*", "/login"],
 };

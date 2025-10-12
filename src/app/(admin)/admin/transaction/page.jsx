@@ -12,9 +12,9 @@ export const metadata = {
 export default function ConnectionPage() {
   return (
     <div>
-      <PageBreadcrumb pageTitle="Connection" />
+      <PageBreadcrumb pageTitle="Transaction" />
       <div className="space-y-6">
-        <ComponentCard title="Connection">
+        <ComponentCard title="Transaction">
           <MainConnect />
         </ComponentCard>
       </div>

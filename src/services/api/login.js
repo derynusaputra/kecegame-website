@@ -1,6 +1,6 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { apiBase } from "../apiBase";
+import { useMutation } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
+import { apiBase } from "../apiBase";
 
 export const postLogin = () =>
   useMutation({
