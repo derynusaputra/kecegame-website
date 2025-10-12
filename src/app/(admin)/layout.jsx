@@ -14,16 +14,13 @@ export default function AdminLayout({ children }) {
       : "lg:ml-[90px]";
   return (
     <div className="min-h-screen bg-amber-900 xl:flex">
-      {/* Sidebar and Backdrop */}
       <AppSidebar />
       <Backdrop />
-      {/* Main Content Area */}
       <div
         className={`flex-1 transition-all duration-300 ease-in-out ${mainContentMargin}`}
       >
-        {/* Header */}
         <AppHeader />
-        {/* Page Content */}
+
         <div className="mx-auto h-full max-w-[1440px] bg-amber-400 p-4 md:p-6">
           {children}
         </div>
