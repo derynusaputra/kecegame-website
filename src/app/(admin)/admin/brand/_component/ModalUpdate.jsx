@@ -30,7 +30,7 @@ export default function ModalUpdate({
     reader.readAsDataURL(selectedFile);
   };
 
-  const imagePreview = preview || `${configEnv.baseUrl}${selected.urlLogo}`;
+  const imagePreview = preview || selected.urlLogo;
 
   const qc = useQueryClient();
   const { mutate, isPending } = putBrand(selected?.id);
@@ -51,7 +51,10 @@ export default function ModalUpdate({
 
       <div className="mt-10 flex h-60 w-full items-center justify-center border border-dashed">
         {imagePreview ? (
-          <img src={imagePreview} className="h-full w-full object-contain" />
+          <img
+            src={preview || `${configEnv.baseUrl}${selected?.urlLogo}`}
+            className="h-full w-full object-contain"
+          />
         ) : (
           <ImagePlus
             onClick={() => {
