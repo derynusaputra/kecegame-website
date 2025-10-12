@@ -19,7 +19,7 @@ import {
   UserCircleIcon,
 } from "../icons/index";
 import SidebarWidget from "./SidebarWidget";
-import { PackageSearch } from "lucide-react";
+import { PackageSearch, Table } from "lucide-react";
 const navItems = [
   {
     icon: <GridIcon />,
@@ -59,6 +59,11 @@ const navItems = [
     icon: <PackageSearch />,
     name: "Product",
     path: "/admin/product",
+  },
+  {
+    icon: <Table />,
+    name: "Brand",
+    path: "/admin/brand",
   },
   {
     icon: <PlugInIcon />,
