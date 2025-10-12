@@ -7,6 +7,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useSidebar } from "@/context/SidebarContext";
+import { capitalizeFirstLetter } from "@/helpers/capitalizeFirstLetter";
 import { formatRupiah } from "@/helpers/formatRupiah";
 import { useDebounce } from "@/hooks/useDebounce";
 import { cn } from "@/lib/utils";
@@ -212,7 +213,9 @@ export default function MainConnect() {
                             getStatusColor(connection?.status)
                           )}
                         >
-                          {connection?.status}
+                          {capitalizeFirstLetter(
+                            connection?.status.toLowerCase() || ""
+                          )}
                         </TableCell>
                         <TableCell className="hidden px-2 py-3 md:table-cell">
                           {moment(connection?.createdAt).format("DD MMM YYYY")}
