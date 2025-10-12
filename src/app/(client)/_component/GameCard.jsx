@@ -9,10 +9,10 @@ import Link from "next/link";
 
 export default function GameCard({ name, iconUrl, link, slug, item }) {
   // Use slug or name as fallback for link
-  const gameId = slug || name?.toLowerCase().replace(/\s+/g, "-") || "game";
+  const gameId = name?.toLowerCase().replace(/\s+/g, "-") || "game";
 
   return (
-    <Link href={`/game/${gameId}`} className="block cursor-pointer p-2.5">
+    <Link href={`/game/${name}`} className="block cursor-pointer p-2.5">
       <div className="relative m-auto h-[50px] w-[50px]">
         <div className="relative m-auto h-[50px] w-[50px] overflow-hidden rounded-lg">
           <ImageHeroui

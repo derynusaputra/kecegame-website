@@ -8,13 +8,12 @@ import { useParams } from "next/navigation";
 export default function DetailGame() {
   const { id } = useParams();
   // Use id directly as game identifier
-  const gameId = id;
+  const gameId = decodeURIComponent(id);
   const litmatch = gameId === "litmatch";
-  const title = gameId;
 
   return (
     <div className="flex h-screen w-screen flex-col items-center bg-[#F5F5F4]">
-      <div className="flex h-full w-full max-w-md flex-col">
+      <div className="flex flex-col w-full h-full max-w-md">
         {/* Atas (Hijau) */}
         <div className="h-[60px] w-full bg-gray-200">
           <div className="h-[60px] w-full bg-[#00c951]">Detail Game</div>
@@ -22,7 +21,7 @@ export default function DetailGame() {
         {litmatch ? (
           <MainContentDetailLitmatch />
         ) : (
-          <MainContentDetailGame title={title} item={{ name: gameId }} />
+          <MainContentDetailGame title={gameId} item={{ name: gameId }} />
         )}
       </div>
     </div>
