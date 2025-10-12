@@ -121,7 +121,7 @@ export default function MainConnect() {
         <div className="w-full rounded-xl border border-gray-200 bg-white transition-all duration-300 dark:border-white/[0.05] dark:bg-white/[0.03]">
           <div
             className="w-full overflow-x-auto"
-            style={{ width: "calc(100vw - 400px)" }}
+            // style={{ width: "calc(100vw - 400px)" }}
           >
             <Table>
               <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
@@ -152,34 +152,34 @@ export default function MainConnect() {
                   </TableCell>
                   <TableCell
                     isHeader
-                    className="hidden min-w-[100px] px-2 py-3 text-start text-xs font-medium text-gray-500 md:table-cell dark:text-gray-400"
+                    className="min-w-[100px] px-2 py-3 text-start text-xs font-medium text-gray-500 md:table-cell dark:text-gray-400"
                   >
                     Category
                   </TableCell>
                   <TableCell
                     isHeader
-                    className="hidden min-w-[100px] px-2 py-3 text-start text-xs font-medium text-gray-500 md:table-cell dark:text-gray-400"
+                    className="min-w-[100px] px-2 py-3 text-start text-xs font-medium text-gray-500 md:table-cell dark:text-gray-400"
                   >
                     Price
                   </TableCell>
                   <TableCell
                     isHeader
-                    className="hidden min-w-[100px] px-2 py-3 text-start text-xs font-medium text-gray-500 md:table-cell dark:text-gray-400"
+                    className="min-w-[100px] px-2 py-3 text-start text-xs font-medium text-gray-500 md:table-cell dark:text-gray-400"
                   >
                     Payment Status
                   </TableCell>
                   <TableCell
                     isHeader
-                    className="hidden min-w-[100px] px-2 py-3 text-start text-xs font-medium text-gray-500 md:table-cell dark:text-gray-400"
+                    className="min-w-[100px] px-2 py-3 text-start text-xs font-medium text-gray-500 md:table-cell dark:text-gray-400"
                   >
                     Created At
                   </TableCell>
-                  <TableCell
+                  {/* <TableCell
                     isHeader
                     className="min-w-[80px] px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
                   >
                     Actions
-                  </TableCell>
+                  </TableCell> */}
                 </TableRow>
               </TableHeader>
 
@@ -205,18 +205,18 @@ export default function MainConnect() {
                         <TableCell className="px-2 py-3">
                           {connection?.productName}
                         </TableCell>
-                        <TableCell className="hidden px-2 py-3 md:table-cell">
+                        <TableCell className="px-2 py-3 md:table-cell">
                           {connection?.brand}
                         </TableCell>
-                        <TableCell className="hidden px-2 py-3 md:table-cell">
+                        <TableCell className="px-2 py-3 md:table-cell">
                           {connection?.category}
                         </TableCell>
-                        <TableCell className="hidden px-2 py-3 md:table-cell">
+                        <TableCell className="px-2 py-3 md:table-cell">
                           {formatRupiah(connection?.price || 0)}
                         </TableCell>
                         <TableCell
                           className={cn(
-                            "hidden px-2 py-3 md:table-cell",
+                            "px-2 py-3 md:table-cell",
                             getStatusColor(connection?.status)
                           )}
                         >
@@ -224,10 +224,10 @@ export default function MainConnect() {
                             connection?.status.toLowerCase() || ""
                           )}
                         </TableCell>
-                        <TableCell className="hidden px-2 py-3 md:table-cell">
+                        <TableCell className="px-2 py-3 md:table-cell">
                           {moment(connection?.createdAt).format("DD MMM YYYY")}
                         </TableCell>
-                        <TableCell className="px-2 py-3">
+                        <TableCell className="hidden px-2 py-3">
                           <div className="flex space-x-1">
                             {/* <button
                               onClick={() =>

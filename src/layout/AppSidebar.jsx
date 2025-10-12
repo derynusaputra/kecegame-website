@@ -64,7 +64,7 @@ const navItems = [
     icon: <PlugInIcon />,
     name: "Authentication",
     subItems: [
-      { name: "Connection", path: "/connection", pro: false },
+      { name: "Connection", path: "/admin/connection", pro: false },
 
       // { name: "Sign In", path: "/signin", pro: false },
       // { name: "Sign Up", path: "/signup", pro: false },
