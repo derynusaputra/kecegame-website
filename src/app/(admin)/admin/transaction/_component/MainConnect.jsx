@@ -128,6 +128,12 @@ export default function MainConnect() {
                 <TableRow>
                   <TableCell
                     isHeader
+                    className="min-w-[30px] px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
+                  >
+                    No
+                  </TableCell>
+                  <TableCell
+                    isHeader
                     className="min-w-[100px] px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
                   >
                     No Hp Customer
@@ -189,9 +195,10 @@ export default function MainConnect() {
                     </td>
                   </tr>
                 ) : (
-                  transactions?.data?.map((connection) => (
+                  transactions?.data?.map((connection, idx) => (
                     <React.Fragment key={connection.id}>
                       <TableRow className="hover:bg-gray-50 dark:hover:bg-gray-800/30">
+                        <TableCell className="px-2 py-3">{idx + 1}</TableCell>
                         <TableCell className="px-2 py-3">
                           {connection?.customerPhone}
                         </TableCell>
