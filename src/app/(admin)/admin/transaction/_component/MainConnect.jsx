@@ -29,218 +29,33 @@ import { moments } from "@tensorflow/tfjs";
 import moment from "moment";
 import { formatRupiah } from "@/helpers/formatRupiah";
 import { useDebounce } from "@/hooks/useDebounce";
+import { cn } from "@/lib/utils";
 
 export default function MainConnect() {
   const { isExpanded } = useSidebar();
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedConnections, setSelectedConnections] = useState([]);
-  const [expandedRows, setExpandedRows] = useState({});
-  const [showOnlyActive, setShowOnlyActive] = useState(false);
-
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 600);
-
   const [page, setPage] = useState(1);
-  const { data } = getListTransaction({
+  const { data, isLoading, isError } = getListTransaction({
     page: page,
     limit: 10,
     search: debouncedSearch,
   });
   const transactions = data && data?.data?.data;
 
-  // Modal states
-  const { isOpen, openModal, closeModal } = useModal();
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [showApiKeyModal, setShowApiKeyModal] = useState(false);
-  const [showConfigModal, setShowConfigModal] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState(null);
-  const [selectedConnection, setSelectedConnection] = useState(null);
-  const [selectedApiKey, setSelectedApiKey] = useState({
-    apiKey: "",
-    name: "",
-  });
-  const [successMessage, setSuccessMessage] = useState({
-    title: "",
-    message: "",
-  });
-
-  // Login modal hook - moved to top level to follow Rules of Hooks
-  const {
-    isOpen: isOpenLogin,
-    onOpen: onOpenLogin,
-    onOpenChange: onOpenChangeLogin,
-    onClose: onCloseLogin,
-  } = useDisclosure();
-
-  // Fetch data using React Query
-  //   const updateUser = useThirParty.update();
-  //   const deleteUser = useThirParty.delete();
-
-  const {
-    data: dataThirParty = [],
-    isLoading: initLoadThirtParty,
-    error: errThirtParty,
-    refetch: getThirtParty,
-    isFetching: loadThirtParty,
-  } = useThirParty.get();
-
-  useEffect(() => {
-    getThirtParty();
-  }, []);
-
-  // Handle successful creation
-  const handleCreateSuccess = () => {
-    getThirtParty(); // Refresh the data
-    setSuccessMessage({
-      title: "API Key Berhasil Ditambahkan!",
-      message: "API Key baru telah berhasil ditambahkan ke sistem.",
-    });
-    setShowSuccessModal(true);
-  };
-
-  // Handle successful deletion
-  const handleDeleteSuccess = () => {
-    getThirtParty(); // Refresh the data
-    setSelectedConnections([]); // Clear selection
-    setSuccessMessage({
-      title: "API Key Berhasil Dihapus!",
-      message: "API Key telah berhasil dihapus dari sistem.",
-    });
-    setShowSuccessModal(true);
-  };
-
-  // Handle single item delete
-  const handleSingleDelete = (connection) => {
-    setItemToDelete(connection);
-    setShowDeleteModal(true);
-  };
-
-  // Handle multiple items delete
-  const handleMultipleDelete = () => {
-    if (selectedConnections.length === 0) {
-      alert("Pilih API Key terlebih dahulu");
-      return;
-    }
-    setItemToDelete(selectedConnections);
-    setShowDeleteModal(true);
-  };
-
-  // Handle connection configuration
-  const handleConfigureConnection = (connection) => {
-    if (connection?.name === "LITEMATCH") {
-      onOpenLogin();
-      return;
-    }
-
-    setSelectedConnection(connection);
-    setShowConfigModal(true);
-  };
-
-  // Handle save configuration
-  const handleSaveConfiguration = (configData) => {
-    // Here you would typically call an API to update the connectio
-    // For now, just show success message
-    setSuccessMessage({
-      title: "Koneksi Berhasil Dikonfigurasi!",
-      message: `Koneksi ${configData.name} telah berhasil diaktifkan dan dikonfigurasi.`,
-    });
-    setShowSuccessModal(true);
-
-    // Refresh data
-    getThirtParty();
-  };
-
-  // Transform API data to match our component structure
-  const transformedData =
-    dataThirParty?.data?.map((item) => {
-      const apiKey = item.apiKey || "kosong";
-      const apiKeyPreview =
-        apiKey === "kosong"
-          ? "No API Key"
-          : `API Key: ${apiKey.substring(0, 20)}...`;
-
-      return {
-        id: item.id.toString(),
-        name: item.name,
-        type: item.provider,
-        status: item.apiKey ? "active" : "inactive",
-        endpoint: apiKeyPreview,
-        lastSync: item.updatedAt,
-        syncStatus: item.isActive ? "success" : "failed",
-        responseTime: "N/A",
-        requests: 0,
-        errors: 0,
-        apiKey: apiKey,
-        provider: item.provider,
-        isActive: item.isActive,
-      };
-    }) || [];
-
-  // Filter data based on search and status
-  const filteredData = transformedData.filter((connection) => {
-    const matchesSearch =
-      connection.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      connection.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      connection.provider.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      connection.endpoint.toLowerCase().includes(searchTerm.toLowerCase());
-
-    const matchesStatus = showOnlyActive ? connection.isActive : true;
-
-    return matchesSearch && matchesStatus;
-  });
-
-  const toggleConnectionSelection = (connectionId) => {
-    setSelectedConnections((prev) =>
-      prev.includes(connectionId)
-        ? prev.filter((id) => id !== connectionId)
-        : [...prev, connectionId]
-    );
-  };
-
-  const toggleAllConnectionsSelection = () => {
-    if (selectedConnections.length === filteredData.length) {
-      setSelectedConnections([]);
-    } else {
-      setSelectedConnections(filteredData.map((item) => item.id));
-    }
-  };
-
-  const toggleRowExpansion = (connectionId) => {
-    setExpandedRows((prev) => ({
-      ...prev,
-      [connectionId]: !prev[connectionId],
-    }));
-  };
-
-  const getStatusColor = (status) => {
-    switch (status) {
-      case "active":
-        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
-      case "inactive":
-        return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400";
+  const getStatusColor = (status = "") => {
+    const statushed = status.toLowerCase();
+    switch (statushed) {
+      case "sukses":
+        return "text-green-800 dark:bg-green-900/30 dark:text-green-400";
       case "pending":
-        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400";
+        return " text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400";
       default:
-        return "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400";
+        return "";
     }
   };
 
-  const getSyncStatusColor = (status) => {
-    switch (status) {
-      case "success":
-        return "text-green-600 dark:text-green-400";
-      case "failed":
-        return "text-red-600 dark:text-red-400";
-      case "pending":
-        return "text-yellow-600 dark:text-yellow-400";
-      default:
-        return "text-gray-600 dark:text-gray-400";
-    }
-  };
-
-  // Loading state
-  if (initLoadThirtParty) {
+  if (isLoading) {
     return (
       <div className="flex min-h-[400px] items-center justify-center">
         <div className="text-center">
@@ -254,7 +69,7 @@ export default function MainConnect() {
   }
 
   // Error state
-  if (errThirtParty) {
+  if (isError) {
     return (
       <div className="flex min-h-[400px] items-center justify-center">
         <div className="text-center">
@@ -276,17 +91,6 @@ export default function MainConnect() {
     );
   }
 
-  const onPressShadow = () => {
-    // addToast({
-    //   title: "Toast title",
-    //   description: "Toast displayed successfully",
-    //   color: "success",
-    //   timeout: 1500,
-    // });
-
-    onOpenLogin();
-  };
-
   return (
     <>
       <div
@@ -294,14 +98,6 @@ export default function MainConnect() {
           isExpanded ? "lg:pr-4" : "lg:pr-0"
         }`}
       >
-        {/* Create API Key Modal */}
-        <CreateApiKeyModal
-          isOpen={isOpen}
-          onClose={closeModal}
-          onSuccess={handleCreateSuccess}
-        />
-
-        {/* Delete Confirmation Modal */}
         <DeleteConfirmationModal
           isOpen={showDeleteModal}
           onClose={() => setShowDeleteModal(false)}
@@ -322,22 +118,6 @@ export default function MainConnect() {
 
         {/* Filters and Search */}
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          <div className="flex flex-wrap gap-2">
-            <button
-              onClick={() => setShowOnlyActive(!showOnlyActive)}
-              className={`rounded-md px-3 py-2 text-sm font-medium transition-colors ${
-                showOnlyActive
-                  ? "bg-green-500 text-white"
-                  : "border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
-              }`}
-            >
-              Hanya Aktif
-            </button>
-            <Button color="primary" variant="shadow" onPress={onPressShadow}>
-              Shadow
-            </Button>
-          </div>
-
           <div className="relative w-full lg:w-80">
             <input
               type="text"
@@ -350,9 +130,6 @@ export default function MainConnect() {
           </div>
         </div>
 
-        {/* Results Count */}
-
-        {/* Table */}
         <div className="w-full rounded-xl border border-gray-200 bg-white transition-all duration-300 dark:border-white/[0.05] dark:bg-white/[0.03]">
           <div
             className="w-full overflow-x-auto"
@@ -468,7 +245,12 @@ export default function MainConnect() {
                         <TableCell className="hidden px-2 py-3 md:table-cell">
                           {formatRupiah(connection?.price || 0)}
                         </TableCell>
-                        <TableCell className="hidden px-2 py-3 md:table-cell">
+                        <TableCell
+                          className={cn(
+                            "hidden px-2 py-3 md:table-cell",
+                            getStatusColor(connection?.status)
+                          )}
+                        >
                           {connection?.status}
                         </TableCell>
                         <TableCell className="hidden px-2 py-3 md:table-cell">
@@ -476,7 +258,7 @@ export default function MainConnect() {
                         </TableCell>
                         <TableCell className="px-2 py-3">
                           <div className="flex space-x-1">
-                            <button
+                            {/* <button
                               onClick={() =>
                                 alert(`Lihat detail ${connection.name}`)
                               }
@@ -484,7 +266,7 @@ export default function MainConnect() {
                               title="Lihat Detail"
                             >
                               <EyeIcon className="h-4 w-4" />
-                            </button>
+                            </button> */}
                             <button
                               onClick={() => alert(`Edit ${connection.name}`)}
                               className="rounded bg-yellow-500 p-1 text-white transition-colors hover:bg-yellow-600"

@@ -21,7 +21,5 @@ const axiosInstatance = (baseURL, token) => {
 // export const API_URLss = "https://d58b88291335.ngrok-free.app";
 // export const API_URL = "http://localhost:3000";
 export const apiBase = (token) => {
-  console.log(configEnv.baseUrl);
-
   return axiosInstatance(configEnv.baseUrl, token);
 };

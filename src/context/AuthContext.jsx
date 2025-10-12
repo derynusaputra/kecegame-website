@@ -10,6 +10,7 @@ import {
 import { useRouter } from "next/navigation";
 import { apiBase } from "@/services/apiBase";
 import { getCookie } from "@/helpers/getCookie";
+import { isAxiosError } from "axios";
 
 const AuthContext = createContext();
 
@@ -33,7 +34,12 @@ export function AuthProvider({ children }) {
         setUser(null);
       }
     } catch (error) {
-      console.error("Gagal ambil profile:", error);
+      if (isAxiosError(error)) {
+        if (error.status === 401) {
+          logout();
+        }
+      }
+
       setUser(null);
     }
   }, [token]);
