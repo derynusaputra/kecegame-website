@@ -7,29 +7,19 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useSidebar } from "@/context/SidebarContext";
-import { useThirParty } from "@/hooks/ReactQuery/useThirParty";
-import { useModal } from "@/hooks/useModal";
+import { formatRupiah } from "@/helpers/formatRupiah";
+import { useDebounce } from "@/hooks/useDebounce";
+import { cn } from "@/lib/utils";
 import { getListTransaction } from "@/services/api/transaction";
 import {
   ExclamationTriangleIcon,
-  EyeIcon,
   MagnifyingGlassIcon,
   PencilIcon,
   TrashIcon,
 } from "@heroicons/react/24/outline";
-import { Button, Modal, Pagination, useDisclosure } from "@heroui/react";
-import React, { useEffect, useState } from "react";
-import ApiKeyPreviewModal from "./ApiKeyPreviewModal";
-import ConnectionConfigModalHero from "./ConnectionConfigModalHero";
-import CreateApiKeyModal from "./CreateApiKeyModal";
-import DeleteConfirmationModal from "./DeleteConfirmationModal";
-import ModalContentLoginLitmatch from "./ModalContentLoginLitmatch";
-import SuccessNotificationModal from "./SuccessNotificationModal";
-import { moments } from "@tensorflow/tfjs";
+import { Pagination } from "@heroui/react";
 import moment from "moment";
-import { formatRupiah } from "@/helpers/formatRupiah";
-import { useDebounce } from "@/hooks/useDebounce";
-import { cn } from "@/lib/utils";
+import React, { useState } from "react";
 
 export default function MainConnect() {
   const { isExpanded } = useSidebar();
@@ -98,15 +88,13 @@ export default function MainConnect() {
           isExpanded ? "lg:pr-4" : "lg:pr-0"
         }`}
       >
-        <DeleteConfirmationModal
+        {/* <DeleteConfirmationModal
           isOpen={showDeleteModal}
           onClose={() => setShowDeleteModal(false)}
           onSuccess={handleDeleteSuccess}
           itemToDelete={itemToDelete}
           isMultiple={Array.isArray(itemToDelete)}
         />
-
-        {/* Success Notification Modal */}
         <SuccessNotificationModal
           isOpen={showSuccessModal}
           onClose={() => setShowSuccessModal(false)}
@@ -114,9 +102,8 @@ export default function MainConnect() {
           message={successMessage.message}
           autoClose={true}
           autoCloseDelay={3000}
-        />
+        /> */}
 
-        {/* Filters and Search */}
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div className="relative w-full lg:w-80">
             <input
@@ -306,30 +293,27 @@ export default function MainConnect() {
           </div>
         </div>
 
-        {/* API Key Preview Modal */}
-        <ApiKeyPreviewModal
+        {/* <ApiKeyPreviewModal
           isOpen={showApiKeyModal}
           onClose={() => setShowApiKeyModal(false)}
           apiKey={selectedApiKey.apiKey}
           providerName={selectedApiKey.name}
         />
-
-        {/* Connection Configuration Modal */}
         <ConnectionConfigModalHero
           isOpen={showConfigModal}
           onClose={() => setShowConfigModal(false)}
           connection={selectedConnection}
           onSave={handleSaveConfiguration}
-        />
+        /> */}
       </div>
 
-      <Modal
+      {/* <Modal
         isOpen={isOpenLogin}
         placement="center"
         onOpenChange={onOpenChangeLogin}
       >
         <ModalContentLoginLitmatch onCloseLogin={onCloseLogin} />
-      </Modal>
+      </Modal> */}
     </>
   );
 }
