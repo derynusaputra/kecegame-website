@@ -101,7 +101,7 @@ export default function MainBrand() {
           autoCloseDelay={3000}
         /> */}
 
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        {/* <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div className="relative w-full lg:w-80">
             <input
               type="text"
@@ -112,7 +112,7 @@ export default function MainBrand() {
             />
             <MagnifyingGlassIcon className="absolute top-2.5 right-3 h-4 w-4 text-gray-400" />
           </div>
-        </div>
+        </div> */}
 
         <div className="w-full rounded-xl border border-gray-200 bg-white transition-all duration-300 dark:border-white/[0.05] dark:bg-white/[0.03]">
           <div
