@@ -127,20 +127,6 @@ export default function MainConnect() {
                 <TableRow>
                   <TableCell
                     isHeader
-                    className="min-w-[40px] px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={
-                        selectedConnections.length === filteredData.length &&
-                        filteredData.length > 0
-                      }
-                      onChange={toggleAllConnectionsSelection}
-                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                    />
-                  </TableCell>
-                  <TableCell
-                    isHeader
                     className="min-w-[100px] px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
                   >
                     No Hp Customer
@@ -205,18 +191,6 @@ export default function MainConnect() {
                   transactions?.data?.map((connection) => (
                     <React.Fragment key={connection.id}>
                       <TableRow className="hover:bg-gray-50 dark:hover:bg-gray-800/30">
-                        <TableCell className="px-2 py-3">
-                          <input
-                            type="checkbox"
-                            checked={selectedConnections.includes(
-                              connection.id
-                            )}
-                            onChange={() =>
-                              toggleConnectionSelection(connection.id)
-                            }
-                            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                          />
-                        </TableCell>
                         <TableCell className="px-2 py-3">
                           {connection?.customerPhone}
                         </TableCell>
