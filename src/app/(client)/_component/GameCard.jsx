@@ -5,11 +5,14 @@ import { API_URL, apiBase } from "@/services/apiBase";
 import Image from "next/image";
 import { Image as ImageHeroui } from "@heroui/image";
 import Link from "next/link";
+import { configEnv } from "@/services/config";
 // Note: Crypto functions removed to avoid dependency issues
 
 export default function GameCard({ name, iconUrl, link, slug, item }) {
   // Use slug or name as fallback for link
   const gameId = name?.toLowerCase().replace(/\s+/g, "-") || "game";
+
+  console.log(iconUrl);
 
   return (
     <Link href={`/game/${name}`} className="block cursor-pointer p-2.5">
@@ -26,7 +29,7 @@ export default function GameCard({ name, iconUrl, link, slug, item }) {
             className="aspect-square bg-gray-200 object-cover"
             src={
               iconUrl
-                ? `${API_URL}${iconUrl}`
+                ? `${configEnv.baseUrl}${iconUrl}`
                 : "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Video-Game-Controller-Icon-IDV-green.svg/2048px-Video-Game-Controller-Icon-IDV-green.svg.png"
             }
             // src="./images/logo/auth-logo.svg"
