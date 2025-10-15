@@ -39,12 +39,12 @@ const bottomNav = [
 export default function page() {
   return (
     <div className="flex h-screen w-screen flex-col items-center bg-[#F5F5F4]">
-      <div className="flex h-full w-full max-w-md flex-col">
+      <div className="flex flex-col w-full h-full max-w-md">
         {/* Atas (Hijau) */}
         <div className="h-[60px] w-full bg-green-500">
           <div className="align-center mt-3 h-[30px] w-full justify-center text-center font-bold text-white">
             <Image
-              className="h-full w-full"
+              className="w-full h-full"
               loading="eager"
               fetchPriority="high"
               width={20}
@@ -55,7 +55,7 @@ export default function page() {
           </div>
         </div>
         {/* Tengah (Kuning, scrollable jika overflow) */}
-        <div className="w-full flex-1 overflow-y-auto bg-gray-50">
+        <div className="flex-1 w-full overflow-y-auto bg-gray-50">
           <div className="flex flex-col gap-2 px-0 py-2">
             <CarouselBanner />
             <MainContent />
@@ -63,7 +63,7 @@ export default function page() {
           </div>
           <div className="h-[60px]" />
           {/*  bottom nav */}
-          <div className="fixed bottom-0 z-10 flex h-[60px] w-full max-w-md grid-cols-4 bg-green-500">
+          {/* <div className="fixed bottom-0 z-10 flex h-[60px] w-full max-w-md grid-cols-4 bg-green-500">
             {bottomNav.map((item, index) => (
               <div
                 key={index}
@@ -77,7 +77,7 @@ export default function page() {
                 </div>
               </div>
             ))}
-          </div>
+          </div> */}
         </div>
         {/* Bawah (Hijau) */}
       </div>
