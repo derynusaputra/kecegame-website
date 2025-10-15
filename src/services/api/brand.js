@@ -1,5 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiBase } from "../apiBase";
+import { toast } from "react-toastify";
+import { isAxiosError } from "axios";
 
 export const getListBrand = () =>
   useQuery({
@@ -26,4 +28,21 @@ export const putBrand = (id) =>
         }
       }
     },
+  });
+
+export const getSyncCategoryBrand = (enabled) =>
+  useQuery({
+    queryKey: ["getSyncCategoryBrand", enabled],
+    queryFn: async () => {
+      try {
+        const res = await apiBase().get(`/v1/game-category/sync`);
+        toast.success("Sync successful ");
+        return res;
+      } catch (error) {
+        if (isAxiosError(error)) {
+          toast.error(error?.data?.message);
+        }
+      }
+    },
+    enabled: enabled,
   });

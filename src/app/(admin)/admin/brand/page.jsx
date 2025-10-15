@@ -1,6 +1,7 @@
 import ComponentCard from "@/components/common/ComponentCard";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import MainBrand from "./_component/MainBrand";
+import { Button } from "@/components/ui/button";
 export const metadata = {
   title: "Next.js Basic Table | KeceGame - Next.js Dashboard Template",
   description:
@@ -12,9 +13,7 @@ export default function ConnectionPage() {
     <div>
       <PageBreadcrumb pageTitle="Brand" />
       <div className="space-y-6">
-        <ComponentCard title="Brand">
-          <MainBrand />
-        </ComponentCard>
+        <MainBrand />
       </div>
     </div>
   );
