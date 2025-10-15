@@ -16,7 +16,7 @@ import {
   PencilIcon,
 } from "@heroicons/react/24/outline";
 import moment from "moment";
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import ModalUpdate from "./ModalUpdate";
 import { Button } from "@/components/ui/button";
 import { Loader2, Plus, RefreshCw } from "lucide-react";
@@ -121,13 +121,13 @@ export default function MainBrand() {
                   <TableRow>
                     <TableCell
                       isHeader
-                      className="min-w-[30px] px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
+                      className="min-w-[30px] px-2 py-3 pl-5 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
                     >
                       No
                     </TableCell>
                     <TableCell
                       isHeader
-                      className="min-w-[100px] px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
+                      className="px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
                     >
                       Name
                     </TableCell>
@@ -171,18 +171,25 @@ export default function MainBrand() {
                     </tr>
                   ) : (
                     brands?.map((connection, idx) => (
-                      <React.Fragment key={connection.id}>
+                      <React.Fragment key={idx + "brands"}>
                         <TableRow className="hover:bg-gray-50 dark:hover:bg-gray-800/30">
-                          <TableCell className="px-2 py-3">{idx + 1}</TableCell>
+                          <TableCell className="px-2 py-3 pl-5">
+                            {idx + 1}
+                          </TableCell>
                           <TableCell className="px-2 py-3">
-                            <div className="flex items-center gap-2">
+                            <div className="flex min-w-0 items-center gap-2">
                               {connection.urlLogo && (
-                                <img
-                                  src={`${configEnv.baseUrl}${connection.urlLogo}`}
-                                  className="h-20 w-20 object-contain"
-                                />
+                                <div className="h-16 w-16 flex-shrink-0 overflow-hidden rounded-md bg-gray-100">
+                                  <img
+                                    src={`${configEnv.baseUrl}${connection.urlLogo}`}
+                                    alt={connection?.name}
+                                    className="h-full w-full object-cover"
+                                  />
+                                </div>
                               )}
-                              {connection?.name}
+                              <span className="min-w-0 text-sm font-medium break-words">
+                                {connection?.name}
+                              </span>
                             </div>
                           </TableCell>
                           <TableCell className="px-2 py-3">
