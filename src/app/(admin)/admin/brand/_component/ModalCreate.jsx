@@ -36,8 +36,6 @@ export default function ModalCreate({
       isOpen={isOpen}
       onClose={() => {
         onClose();
-        setPreview(null);
-        setFile(null);
       }}
       className="max-w-[600px] p-5 lg:p-10"
     >

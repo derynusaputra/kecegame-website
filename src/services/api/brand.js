@@ -29,6 +29,19 @@ export const putBrand = (id) =>
       }
     },
   });
+export const putBrandById = () =>
+  useMutation({
+    mutationFn: async (body) => {
+      try {
+        const res = await apiBase().put(`/v1/game-brand/${body?.id}`, body);
+        return res?.data;
+      } catch (error) {
+        if (isAxiosError(error)) {
+          throw error.response;
+        }
+      }
+    },
+  });
 export const postBrand = () =>
   useMutation({
     mutationFn: async (body) => {

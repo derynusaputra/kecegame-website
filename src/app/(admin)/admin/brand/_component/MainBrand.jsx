@@ -8,7 +8,12 @@ import {
 } from "@/components/ui/table";
 import { useSidebar } from "@/context/SidebarContext";
 import { useDebounce } from "@/hooks/useDebounce";
-import { getListBrand, getSyncCategoryBrand } from "@/services/api/brand";
+import {
+  getListBrand,
+  getSyncCategoryBrand,
+  putBrand,
+  putBrandById,
+} from "@/services/api/brand";
 import { configEnv } from "@/services/config";
 import {
   ExclamationTriangleIcon,
@@ -22,6 +27,8 @@ import { Button } from "@/components/ui/button";
 import { Loader2, Plus, RefreshCw } from "lucide-react";
 import ModalCreate from "./ModalCreate";
 import { Switch } from "@heroui/react";
+import { toast } from "react-toastify";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function MainBrand() {
   const { isExpanded } = useSidebar();
@@ -33,6 +40,7 @@ export default function MainBrand() {
   const [isOpenUpdate, setIsOpenUpdate] = useState(false);
   const [isOpenCreate, setIsOpenCreate] = useState(false);
   const [checked, setIsChecked] = useState(true);
+  const qc = useQueryClient();
 
   const [isSync, setIsync] = useState(false);
 
@@ -49,6 +57,7 @@ export default function MainBrand() {
   }, [isSuccess]);
 
   const brands = data && data?.data?.data;
+  const { mutate, isPending } = putBrandById();
 
   const getStatusColor = (status = "") => {
     const statushed = status.toLowerCase();
@@ -202,8 +211,33 @@ export default function MainBrand() {
                           </TableCell>
                           <TableCell className="px-2 py-3 md:table-cell">
                             <Switch
-                              checked={!!checked}
-                              onChange={setIsChecked}
+                              isSelected={connection?.isActive}
+                              onChange={(e) => {
+                                const body = {
+                                  isActive: e.target.checked,
+                                };
+                                mutate(
+                                  {
+                                    id: connection?.id,
+                                    isActive: e.target.checked,
+                                  },
+                                  {
+                                    onSuccess: (res) => {
+                                      if (res) {
+                                        qc.invalidateQueries({
+                                          queryKey: ["getListBrand"],
+                                        });
+                                        toast.success("Update Success");
+                                      }
+                                    },
+                                    onError: (err) => {
+                                      if (err) {
+                                        toast.error("Internal err");
+                                      }
+                                    },
+                                  }
+                                );
+                              }}
                             />
                           </TableCell>
 
