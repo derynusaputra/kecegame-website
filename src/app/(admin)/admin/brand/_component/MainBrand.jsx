@@ -20,6 +20,8 @@ import React, { Fragment, useEffect, useState } from "react";
 import ModalUpdate from "./ModalUpdate";
 import { Button } from "@/components/ui/button";
 import { Loader2, Plus, RefreshCw } from "lucide-react";
+import ModalCreate from "./ModalCreate";
+import { Switch } from "@heroui/react";
 
 export default function MainBrand() {
   const { isExpanded } = useSidebar();
@@ -29,6 +31,9 @@ export default function MainBrand() {
   const { data, isLoading, isError } = getListBrand();
   const [selected, setSelected] = useState(null);
   const [isOpenUpdate, setIsOpenUpdate] = useState(false);
+  const [isOpenCreate, setIsOpenCreate] = useState(false);
+  const [checked, setIsChecked] = useState(true);
+
   const [isSync, setIsync] = useState(false);
 
   const {
@@ -110,7 +115,7 @@ export default function MainBrand() {
               )}{" "}
               Sync
             </Button>
-            <Button>
+            <Button onClick={() => setIsOpenCreate(true)}>
               <Plus /> Add Brand
             </Button>
           </div>
@@ -196,7 +201,10 @@ export default function MainBrand() {
                             {connection?.category}
                           </TableCell>
                           <TableCell className="px-2 py-3 md:table-cell">
-                            {connection?.isActive ? "Aktif" : "Nonaktif"}
+                            <Switch
+                              checked={!!checked}
+                              onChange={setIsChecked}
+                            />
                           </TableCell>
 
                           <TableCell className="px-2 py-3 md:table-cell">
@@ -245,6 +253,15 @@ export default function MainBrand() {
               setIsOpenUpdate(false);
             }}
             selected={selected}
+          />
+        )}
+
+        {isOpenCreate && (
+          <ModalCreate
+            isOpen={isOpenCreate}
+            onClose={() => {
+              setIsOpenCreate(false);
+            }}
           />
         )}
       </div>

@@ -29,6 +29,19 @@ export const putBrand = (id) =>
       }
     },
   });
+export const postBrand = () =>
+  useMutation({
+    mutationFn: async (body) => {
+      try {
+        const res = await apiBase().post(`/v1/game-brand`, body);
+        return res?.data;
+      } catch (error) {
+        if (isAxiosError(error)) {
+          throw error.response;
+        }
+      }
+    },
+  });
 
 export const getSyncCategoryBrand = (enabled) =>
   useQuery({

@@ -31,7 +31,7 @@ const ProductTable = ({
   const { isExpanded } = useSidebar();
 
   return (
-    <div className="w-full">
+    <div className="w-full overflow-x-auto">
       <Table>
         <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
           <TableRow>
@@ -51,61 +51,61 @@ const ProductTable = ({
             </TableCell>
             <TableCell
               isHeader
-              className="min-w-[120px] px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
+              className="px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
             >
               Kode Produk
             </TableCell>
             <TableCell
               isHeader
-              className="min-w-[100px] px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
+              className="px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
             >
               Harga Max
             </TableCell>
             <TableCell
               isHeader
-              className="min-w-[150px] px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
+              className="px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
             >
               Nama Produk
             </TableCell>
             <TableCell
               isHeader
-              className="min-w-[100px] px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
+              className="px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
             >
               Pilih Seller
             </TableCell>
             <TableCell
               isHeader
-              className="min-w-[120px] px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
+              className="px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
             >
               Seller Status
             </TableCell>
             <TableCell
               isHeader
-              className="min-w-[80px] px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
+              className="px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
             >
               Harga
             </TableCell>
             <TableCell
               isHeader
-              className="min-w-[60px] px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
+              className="px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
             >
               Stok
             </TableCell>
             <TableCell
               isHeader
-              className="min-w-[60px] px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
+              className="px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
             >
               Multi
             </TableCell>
             <TableCell
               isHeader
-              className="min-w-[80px] px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
+              className="px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
             >
               Status
             </TableCell>
             <TableCell
               isHeader
-              className="min-w-[80px] px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
+              className="px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
             >
               Actions
             </TableCell>
