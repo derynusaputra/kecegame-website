@@ -59,7 +59,7 @@ export default function BrandDetail() {
         }`}
       >
         <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03]">
-          <div>Detail Brand</div>
+          <div>{brand}</div>
           <div className="mt-5 w-full rounded-xl border border-gray-200 bg-white transition-all duration-300 dark:border-white/[0.05] dark:bg-white/[0.03]">
             <div className="w-full overflow-x-auto">
               <Table>
