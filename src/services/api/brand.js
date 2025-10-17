@@ -62,6 +62,8 @@ export const getSyncCategoryBrand = (enabled) =>
     queryFn: async () => {
       try {
         const res = await apiBase().get(`/v1/game-category/sync`);
+        await apiBase().get(`/v1/game-product/sync`);
+
         toast.success("Sync successful ");
         return res;
       } catch (error) {
