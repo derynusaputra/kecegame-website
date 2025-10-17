@@ -10,11 +10,21 @@ import ContainerPackage from "./ContainerPackage";
 import { API_URL, apiBase } from "@/services/apiBase";
 import { HeadDetail } from "./HeaderDetail";
 import axios from "axios";
+import { useParams, useSearchParams } from "next/navigation";
+import { getAllProductOther } from "@/services/api/product";
 
 export default function MainContentDetailGame({ children, title, item }) {
   const [selectedPackage, setSelectedPackage] = useState(null);
+  const params = useParams();
+  const qp = useSearchParams();
+  const type = qp.get("type");
+
+  const idParams = decodeURIComponent(params?.id);
+  const { data } = getAllProductOther(idParams);
 
   const postProduct = useProduct.create();
+  const product =
+    type === "OTHER" ? data && data?.data?.data : postProduct?.data?.data;
 
   const getProduct = async () => {
     await postProduct.mutateAsync(title);
@@ -65,15 +75,15 @@ export default function MainContentDetailGame({ children, title, item }) {
       {dataSubmit ? (
         <WebView url={dataSubmit} />
       ) : (
-        <div className="flex-1 w-full overflow-y-auto bg-gray-200">
+        <div className="w-full flex-1 overflow-y-auto bg-gray-200">
           <div className="flex flex-col gap-2 px-0 py-2">
             {/* content */}
             <div className="flex flex-col">
-              <div className="flex flex-col p-4 bg-white">
+              <div className="flex flex-col bg-white p-4">
                 <HeadDetail no={1} title={title} item={item} />
               </div>
               {/* head */}
-              <div className="flex flex-col p-4 mt-3 bg-white">
+              <div className="mt-3 flex flex-col bg-white p-4">
                 <Head no={1} title="Pembayaran" />
 
                 <Controller
@@ -104,7 +114,7 @@ export default function MainContentDetailGame({ children, title, item }) {
                   }}
                 />
               </div>
-              <div className="flex flex-col p-4 mt-3 bg-white">
+              <div className="mt-3 flex flex-col bg-white p-4">
                 <Head no={2} title="Pembayaran" />
                 <Controller
                   name="phoneNumber"
@@ -123,8 +133,8 @@ export default function MainContentDetailGame({ children, title, item }) {
                       errorMessage={errors.phoneNumber?.message}
                       type="tel"
                       startContent={
-                        <div className="flex items-center pointer-events-none">
-                          <span className="text-sm text-default-400">+62</span>
+                        <div className="pointer-events-none flex items-center">
+                          <span className="text-default-400 text-sm">+62</span>
                         </div>
                       }
                       onChange={(e) => {
@@ -160,7 +170,7 @@ export default function MainContentDetailGame({ children, title, item }) {
                 />
               </div>
 
-              <div className="flex flex-col p-4 mt-3 bg-white">
+              <div className="mt-3 flex flex-col bg-white p-4">
                 <Head no={3} title="Pilih Paket" />
 
                 <Controller
@@ -170,7 +180,7 @@ export default function MainContentDetailGame({ children, title, item }) {
                     <ContainerPackage
                       setSelectedPackage={setSelectedPackage}
                       setValue={field}
-                      initialPackages={postProduct?.data?.data}
+                      initialPackages={product}
                     />
                   )}
                   rules={{
@@ -196,7 +206,7 @@ export default function MainContentDetailGame({ children, title, item }) {
 
 const WebView = ({ url }) => {
   return (
-    <div className="flex-1 w-full overflow-y-auto bg-yellow-500">
+    <div className="w-full flex-1 overflow-y-auto bg-yellow-500">
       <iframe
         src={url}
         title="Xendit Checkout"
@@ -213,7 +223,7 @@ const WebView = ({ url }) => {
 };
 const Head = ({ no, title }) => {
   return (
-    <div className="flex items-center justify-between w-full mb-2">
+    <div className="mb-2 flex w-full items-center justify-between">
       {/* Left: Number and Title */}
       <div className="flex items-center gap-2">
         <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#7B61FF]">

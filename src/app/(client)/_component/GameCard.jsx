@@ -12,10 +12,11 @@ export default function GameCard({ name, iconUrl, link, slug, item }) {
   // Use slug or name as fallback for link
   const gameId = name?.toLowerCase().replace(/\s+/g, "-") || "game";
 
-  console.log(iconUrl);
-
   return (
-    <Link href={`/game/${name}`} className="block cursor-pointer p-2.5">
+    <Link
+      href={`/game/${name}?type=${item?.type}`}
+      className="block cursor-pointer p-2.5"
+    >
       <div className="relative m-auto h-[50px] w-[50px]">
         <div className="relative m-auto h-[50px] w-[50px] overflow-hidden rounded-lg">
           <ImageHeroui
