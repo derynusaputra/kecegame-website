@@ -1,4 +1,5 @@
 "use client";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -9,22 +10,33 @@ import {
 import { useSidebar } from "@/context/SidebarContext";
 import { formatRupiah } from "@/helpers/formatRupiah";
 import { postProductByBrand } from "@/services/api/brand";
+import { getAllProductOther } from "@/services/api/product";
 import { configEnv } from "@/services/config";
 import { PencilIcon } from "@heroicons/react/24/outline";
+import { Loader2, Plus, RefreshCw } from "lucide-react";
 import moment from "moment";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import ModalCreate from "./_components/ModalCreate";
+import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 
 export default function BrandDetail() {
   const params = useParams();
+  const queryParams = useSearchParams();
+  const type = queryParams.get("type");
+  const category = queryParams.get("category");
+  const [isModalCreate, setIsModalCreate] = useState(false);
+
   const brand = decodeURIComponent(params?.slug);
 
   const { isExpanded } = useSidebar();
   const [datas, setDatas] = useState();
   const { mutate, isPending } = postProductByBrand();
 
+  const { data } = getAllProductOther(brand);
+
   useEffect(() => {
-    if (brand) {
+    if (brand && type !== "OTHER") {
       mutate(
         {
           brand: brand,
@@ -35,8 +47,10 @@ export default function BrandDetail() {
           },
         }
       );
+    } else {
+      setDatas(data?.data?.data);
     }
-  }, []);
+  }, [brand, type, data]);
 
   if (isPending) {
     return (
@@ -58,8 +72,17 @@ export default function BrandDetail() {
           isExpanded ? "lg:pr-4" : "lg:pr-0"
         }`}
       >
+        <PageBreadcrumb pageTitle="Product Detail" />
         <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03]">
-          <div>{brand}</div>
+          <div className="flex items-center justify-between gap-3">
+            <div>{brand}</div>
+
+            {type === "OTHER" && (
+              <Button onClick={() => setIsModalCreate(true)}>
+                <Plus /> Add Product
+              </Button>
+            )}
+          </div>
           <div className="mt-5 w-full rounded-xl border border-gray-200 bg-white transition-all duration-300 dark:border-white/[0.05] dark:bg-white/[0.03]">
             <div className="w-full overflow-x-auto">
               <Table>
@@ -101,12 +124,12 @@ export default function BrandDetail() {
                     >
                       Created At
                     </TableCell>
-                    <TableCell
+                    {/* <TableCell
                       isHeader
                       className="min-w-[100px] px-2 py-3 text-start text-xs font-medium text-gray-500 md:table-cell dark:text-gray-400"
                     >
                       Action
-                    </TableCell>
+                    </TableCell> */}
                   </TableRow>
                 </TableHeader>
 
@@ -158,7 +181,7 @@ export default function BrandDetail() {
                               "DD MMM YYYY"
                             )}
                           </TableCell>
-                          <TableCell className="px-2 py-3">
+                          <TableCell className="hidden px-2 py-3">
                             <div className="flex space-x-1">
                               {/* <button
                               onClick={() =>
@@ -190,6 +213,15 @@ export default function BrandDetail() {
             </div>
           </div>
         </div>
+
+        {isModalCreate && (
+          <ModalCreate
+            isOpen={isModalCreate}
+            brand={brand}
+            category={category}
+            onClose={() => setIsModalCreate(false)}
+          />
+        )}
       </div>
     </>
   );

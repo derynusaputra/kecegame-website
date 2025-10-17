@@ -253,7 +253,7 @@ export default function MainBrand() {
                               <button
                                 onClick={() => {
                                   router.push(
-                                    `/admin/brand/${connection.name}`
+                                    `/admin/brand/${connection.name}?type=${connection?.type}&category=${connection?.category}`
                                   );
                                 }}
                                 className="rounded bg-blue-500 p-1 text-white transition-colors hover:bg-blue-600"
