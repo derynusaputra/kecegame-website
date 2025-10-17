@@ -217,11 +217,11 @@ export default function MainConnect() {
                         <TableCell
                           className={cn(
                             "px-2 py-3 md:table-cell",
-                            getStatusColor(connection?.status)
+                            getStatusColor(connection?.paymentStatus)
                           )}
                         >
                           {capitalizeFirstLetter(
-                            connection?.status.toLowerCase() || ""
+                            connection?.paymentStatus.toLowerCase() || ""
                           )}
                         </TableCell>
                         <TableCell className="px-2 py-3 md:table-cell">
