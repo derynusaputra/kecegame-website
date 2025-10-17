@@ -11,7 +11,12 @@ import { capitalizeFirstLetter } from "@/helpers/capitalizeFirstLetter";
 import { formatRupiah } from "@/helpers/formatRupiah";
 import { useDebounce } from "@/hooks/useDebounce";
 import { cn } from "@/lib/utils";
-import { getListTransaction } from "@/services/api/transaction";
+import {
+  checkStatusDelivery,
+  checkStatuss,
+  getListTransaction,
+} from "@/services/api/transaction";
+import { apiBase } from "@/services/apiBase";
 import {
   ExclamationTriangleIcon,
   MagnifyingGlassIcon,
@@ -19,6 +24,8 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/outline";
 import { Pagination } from "@heroui/react";
+import { useQueryClient } from "@tanstack/react-query";
+import { Eye, RefreshCw } from "lucide-react";
 import moment from "moment";
 import React, { useState } from "react";
 
@@ -32,7 +39,11 @@ export default function MainConnect() {
     limit: 10,
     search: debouncedSearch,
   });
+
   const transactions = data && data?.data?.data;
+  // const [refId,setRefI]
+
+  const { get } = checkStatuss();
 
   const getStatusColor = (status = "") => {
     const statushed = status.toLowerCase();
@@ -172,14 +183,20 @@ export default function MainConnect() {
                     isHeader
                     className="min-w-[100px] px-2 py-3 text-start text-xs font-medium text-gray-500 md:table-cell dark:text-gray-400"
                   >
+                    Status
+                  </TableCell>
+                  <TableCell
+                    isHeader
+                    className="min-w-[100px] px-2 py-3 text-start text-xs font-medium text-gray-500 md:table-cell dark:text-gray-400"
+                  >
                     Created At
                   </TableCell>
-                  {/* <TableCell
+                  <TableCell
                     isHeader
                     className="min-w-[80px] px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
                   >
-                    Actions
-                  </TableCell> */}
+                    Action
+                  </TableCell>
                 </TableRow>
               </TableHeader>
 
@@ -224,10 +241,21 @@ export default function MainConnect() {
                             connection?.paymentStatus.toLowerCase() || ""
                           )}
                         </TableCell>
+                        <TableCell
+                          className={cn(
+                            "px-2 py-3 md:table-cell",
+                            getStatusColor(connection?.status)
+                          )}
+                        >
+                          {capitalizeFirstLetter(
+                            connection?.status.toLowerCase() || ""
+                          )}
+                        </TableCell>
+
                         <TableCell className="px-2 py-3 md:table-cell">
                           {moment(connection?.createdAt).format("DD MMM YYYY")}
                         </TableCell>
-                        <TableCell className="hidden px-2 py-3">
+                        <TableCell className="px-2 py-3">
                           <div className="flex space-x-1">
                             {/* <button
                               onClick={() =>
@@ -238,20 +266,31 @@ export default function MainConnect() {
                             >
                               <EyeIcon className="h-4 w-4" />
                             </button> */}
+                            {/* <ButtonRefresh
+                              connection={connection}
+                              refId={connection?.refId}
+                            /> */}
                             <button
-                              onClick={() => alert(`Edit ${connection.name}`)}
-                              className="rounded bg-yellow-500 p-1 text-white transition-colors hover:bg-yellow-600"
-                              title="Edit"
+                              onClick={() => {
+                                get(connection?.refId);
+                              }}
+                              className={cn(
+                                "rounded bg-yellow-500 p-1 text-white transition-colors hover:bg-yellow-600"
+                                // connection?.paymentStatus === "PAID" &&
+                                //   "cursor-not-allowed"
+                              )}
+                              title="Refresh"
+                              // disabled={connection?.paymentStatus === "PAID"}
                             >
-                              <PencilIcon className="h-4 w-4" />
+                              <RefreshCw />
                             </button>
-                            <button
+                            {/* <button
                               onClick={() => handleSingleDelete(connection)}
                               className="rounded bg-red-500 p-1 text-white transition-colors hover:bg-red-600"
                               title="Hapus"
                             >
                               <TrashIcon className="h-4 w-4" />
-                            </button>
+                            </button> */}
                           </div>
                         </TableCell>
                       </TableRow>
@@ -301,3 +340,32 @@ export default function MainConnect() {
     </>
   );
 }
+
+const ButtonRefresh = ({ refId, connection }) => {
+  const qc = useQueryClient();
+  const getStatus = async () => {
+    try {
+      const res = await apiBase().get(`/v1/game-payment/check-status/${refId}`);
+      qc.invalidateQueries({ queryKey: ["getListTransaction"] });
+      return res;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return (
+    <button
+      onClick={() => {
+        getStatus();
+      }}
+      className={cn(
+        "rounded bg-yellow-500 p-1 text-white transition-colors hover:bg-yellow-600"
+        // connection?.paymentStatus !== "PAID" && "cursor-not-allowed"
+      )}
+      title="Refresh"
+      // disabled={connection?.paymentStatus !== "PAID"}
+    >
+      <RefreshCw />
+    </button>
+  );
+};
