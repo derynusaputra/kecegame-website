@@ -72,3 +72,17 @@ export const getSyncCategoryBrand = (enabled) =>
     },
     enabled: enabled,
   });
+
+export const postProductByBrand = () =>
+  useMutation({
+    mutationFn: async (body) => {
+      try {
+        const res = await apiBase().post(`/v1/game-product`, body);
+        return res?.data;
+      } catch (error) {
+        if (isAxiosError(error)) {
+          throw error.response;
+        }
+      }
+    },
+  });

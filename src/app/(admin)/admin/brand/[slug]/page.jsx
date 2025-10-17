@@ -7,73 +7,38 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useSidebar } from "@/context/SidebarContext";
-import { useDebounce } from "@/hooks/useDebounce";
-import {
-  getListBrand,
-  getSyncCategoryBrand,
-  putBrand,
-  putBrandById,
-} from "@/services/api/brand";
+import { formatRupiah } from "@/helpers/formatRupiah";
+import { postProductByBrand } from "@/services/api/brand";
 import { configEnv } from "@/services/config";
-import {
-  ExclamationTriangleIcon,
-  MagnifyingGlassIcon,
-  PencilIcon,
-} from "@heroicons/react/24/outline";
+import { PencilIcon } from "@heroicons/react/24/outline";
 import moment from "moment";
-import React, { Fragment, useEffect, useState } from "react";
-import ModalUpdate from "./ModalUpdate";
-import { Button } from "@/components/ui/button";
-import { EyeIcon, Loader2, Plus, RefreshCw } from "lucide-react";
-import ModalCreate from "./ModalCreate";
-import { Switch } from "@heroui/react";
-import { toast } from "react-toastify";
-import { useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
-export default function MainBrand() {
-  const router = useRouter();
+export default function BrandDetail() {
+  const params = useParams();
+  const brand = decodeURIComponent(params?.slug);
+
   const { isExpanded } = useSidebar();
-  const [search, setSearch] = useState("");
-  const debouncedSearch = useDebounce(search, 600);
-  const [page, setPage] = useState(1);
-  const { data, isLoading, isError } = getListBrand();
-  const [selected, setSelected] = useState(null);
-  const [isOpenUpdate, setIsOpenUpdate] = useState(false);
-  const [isOpenCreate, setIsOpenCreate] = useState(false);
-  const [checked, setIsChecked] = useState(true);
-  const qc = useQueryClient();
-
-  const [isSync, setIsync] = useState(false);
-
-  const {
-    data: sync,
-    isLoading: loadingSync,
-    isSuccess,
-  } = getSyncCategoryBrand(isSync);
+  const [datas, setDatas] = useState();
+  const { mutate, isPending } = postProductByBrand();
 
   useEffect(() => {
-    if (isSuccess) {
-      setIsync(false);
+    if (brand) {
+      mutate(
+        {
+          brand: brand,
+        },
+        {
+          onSuccess: (res) => {
+            setDatas(res?.data);
+          },
+        }
+      );
     }
-  }, [isSuccess]);
+  }, []);
 
-  const brands = data && data?.data?.data;
-  const { mutate, isPending } = putBrandById();
-
-  const getStatusColor = (status = "") => {
-    const statushed = status.toLowerCase();
-    switch (statushed) {
-      case "sukses":
-        return "text-green-800 dark:bg-green-900/30 dark:text-green-400";
-      case "pending":
-        return " text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400";
-      default:
-        return "";
-    }
-  };
-
-  if (isLoading) {
+  if (isPending) {
     return (
       <div className="flex min-h-[400px] items-center justify-center">
         <div className="text-center">
@@ -81,29 +46,6 @@ export default function MainBrand() {
           <p className="mt-4 text-gray-600 dark:text-gray-400">
             Memuat data koneksi...
           </p>
-        </div>
-      </div>
-    );
-  }
-
-  // Error state
-  if (isError) {
-    return (
-      <div className="flex min-h-[400px] items-center justify-center">
-        <div className="text-center">
-          <ExclamationTriangleIcon className="mx-auto h-12 w-12 text-red-500" />
-          <h3 className="mt-4 text-lg font-medium text-gray-900 dark:text-white">
-            Terjadi Kesalahan
-          </h3>
-          <p className="mt-2 text-gray-600 dark:text-gray-400">
-            {errThirtParty.message || "Gagal memuat data koneksi"}
-          </p>
-          <button
-            onClick={() => getThirtParty()}
-            className="mt-4 rounded-md bg-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-blue-600"
-          >
-            Coba Lagi
-          </button>
         </div>
       </div>
     );
@@ -117,19 +59,7 @@ export default function MainBrand() {
         }`}
       >
         <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03]">
-          <div className="flex items-center justify-end gap-3">
-            <Button onClick={() => setIsync(true)} variant={"outline"}>
-              {loadingSync ? (
-                <Loader2 className="animate-spin" />
-              ) : (
-                <RefreshCw />
-              )}{" "}
-              Sync
-            </Button>
-            <Button onClick={() => setIsOpenCreate(true)}>
-              <Plus /> Add Brand
-            </Button>
-          </div>
+          <div>Detail Brand</div>
           <div className="mt-5 w-full rounded-xl border border-gray-200 bg-white transition-all duration-300 dark:border-white/[0.05] dark:bg-white/[0.03]">
             <div className="w-full overflow-x-auto">
               <Table>
@@ -157,7 +87,13 @@ export default function MainBrand() {
                       isHeader
                       className="min-w-[100px] px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
                     >
-                      Status
+                      Brand
+                    </TableCell>
+                    <TableCell
+                      isHeader
+                      className="min-w-[100px] px-2 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400"
+                    >
+                      Price
                     </TableCell>
                     <TableCell
                       isHeader
@@ -176,7 +112,7 @@ export default function MainBrand() {
 
                 {/* body */}
                 <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-                  {brands?.length === 0 ? (
+                  {datas?.length === 0 ? (
                     <tr>
                       <td
                         colSpan={9}
@@ -186,7 +122,7 @@ export default function MainBrand() {
                       </td>
                     </tr>
                   ) : (
-                    brands?.map((connection, idx) => (
+                    datas?.map((connection, idx) => (
                       <React.Fragment key={idx + "brands"}>
                         <TableRow className="hover:bg-gray-50 dark:hover:bg-gray-800/30">
                           <TableCell className="px-2 py-3 pl-5">
@@ -204,7 +140,7 @@ export default function MainBrand() {
                                 </div>
                               )}
                               <span className="min-w-0 text-sm font-medium break-words">
-                                {connection?.name}
+                                {connection?.product_name}
                               </span>
                             </div>
                           </TableCell>
@@ -212,37 +148,11 @@ export default function MainBrand() {
                             {connection?.category}
                           </TableCell>
                           <TableCell className="px-2 py-3 md:table-cell">
-                            <Switch
-                              isSelected={connection?.isActive}
-                              onChange={(e) => {
-                                const body = {
-                                  isActive: e.target.checked,
-                                };
-                                mutate(
-                                  {
-                                    id: connection?.id,
-                                    isActive: e.target.checked,
-                                  },
-                                  {
-                                    onSuccess: (res) => {
-                                      if (res) {
-                                        qc.invalidateQueries({
-                                          queryKey: ["getListBrand"],
-                                        });
-                                        toast.success("Update Success");
-                                      }
-                                    },
-                                    onError: (err) => {
-                                      if (err) {
-                                        toast.error("Internal err");
-                                      }
-                                    },
-                                  }
-                                );
-                              }}
-                            />
+                            {connection.brand}
                           </TableCell>
-
+                          <TableCell className="px-2 py-3 md:table-cell">
+                            {formatRupiah(connection.price)}
+                          </TableCell>
                           <TableCell className="px-2 py-3 md:table-cell">
                             {moment(connection?.createdAt).format(
                               "DD MMM YYYY"
@@ -250,17 +160,15 @@ export default function MainBrand() {
                           </TableCell>
                           <TableCell className="px-2 py-3">
                             <div className="flex space-x-1">
-                              <button
-                                onClick={() => {
-                                  router.push(
-                                    `/admin/brand/${connection.name}`
-                                  );
-                                }}
-                                className="rounded bg-blue-500 p-1 text-white transition-colors hover:bg-blue-600"
-                                title="Lihat Detail"
-                              >
-                                <EyeIcon className="h-4 w-4" />
-                              </button>
+                              {/* <button
+                              onClick={() =>
+                                alert(`Lihat detail ${connection.name}`)
+                              }
+                              className="rounded bg-blue-500 p-1 text-white transition-colors hover:bg-blue-600"
+                              title="Lihat Detail"
+                            >
+                              <EyeIcon className="h-4 w-4" />
+                            </button> */}
                               <button
                                 onClick={() => {
                                   setSelected(connection);
@@ -282,26 +190,6 @@ export default function MainBrand() {
             </div>
           </div>
         </div>
-
-        {isOpenUpdate && (
-          <ModalUpdate
-            isOpen={isOpenUpdate}
-            onClose={() => {
-              setSelected(null);
-              setIsOpenUpdate(false);
-            }}
-            selected={selected}
-          />
-        )}
-
-        {isOpenCreate && (
-          <ModalCreate
-            isOpen={isOpenCreate}
-            onClose={() => {
-              setIsOpenCreate(false);
-            }}
-          />
-        )}
       </div>
     </>
   );
