@@ -19,6 +19,8 @@ export default function ModalUpdateXendit({ isOpen, onClose, selected }) {
     mutate(form, {
       onSuccess: (res) => {
         toast.success("Update Key Succesfully");
+        onClose();
+        setForm({ key: "" });
       },
       onError: (err) => {
         console.log(err);
