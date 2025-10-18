@@ -39,6 +39,8 @@ import {
   useDisclosure,
 } from "@heroui/react";
 import ModalContentLoginLitmatch from "./ModalContentLoginLitmatch";
+import moment from "moment";
+import ModalOTP from "./ModalCreate";
 
 export default function MainConnect() {
   const { isExpanded } = useSidebar();
@@ -55,6 +57,7 @@ export default function MainConnect() {
   const [showConfigModal, setShowConfigModal] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
   const [selectedConnection, setSelectedConnection] = useState(null);
+  const [iseOpen, setIsOpen] = useState(false);
   const [selectedApiKey, setSelectedApiKey] = useState({
     apiKey: "",
     name: "",
@@ -63,6 +66,10 @@ export default function MainConnect() {
     title: "",
     message: "",
   });
+
+  const handleOpen = (type) => {
+    setIsOpen(true);
+  };
 
   // Login modal hook - moved to top level to follow Rules of Hooks
   const {
@@ -247,7 +254,7 @@ export default function MainConnect() {
     return (
       <div className="flex min-h-[400px] items-center justify-center">
         <div className="text-center">
-          <div className="w-12 h-12 mx-auto border-b-2 border-blue-500 rounded-full animate-spin"></div>
+          <div className="mx-auto h-12 w-12 animate-spin rounded-full border-b-2 border-blue-500"></div>
           <p className="mt-4 text-gray-600 dark:text-gray-400">
             Memuat data koneksi...
           </p>
@@ -261,7 +268,7 @@ export default function MainConnect() {
     return (
       <div className="flex min-h-[400px] items-center justify-center">
         <div className="text-center">
-          <ExclamationTriangleIcon className="w-12 h-12 mx-auto text-red-500" />
+          <ExclamationTriangleIcon className="mx-auto h-12 w-12 text-red-500" />
           <h3 className="mt-4 text-lg font-medium text-gray-900 dark:text-white">
             Terjadi Kesalahan
           </h3>
@@ -270,7 +277,7 @@ export default function MainConnect() {
           </p>
           <button
             onClick={() => getThirtParty()}
-            className="px-4 py-2 mt-4 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600"
+            className="mt-4 rounded-md bg-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-blue-600"
           >
             Coba Lagi
           </button>
@@ -337,11 +344,11 @@ export default function MainConnect() {
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => getThirtParty()}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white transition-colors bg-green-500 rounded-md hover:bg-green-600"
+              className="flex items-center gap-2 rounded-md bg-green-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-green-600"
             >
               {loadThirtParty ? (
                 <svg
-                  className="w-4 h-4 text-white animate-spin"
+                  className="h-4 w-4 animate-spin text-white"
                   fill="none"
                   viewBox="0 0 24 24"
                 >
@@ -360,7 +367,7 @@ export default function MainConnect() {
                   ></path>
                 </svg>
               ) : (
-                <EyeIcon className="w-4 h-4" />
+                <EyeIcon className="h-4 w-4" />
               )}
               <span className="hidden sm:inline">Refresh Data</span>
               <span className="sm:hidden">Refresh</span>
@@ -368,9 +375,9 @@ export default function MainConnect() {
             <button
               onClick={handleMultipleDelete}
               disabled={selectedConnections.length === 0}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white transition-colors bg-red-500 rounded-md hover:bg-red-600 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex items-center gap-2 rounded-md bg-red-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-600 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              <TrashIcon className="w-4 h-4" />
+              <TrashIcon className="h-4 w-4" />
               <span className="hidden sm:inline">
                 Hapus ({selectedConnections.length})
               </span>
@@ -378,9 +385,9 @@ export default function MainConnect() {
             </button>
             <button
               onClick={openModal}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white transition-colors bg-blue-500 rounded-md hover:bg-blue-600"
+              className="flex items-center gap-2 rounded-md bg-blue-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-600"
             >
-              <PlusIcon className="w-4 h-4" />
+              <PlusIcon className="h-4 w-4" />
               <span className="hidden sm:inline">Tambah API Key</span>
               <span className="sm:hidden">Tambah</span>
             </button>
@@ -411,7 +418,7 @@ export default function MainConnect() {
               placeholder="Cari API key..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full py-2 pl-4 pr-10 border border-gray-300 rounded-md focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+              className="w-full rounded-md border border-gray-300 py-2 pr-10 pl-4 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
             />
             <MagnifyingGlassIcon className="absolute top-2.5 right-3 h-4 w-4 text-gray-400" />
           </div>
@@ -440,7 +447,7 @@ export default function MainConnect() {
                         filteredData.length > 0
                       }
                       onChange={toggleAllConnectionsSelection}
-                      className="text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                     />
                   </TableCell>
                   <TableCell
@@ -500,12 +507,12 @@ export default function MainConnect() {
                             onChange={() =>
                               toggleConnectionSelection(connection.id)
                             }
-                            className="text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                           />
                         </TableCell>
                         <TableCell className="px-2 py-3">
                           <span className="text-sm text-gray-700 dark:text-gray-300">
-                            {connection.provider}
+                            {connection.name}
                           </span>
                         </TableCell>
                         <TableCell className="px-2 py-3">
@@ -513,10 +520,10 @@ export default function MainConnect() {
                             onClick={() =>
                               handleConfigureConnection(connection)
                             }
-                            className="inline-flex items-center px-3 py-1 text-xs font-medium text-yellow-800 transition-colors bg-yellow-100 rounded-full hover:bg-yellow-200"
+                            className="inline-flex items-center rounded-full bg-yellow-100 px-3 py-1 text-xs font-medium text-yellow-800 transition-colors hover:bg-yellow-200"
                           >
                             <svg
-                              className="w-3 h-3 mr-1"
+                              className="mr-1 h-3 w-3"
                               fill="none"
                               stroke="currentColor"
                               viewBox="0 0 24 24"
@@ -540,18 +547,16 @@ export default function MainConnect() {
                         <TableCell className="px-2 py-3">
                           <span
                             className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${getStatusColor(
-                              connection.status
+                              connection.isActive
                             )}`}
                           >
-                            {connection.status === "active"
-                              ? "Aktif"
-                              : "Tidak Aktif"}
+                            {connection.isActive ? "Aktif" : "Tidak Aktif"}
                           </span>
                         </TableCell>
                         <TableCell className="hidden px-2 py-3 md:table-cell">
                           <div className="text-sm text-gray-700 dark:text-gray-300">
-                            {new Date(connection.lastSync).toLocaleString(
-                              "id-ID"
+                            {moment(connection.lastSync).format(
+                              "DD MMM YYYY, HH:mm"
                             )}
                           </div>
                         </TableCell>
@@ -561,24 +566,24 @@ export default function MainConnect() {
                               onClick={() =>
                                 alert(`Lihat detail ${connection.name}`)
                               }
-                              className="p-1 text-white transition-colors bg-blue-500 rounded hover:bg-blue-600"
+                              className="rounded bg-blue-500 p-1 text-white transition-colors hover:bg-blue-600"
                               title="Lihat Detail"
                             >
-                              <EyeIcon className="w-4 h-4" />
+                              <EyeIcon className="h-4 w-4" />
                             </button>
                             <button
                               onClick={() => alert(`Edit ${connection.name}`)}
-                              className="p-1 text-white transition-colors bg-yellow-500 rounded hover:bg-yellow-600"
+                              className="rounded bg-yellow-500 p-1 text-white transition-colors hover:bg-yellow-600"
                               title="Edit"
                             >
-                              <PencilIcon className="w-4 h-4" />
+                              <PencilIcon className="h-4 w-4" />
                             </button>
                             <button
                               onClick={() => handleSingleDelete(connection)}
-                              className="p-1 text-white transition-colors bg-red-500 rounded hover:bg-red-600"
+                              className="rounded bg-red-500 p-1 text-white transition-colors hover:bg-red-600"
                               title="Hapus"
                             >
-                              <TrashIcon className="w-4 h-4" />
+                              <TrashIcon className="h-4 w-4" />
                             </button>
                           </div>
                         </TableCell>
@@ -615,6 +620,13 @@ export default function MainConnect() {
       >
         <ModalContentLoginLitmatch onCloseLogin={onCloseLogin} />
       </Modal>
+
+      <ModalOTP
+        isOpen={isOpen}
+        onClose={() => {
+          setIsOpen(false);
+        }}
+      />
     </>
   );
 }
