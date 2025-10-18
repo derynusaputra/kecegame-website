@@ -69,7 +69,11 @@ export default function MainConnect() {
   });
 
   const handleOpen = (type) => {
-    setIsOpenAPI(true);
+    if (type.name === "XENA") {
+      setIsOpenAPI(true);
+    } else {
+      onPressShadow();
+    }
   };
 
   // Login modal hook - moved to top level to follow Rules of Hooks
@@ -406,9 +410,9 @@ export default function MainConnect() {
             >
               Hanya Aktif
             </button>
-            <Button color="primary" variant="shadow" onPress={onPressShadow}>
+            {/* <Button color="primary" variant="shadow" onPress={onPressShadow}>
               Shadow
-            </Button>
+            </Button> */}
           </div>
 
           <div className="relative w-full lg:w-80">
@@ -584,6 +588,7 @@ export default function MainConnect() {
                             >
                               <TrashIcon className="h-4 w-4" />
                             </button>
+
                             <button
                               onClick={() => handleOpen(connection)}
                               className="rounded bg-red-500 p-1 text-white transition-colors hover:bg-red-600"
