@@ -635,7 +635,7 @@ export default function MainConnect() {
         isOpen={isXendit}
         selected={selected}
         onClose={() => {
-          setIsOpenAPI(false);
+          setIsXendit(false);
           setSelected(null);
         }}
       />
