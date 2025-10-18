@@ -4,6 +4,7 @@ import Button from "@/components/ui/button/Button";
 import { Modal } from "@/components/ui/modal";
 import { updateKey } from "@/services/api/xendit";
 import { Input } from "@heroui/react";
+import { useQueryClient } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -15,12 +16,15 @@ export default function ModalUpdateXendit({ isOpen, onClose, selected }) {
     key: "",
   });
 
+  const qc = useQueryClient();
+
   const handleSubmit = () => {
     mutate(form, {
       onSuccess: (res) => {
         toast.success("Update Key Succesfully");
         onClose();
         setForm({ key: "" });
+        qc.invalidateQueries({ queryKey: ["thirdparty"] });
       },
       onError: (err) => {
         console.log(err);
