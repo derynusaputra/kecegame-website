@@ -51,6 +51,12 @@ const navItems = [
   //   ],
   // },
   {
+    icon: <GridIcon />,
+    name: "Chat",
+    // subItems: [{ name: "Ecommerce", path: "/admin", pro: false }],
+    path: "/admin/chat",
+  },
+  {
     name: "Transactions",
     icon: <TableIcon />,
     subItems: [{ name: "Transaction", path: "/admin/transaction", pro: false }],
