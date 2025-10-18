@@ -41,6 +41,7 @@ import {
 import ModalContentLoginLitmatch from "./ModalContentLoginLitmatch";
 import moment from "moment";
 import ModalOTP from "./ModalCreate";
+import { Key } from "lucide-react";
 
 export default function MainConnect() {
   const { isExpanded } = useSidebar();
@@ -57,7 +58,7 @@ export default function MainConnect() {
   const [showConfigModal, setShowConfigModal] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
   const [selectedConnection, setSelectedConnection] = useState(null);
-  const [iseOpen, setIsOpen] = useState(false);
+  const [iseOpenAPI, setIsOpenAPI] = useState(false);
   const [selectedApiKey, setSelectedApiKey] = useState({
     apiKey: "",
     name: "",
@@ -68,7 +69,7 @@ export default function MainConnect() {
   });
 
   const handleOpen = (type) => {
-    setIsOpen(true);
+    setIsOpenAPI(true);
   };
 
   // Login modal hook - moved to top level to follow Rules of Hooks
@@ -162,8 +163,6 @@ export default function MainConnect() {
   // Transform API data to match our component structure
   const transformedData =
     dataThirParty?.data?.map((item) => {
-      console.log(item);
-
       const apiKey = item.apiKey || "kosong";
       const apiKeyPreview =
         apiKey === "kosong"
@@ -585,6 +584,13 @@ export default function MainConnect() {
                             >
                               <TrashIcon className="h-4 w-4" />
                             </button>
+                            <button
+                              onClick={() => handleOpen(connection)}
+                              className="rounded bg-red-500 p-1 text-white transition-colors hover:bg-red-600"
+                              title="API KEY"
+                            >
+                              <Key className="h-4 w-4" />
+                            </button>
                           </div>
                         </TableCell>
                       </TableRow>
@@ -622,9 +628,9 @@ export default function MainConnect() {
       </Modal>
 
       <ModalOTP
-        isOpen={isOpen}
+        isOpen={iseOpenAPI}
         onClose={() => {
-          setIsOpen(false);
+          setIsOpenAPI(false);
         }}
       />
     </>
