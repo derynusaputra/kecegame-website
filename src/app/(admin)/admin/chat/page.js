@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import io from "socket.io-client";
 import { useAuth } from "@/context/AuthContext";
 import { apiBase } from "@/services/apiBase";
+import { configEnv } from "@/services/config";
 
 export default function ChatRoom() {
   const { user } = useAuth();
@@ -49,7 +50,7 @@ export default function ChatRoom() {
   useEffect(() => {
     if (!user?.id) return;
 
-    const s = io("http://localhost:3000", {
+    const s = io(configEnv.baseUrl, {
       query: { userId: user.id.toString() },
       transports: ["websocket"],
     });
