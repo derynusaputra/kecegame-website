@@ -56,6 +56,13 @@ export default function ModalOTP({ isOpen, onClose, isDisabled }) {
       isOpen={isOpen}
       onClose={() => {
         onClose();
+        setLogin(null);
+        setLogin({
+          username: "",
+          password: "",
+          code: "",
+          uuid: "",
+        });
       }}
       className="max-w-[300px] p-5 lg:p-10"
     >
