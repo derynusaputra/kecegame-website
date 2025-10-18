@@ -64,7 +64,7 @@ export default function ModalOTP({ isOpen, onClose, isDisabled }) {
           uuid: "",
         });
       }}
-      className="max-w-[300px] p-5 lg:p-10"
+      className="max-w-[400px] p-5 lg:p-10"
     >
       <div className="font-semibold text-gray-800 dark:text-white/90">
         GET API KEYS

@@ -1,5 +1,4 @@
 "use client";
-import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -7,41 +6,29 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  MagnifyingGlassIcon,
-  PlusIcon,
-  TrashIcon,
-  PencilIcon,
-  EyeIcon,
-  ChevronDownIcon,
-  ChevronRightIcon,
-  ExclamationTriangleIcon,
-} from "@heroicons/react/24/outline";
 import { useSidebar } from "@/context/SidebarContext";
-import { useThirdPartyKeys } from "@/hooks/useThirdPartyKeys";
 import { useThirParty } from "@/hooks/ReactQuery/useThirParty";
 import { useModal } from "@/hooks/useModal";
-import CreateApiKeyModal from "./CreateApiKeyModal";
-import DeleteConfirmationModal from "./DeleteConfirmationModal";
-import SuccessNotificationModal from "./SuccessNotificationModal";
+import {
+  ExclamationTriangleIcon,
+  EyeIcon,
+  MagnifyingGlassIcon,
+  PencilIcon,
+  PlusIcon,
+  TrashIcon,
+} from "@heroicons/react/24/outline";
+import { Modal, useDisclosure } from "@heroui/react";
+import { Key } from "lucide-react";
+import moment from "moment";
+import React, { useEffect, useState } from "react";
 import ApiKeyPreviewModal from "./ApiKeyPreviewModal";
 import ConnectionConfigModalHero from "./ConnectionConfigModalHero";
-import {
-  Button,
-  Checkbox,
-  Input,
-  Link,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  useDisclosure,
-} from "@heroui/react";
+import CreateApiKeyModal from "./CreateApiKeyModal";
+import DeleteConfirmationModal from "./DeleteConfirmationModal";
 import ModalContentLoginLitmatch from "./ModalContentLoginLitmatch";
-import moment from "moment";
 import ModalOTP from "./ModalCreate";
-import { Key } from "lucide-react";
+import ModalUpdateXendit from "./ModalXendit";
+import SuccessNotificationModal from "./SuccessNotificationModal";
 
 export default function MainConnect() {
   const { isExpanded } = useSidebar();
@@ -59,6 +46,7 @@ export default function MainConnect() {
   const [itemToDelete, setItemToDelete] = useState(null);
   const [selectedConnection, setSelectedConnection] = useState(null);
   const [iseOpenAPI, setIsOpenAPI] = useState(false);
+  const [isXendit, setIsXendit] = useState(false);
   const [selectedApiKey, setSelectedApiKey] = useState({
     apiKey: "",
     name: "",
@@ -71,6 +59,8 @@ export default function MainConnect() {
   const handleOpen = (type) => {
     if (type.name === "XENA") {
       setIsOpenAPI(true);
+    } else if (type.name === "XENDIT") {
+      setIsXendit(true);
     } else {
       onPressShadow();
     }
@@ -549,11 +539,11 @@ export default function MainConnect() {
                         </TableCell>
                         <TableCell className="px-2 py-3">
                           <span
-                            className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${getStatusColor(
-                              connection.isActive
-                            )}`}
+                            className={`inline-flex rounded-full px-2 py-1 text-xs font-medium`}
                           >
-                            {connection.isActive ? "Aktif" : "Tidak Aktif"}
+                            {connection.apiKey !== ("kosong" || "")
+                              ? "Aktif"
+                              : "Tidak Aktif"}
                           </span>
                         </TableCell>
                         <TableCell className="hidden px-2 py-3 md:table-cell">
@@ -634,6 +624,13 @@ export default function MainConnect() {
 
       <ModalOTP
         isOpen={iseOpenAPI}
+        onClose={() => {
+          setIsOpenAPI(false);
+        }}
+      />
+
+      <ModalUpdateXendit
+        isOpen={isXendit}
         onClose={() => {
           setIsOpenAPI(false);
         }}
