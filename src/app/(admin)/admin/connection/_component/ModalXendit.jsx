@@ -8,8 +8,8 @@ import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
-export default function ModalUpdateXendit({ isOpen, onClose }) {
-  const { mutate, isPending } = updateKey();
+export default function ModalUpdateXendit({ isOpen, onClose, selected }) {
+  const { mutate, isPending } = updateKey(selected?.id);
 
   const [form, setForm] = useState({
     key: "",

@@ -36,6 +36,7 @@ export default function MainConnect() {
   const [selectedConnections, setSelectedConnections] = useState([]);
   const [expandedRows, setExpandedRows] = useState({});
   const [showOnlyActive, setShowOnlyActive] = useState(false);
+  const [selected, setSelected] = useState(null);
 
   // Modal states
   const { isOpen, openModal, closeModal } = useModal();
@@ -60,6 +61,7 @@ export default function MainConnect() {
     if (type.name === "XENA") {
       setIsOpenAPI(true);
     } else if (type.name === "XENDIT") {
+      setSelected(type);
       setIsXendit(true);
     } else {
       onPressShadow();
@@ -631,8 +633,10 @@ export default function MainConnect() {
 
       <ModalUpdateXendit
         isOpen={isXendit}
+        selected={selected}
         onClose={() => {
           setIsOpenAPI(false);
+          setSelected(null);
         }}
       />
     </>
